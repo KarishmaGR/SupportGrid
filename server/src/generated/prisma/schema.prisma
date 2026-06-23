@@ -1,0 +1,154 @@
+// SupportGrid — Prisma schema (Phase 1)
+// Models map to the domain defined in project-scop.md and shared/src/index.ts.
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TicketStatus {
+  Open
+  Resolved
+  Closed
+}
+
+enum TicketCategory {
+  General
+  Technical
+  Refund
+}
+
+enum UserRole {
+  Admin
+  Agent
+}
+
+enum MessageDirection {
+  inbound
+  outbound
+}
+
+model User {
+  id            String   @id
+  email         String   @unique
+  name          String
+  emailVerified Boolean  @default(false)
+  image         String?
+  role          UserRole @default(Agent)
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  assignedTickets Ticket[]  @relation("TicketAssignee")
+  sessions        Session[]
+  accounts        Account[]
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model Jwks {
+  id         String   @id
+  publicKey  String
+  privateKey String
+  createdAt  DateTime @default(now())
+
+  @@map("jwks")
+}
+
+model Ticket {
+  id             String          @id @default(uuid())
+  subject        String
+  requesterEmail String
+  status         TicketStatus    @default(Open)
+  category       TicketCategory?
+  summary        String?
+  assigneeId     String?
+  assignee       User?           @relation("TicketAssignee", fields: [assigneeId], references: [id])
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  messages      Message[]
+  aiSuggestions AiSuggestion[]
+
+  // Indexes for ticket filtering/sorting (implementation-plan Phase 1).
+  @@index([status])
+  @@index([category])
+  @@index([assigneeId])
+  @@index([createdAt])
+}
+
+model Message {
+  id        String           @id @default(uuid())
+  ticketId  String
+  ticket    Ticket           @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  direction MessageDirection
+  from      String
+  body      String
+  createdAt DateTime         @default(now())
+
+  @@index([ticketId])
+}
+
+// Reserved for Phase 7 (AI layer): drafted/suggested replies with confidence + model used.
+model AiSuggestion {
+  id         String   @id @default(uuid())
+  ticketId   String
+  ticket     Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  kind       String // "classification" | "summary" | "draft-reply"
+  content    String
+  confidence Float?
+  model      String?
+  tokens     Int?
+  createdAt  DateTime @default(now())
+
+  @@index([ticketId])
+}
