@@ -13,7 +13,7 @@
     "typecheck": "tsc --noEmit",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "bun prisma/seed.ts",
+    "db:seed": "bun src/generate/prisma/seed.ts",
     "db:studio": "prisma studio"
   },
   "dependencies": {
