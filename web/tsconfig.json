@@ -3,7 +3,11 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "noEmit": true,
-    "types": []
+    "types": [],
+    "paths": {
+      "zod": ["../node_modules/.bun/zod@3.25.76/node_modules/zod/index.d.ts"],
+      "zod/*": ["../node_modules/.bun/zod@3.25.76/node_modules/zod/*"]
+    }
   },
   "include": ["src"]
 }
