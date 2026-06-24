@@ -10,6 +10,7 @@ const BASE = "/api";
 
 async function http<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
+    credentials: "include",
     headers: { "Content-Type": "application/json" },
     ...init,
   });
@@ -19,6 +20,38 @@ async function http<T>(path: string, init?: RequestInit): Promise<T> {
   }
   return res.json() as Promise<T>;
 }
+
+interface SessionUser {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
+async function authHttp<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(path, {
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    ...init,
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message ?? body.error ?? `Request failed: ${res.status}`);
+  }
+  return res.json() as Promise<T>;
+}
+
+export const auth = {
+  getSession: () =>
+    authHttp<{ user: SessionUser } | null>("/api/auth/get-session"),
+  signIn: (email: string, password: string) =>
+    authHttp<{ user: SessionUser }>("/api/auth/sign-in/email", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    }),
+  signOut: () =>
+    authHttp<void>("/api/auth/sign-out", { method: "POST" }),
+};
 
 export const api = {
   listTickets: (params: Record<string, string> = {}) => {

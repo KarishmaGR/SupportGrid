@@ -39,3 +39,48 @@ select { padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; }
 .muted { color: #888; font-size: 13px; }
 .error { color: #c62828; }
 a { color: #1565c0; }
+
+/* Header user area */
+.header { display: flex; align-items: center; justify-content: space-between; }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.header-user { color: #ccc; font-size: 14px; }
+.btn-ghost {
+  padding: 6px 12px;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.1); }
+
+/* Login page */
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f6fa;
+}
+.login-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+}
+.login-title { margin: 0 0 4px; font-size: 22px; color: #1a1a2e; }
+.login-form { display: flex; flex-direction: column; gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 13px; font-weight: 600; color: #444; }
+.field input {
+  padding: 9px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+}
+.field input:focus { border-color: #1a1a2e; }
