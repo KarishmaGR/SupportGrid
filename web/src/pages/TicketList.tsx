@@ -4,6 +4,19 @@ import { useState } from "react";
 import { TicketStatus } from "@supportgrid/shared";
 import type { TicketStatus as Status } from "@supportgrid/shared";
 import { api } from "../api.ts";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from "@/components/ui/table";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+
+const badgeVariant: Record<string, "default" | "secondary" | "outline"> = {
+  open: "default",
+  resolved: "secondary",
+  closed: "outline",
+};
 
 export function TicketList() {
   const [status, setStatus] = useState<Status | "">("");
@@ -13,50 +26,57 @@ export function TicketList() {
     queryFn: () => api.listTickets(status ? { status } : {}),
   });
 
-  if (isLoading) return <p>Loading tickets…</p>;
-  if (error) return <p className="error">{(error as Error).message}</p>;
+  if (isLoading) return <p className="text-muted-foreground">Loading tickets…</p>;
+  if (error) return <p className="text-destructive">{(error as Error).message}</p>;
 
   return (
     <section>
-      <div className="toolbar">
-        <h1>Tickets</h1>
-        <select value={status} onChange={(e) => setStatus(e.target.value as Status | "")}>
-          <option value="">All statuses</option>
-          {Object.values(TicketStatus).map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </select>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-3xl font-semibold">Tickets</h1>
+        <Select value={status} onValueChange={(v) => setStatus(v as Status | "")}>
+          <SelectTrigger className="w-44 h-10 text-base">
+            <SelectValue placeholder="All statuses" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">All statuses</SelectItem>
+            {Object.values(TicketStatus).map((s) => (
+              <SelectItem key={s} value={s}>{s}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Subject</th>
-            <th>Requester</th>
-            <th>Status</th>
-            <th>Category</th>
-            <th>Created</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Subject</TableHead>
+            <TableHead>Requester</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead>Created</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {data!.items.map((t) => (
-            <tr key={t.id}>
-              <td>
-                <Link to={`/tickets/${t.id}`}>{t.subject}</Link>
-              </td>
-              <td>{t.requesterEmail}</td>
-              <td>
-                <span className={`badge badge-${t.status.toLowerCase()}`}>{t.status}</span>
-              </td>
-              <td>{t.category ?? "—"}</td>
-              <td>{new Date(t.createdAt).toLocaleString()}</td>
-            </tr>
+            <TableRow key={t.id}>
+              <TableCell>
+                <Link to={`/tickets/${t.id}`} className="text-primary hover:underline">
+                  {t.subject}
+                </Link>
+              </TableCell>
+              <TableCell>{t.requesterEmail}</TableCell>
+              <TableCell>
+                <Badge variant={badgeVariant[t.status.toLowerCase()] ?? "outline"}>
+                  {t.status}
+                </Badge>
+              </TableCell>
+              <TableCell>{t.category ?? "—"}</TableCell>
+              <TableCell>{new Date(t.createdAt).toLocaleString()}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
-      <p className="muted">
+        </TableBody>
+      </Table>
+      <p className="text-muted-foreground text-sm mt-2">
         {data!.total} ticket(s) · page {data!.page}
       </p>
     </section>

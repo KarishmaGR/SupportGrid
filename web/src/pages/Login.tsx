@@ -4,6 +4,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "../auth.tsx";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 const schema = z.object({
   email: z.string().min(1, "Email is required").email("Enter a valid email"),
@@ -27,7 +31,7 @@ export function LoginPage() {
     setServerError("");
     try {
       await signIn(values.email, values.password);
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       setServerError(
         err instanceof Error ? err.message : "Invalid email or password",
@@ -36,56 +40,57 @@ export function LoginPage() {
   }
 
   return (
-    <div className="login-wrapper">
-      <div className="login-card">
-        <h1 className="login-title">SupportGrid</h1>
-        <p className="muted" style={{ marginBottom: 24 }}>
-          Sign in to your account
-        </p>
+    <div className="min-h-screen flex items-center justify-center bg-muted/40">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-3xl">SupportGrid</CardTitle>
+          <CardDescription className="text-base">Sign in to your account</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {serverError && (
+            <div className="mb-4 rounded-lg bg-destructive/10 px-3.5 py-2.5 text-sm text-destructive border border-destructive/20">
+              {serverError}
+            </div>
+          )}
 
-        {serverError && (
-          <div className="server-error">{serverError}</div>
-        )}
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="email" className="text-sm font-semibold">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                autoFocus
+                autoComplete="email"
+                className="h-11 text-base"
+                aria-invalid={!!errors.email}
+                {...register("email")}
+              />
+              {errors.email && (
+                <span className="text-sm text-destructive">{errors.email.message}</span>
+              )}
+            </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="login-form" noValidate>
-          <div className="field">
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              autoFocus
-              autoComplete="email"
-              className={errors.email ? "input-error" : ""}
-              {...register("email")}
-            />
-            {errors.email && (
-              <span className="field-error">{errors.email.message}</span>
-            )}
-          </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="password" className="text-sm font-semibold">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                autoComplete="current-password"
+                className="h-11 text-base"
+                aria-invalid={!!errors.password}
+                {...register("password")}
+              />
+              {errors.password && (
+                <span className="text-sm text-destructive">{errors.password.message}</span>
+              )}
+            </div>
 
-          <div className="field">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              className={errors.password ? "input-error" : ""}
-              {...register("password")}
-            />
-            {errors.password && (
-              <span className="field-error">{errors.password.message}</span>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            style={{ width: "100%", justifyContent: "center" }}
-          >
-            {isSubmitting ? "Signing in…" : "Sign in"}
-          </button>
-        </form>
-      </div>
+            <Button type="submit" disabled={isSubmitting} size="lg" className="w-full mt-1">
+              {isSubmitting ? "Signing in…" : "Sign in"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -14,20 +14,24 @@ Do **not** use Context7 for: refactoring, writing scripts from scratch, debuggin
 
 A web console for AI-assisted support ticket management. Students never use the app — they interact only via support emails. Agents/admins use the console. Full product spec lives in `project-scop.md`, `tech-stack.md`, and `implementation-plan.md`.
 
-**Status:** Phase 0 — foundations. Tickets are stored **in-memory** (`server/src/store.ts`); they reset on server restart. Persistence (Prisma + PostgreSQL) is Phase 1.
+**Status:** Auth + DB foundations complete. Prisma + PostgreSQL in place. better-auth handles session management. Two seeded users exist (see Seeds section below).
 
 ## Stack
 
 - **Runtime / package manager:** Bun 1.3+ (workspace monorepo)
 - **Backend:** Express 4 + TypeScript, Zod validation — `server/`
 - **Frontend:** React 18 + Vite + TypeScript, TanStack Query, React Router — `web/`
-- **Shared:** `@ticket/shared` — domain types + API contract, imported by both — `shared/src/index.ts`
+- **Shared:** `@supportgrid/shared` — domain types + API contract, imported by both — `shared/src/index.ts`
+- **Auth:** `better-auth` (email/password, session cookies, JWT plugin) — `server/src/auth.ts`
+- **UI components:** shadcn/ui (Radix-based) — `web/src/components/ui/`
+- **Form validation:** React Hook Form + Zod (`@hookform/resolvers/zod`) — used in Login
+- **Database:** PostgreSQL on port `5432`, accessed via Prisma ORM — DB name `SupportGrid`
 
 ## Layout
 
 ```
-shared/   @ticket/shared — types shared by server + web (source-only, no build step)
-server/   Express REST API (Bun runtime), in-memory store
+shared/   @supportgrid/shared — types shared by server + web (source-only, no build step)
+server/   Express REST API (Bun runtime), Prisma + PostgreSQL
 web/      React + Vite SPA; dev server proxies /api/* → :4000
 ```
 
@@ -46,6 +50,50 @@ bun run build      # production build of all workspaces
 
 Web: http://localhost:5173 · API: http://localhost:4000 · health: `GET /api/health`
 
+## Authentication flow
+
+- Login page: `web/src/pages/Login.tsx` — React Hook Form + Zod, posts to `better-auth` via `web/src/api.ts` (`auth.signIn`)
+- Session stored as a cookie; `auth.getSession()` called on app load in `AuthProvider` (`web/src/auth.tsx`)
+- After login → redirects to `/dashboard`
+- `ProtectedRoute` (`web/src/ProtectedRoute.tsx`) — redirects unauthenticated users to `/login`
+- `AdminRoute` (`web/src/AdminRoute.tsx`) — redirects non-admins to `/dashboard`; checks `user.role === UserRole.Admin`
+- `UserRole` enum lives in `shared/src/index.ts` — always use it instead of hardcoding role strings
+
+## Roles
+
+| Role | Value (`UserRole`) | Access |
+|------|--------------------|--------|
+| Admin | `UserRole.Admin` = `"Admin"` | All routes including `/users` |
+| Agent | `UserRole.Agent` | All routes except `/users` |
+
+## Seeds
+
+Run from the `server/` directory:
+
+```bash
+# Admin user
+SEED_ADMIN_EMAIL=admin@example.com SEED_ADMIN_PASSWORD=Password@123 bun run src/generate/prisma/seed.ts
+
+# Agent user (credentials hardcoded in script)
+bun run src/generate/prisma/seed-agent.ts
+# → agent@example.com / Password@123
+```
+
+To inspect DB tables in the browser:
+```bash
+cd server && bunx prisma studio   # opens http://localhost:5555
+```
+
+## Routing (web)
+
+| Path | Component | Guard |
+|------|-----------|-------|
+| `/login` | `LoginPage` | public |
+| `/dashboard` | `Dashboard` | auth |
+| `/tickets` | `TicketList` | auth |
+| `/tickets/:id` | `TicketDetailPage` | auth |
+| `/users` | `UsersPage` | admin only |
+
 ## Conventions
 
 - TypeScript is `strict` with `noUncheckedIndexedAccess`. Bun resolves `.ts` import extensions directly (`allowImportingTsExtensions` in `tsconfig.base.json`) — keep explicit `.ts` extensions on relative imports in `server/`.
@@ -54,4 +102,4 @@ Web: http://localhost:5173 · API: http://localhost:4000 · health: `GET /api/he
 
 ## Roadmap
 
-See `implementation-plan.md`. Next: Phase 1 (Prisma + PostgreSQL), Phase 2 (JWT auth + roles), Phase 4 (Redis + BullMQ), Phase 7 (Anthropic AI: classification, summaries, suggested replies — Haiku for classify/summary, Opus for drafted replies).
+See `implementation-plan.md`. Phase 0 (auth + DB) done. Next: Phase 4 (Redis + BullMQ), Phase 7 (Anthropic AI: classification, summaries, suggested replies — Haiku for classify/summary, Opus for drafted replies).

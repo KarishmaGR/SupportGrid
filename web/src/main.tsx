@@ -5,7 +5,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { App } from "./App.tsx";
 import { AuthProvider } from "./auth.tsx";
 import { ProtectedRoute } from "./ProtectedRoute.tsx";
+import { AdminRoute } from "./AdminRoute.tsx";
+import { UsersPage } from "./pages/Users.tsx";
 import { LoginPage } from "./pages/Login.tsx";
+import { Dashboard } from "./pages/Dashboard.tsx";
 import { TicketList } from "./pages/TicketList.tsx";
 import { TicketDetailPage } from "./pages/TicketDetail.tsx";
 import "./styles.css";
@@ -21,8 +24,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route path="/login" element={<LoginPage />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/" element={<App />}>
-                <Route index element={<TicketList />} />
+                <Route path="dashboard" element={<Dashboard />} />
+                <Route path="tickets" element={<TicketList />} />
                 <Route path="tickets/:id" element={<TicketDetailPage />} />
+                <Route element={<AdminRoute />}>
+                  <Route path="users" element={<UsersPage />} />
+                </Route>
               </Route>
             </Route>
           </Routes>
