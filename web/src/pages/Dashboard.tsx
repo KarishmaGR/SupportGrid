@@ -3,17 +3,18 @@ import { Link } from "react-router-dom";
 import { api } from "../api.ts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import type { Ticket } from "@supportgrid/shared";
+import { TicketStatus, type Paginated, type Ticket } from "@supportgrid/shared";
 
 export function Dashboard() {
-  const { data: tickets = [] } = useQuery<Ticket[]>({
+  const { data } = useQuery<Paginated<Ticket>>({
     queryKey: ["tickets"],
-    queryFn: () => api("/tickets"),
+    queryFn: () => api.listTickets(),
   });
 
-  const open = tickets.filter((t) => t.status === "open").length;
-  const inProgress = tickets.filter((t) => t.status === "in_progress").length;
-  const resolved = tickets.filter((t) => t.status === "resolved").length;
+  const tickets = data?.items ?? [];
+  const open = tickets.filter((t) => t.status === TicketStatus.Open).length;
+  const inProgress = tickets.filter((t) => t.status === TicketStatus.Closed).length;
+  const resolved = tickets.filter((t) => t.status === TicketStatus.Resolved).length;
 
   return (
     <div className="flex flex-col gap-8">
@@ -52,9 +53,7 @@ export function Dashboard() {
       </div>
 
       <div className="flex items-center gap-4">
-        <Button asChild>
-          <Link to="/tickets">View all tickets</Link>
-        </Button>
+        <Button render={<Link to="/tickets" />}>View all tickets</Button>
       </div>
     </div>
   );
