@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { UserRole } from "@supportgrid/shared";
 import { api } from "../api.ts";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
@@ -12,14 +13,31 @@ export function UsersPage() {
     queryFn: () => api.listUsers(),
   });
 
-  if (isLoading) return <p className="text-muted-foreground">Loading users…</p>;
+  if (isLoading) return (
+    <section>
+      <div className="mb-4">
+        <h1 className="text-3xl font-semibold">Users</h1>
+        <p className="text-muted-foreground text-sm mt-1">Manage system users</p>
+      </div>
+      <div className="space-y-3">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="flex gap-4">
+            <Skeleton className="h-8 w-1/4" />
+            <Skeleton className="h-8 w-1/3" />
+            <Skeleton className="h-8 w-16" />
+            <Skeleton className="h-8 w-16" />
+            <Skeleton className="h-8 w-1/4" />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
   if (error) return <p className="text-destructive">{(error as Error).message}</p>;
 
   return (
     <section>
       <div className="mb-4">
         <h1 className="text-3xl font-semibold">Users</h1>
-        <p className="text-muted-foreground text-sm mt-1">Manage system users</p>
       </div>
 
       <Table>
@@ -52,7 +70,7 @@ export function UsersPage() {
           ))}
         </TableBody>
       </Table>
-      <p className="text-muted-foreground text-sm mt-2">{data!.length} user(s)</p>
+      
     </section>
   );
 }
