@@ -8,3 +8,7 @@ build/
 bun.lockb
 web/dist/
 server/dist/
+e2e/.env.test
+e2e/.auth/
+e2e/test-results/
+e2e/playwright-report/

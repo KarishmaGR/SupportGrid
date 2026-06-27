@@ -25,15 +25,16 @@ app.use(
   }),
 );
 
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 20,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: "Too many requests, please try again later" },
-});
-
-app.use("/api/auth/sign-in", authLimiter);
+if (process.env.NODE_ENV === "production") {
+  const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 20,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: "Too many requests, please try again later" },
+  });
+  app.use("/api/auth/sign-in", authLimiter);
+}
 
 // better-auth must come before express.json()
 app.all("/api/auth/*", toNodeHandler(auth));
