@@ -98,7 +98,7 @@ export function UsersPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-1">
               <Label htmlFor="name">Name</Label>
-              <Input id="name" {...register("name")} placeholder="Full name" />
+              <Input id="name" {...register("name")} placeholder="Full name" className={errors.name ? "border-destructive" : ""} />
               {errors.name && (
                 <p className="text-destructive text-sm">{errors.name.message}</p>
               )}
@@ -106,7 +106,7 @@ export function UsersPage() {
 
             <div className="space-y-1">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" {...register("email")} placeholder="user@example.com" />
+              <Input id="email" type="email" {...register("email")} placeholder="user@example.com" className={errors.email ? "border-destructive" : ""} />
               {errors.email && (
                 <p className="text-destructive text-sm">{errors.email.message}</p>
               )}
@@ -114,7 +114,7 @@ export function UsersPage() {
 
             <div className="space-y-1">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" {...register("password")} placeholder="Min 8 characters" />
+              <Input id="password" type="password" {...register("password")} placeholder="Min 8 characters" className={errors.password ? "border-destructive" : ""} />
               {errors.password && (
                 <p className="text-destructive text-sm">{errors.password.message}</p>
               )}
