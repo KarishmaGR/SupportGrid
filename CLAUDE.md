@@ -100,6 +100,31 @@ cd server && bunx prisma studio   # opens http://localhost:5555
 - Shared types are the source of truth for the API contract — update `shared/src/index.ts` first, then server and web.
 - Validate all request bodies/queries with Zod in `server/src/routes/`.
 
+## Component Testing
+
+Use **Vitest + React Testing Library** for component-level tests in the `web/` workspace.
+
+```bash
+bun run --cwd web test        # run all component tests once
+bun run --cwd web test:watch  # watch mode
+```
+
+- Test files go in `web/src/test/*.test.tsx`
+- Import `describe`, `it`, `expect`, `vi`, `beforeEach` from `vitest` (globals are enabled — no explicit import needed, but be explicit for clarity)
+- Render with a fresh `QueryClient` per test — use a local `renderWithQuery` helper that wraps the component in `QueryClientProvider` with `retry: false`
+- Always mock `../api.ts` with `vi.mock` — tests must never hit the network
+- Clear mocks in `beforeEach` with `vi.clearAllMocks()`
+- Use `waitFor` from `@testing-library/react` to assert after async data loads
+- Setup file: `web/src/test/setup.ts` (imports `@testing-library/jest-dom` — do not remove)
+
+**What to cover in every page/component test:**
+1. Loading state (skeleton or spinner visible)
+2. Successful data render (key fields appear)
+3. Column/section headers
+4. Badges or status indicators
+5. Error state (error message shown)
+6. Empty state (no rows / empty list)
+
 ## E2E Testing
 
 Use the **`e2e-test-writer` agent** to write Playwright tests after implementing any new page, route, or significant feature.
