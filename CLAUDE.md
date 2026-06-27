@@ -72,11 +72,9 @@ Run from the `server/` directory:
 
 ```bash
 # Admin user
-SEED_ADMIN_EMAIL=admin@example.com SEED_ADMIN_PASSWORD=Password@123 bun run src/generate/prisma/seed.ts
+SEED_ADMIN_EMAIL=<email> SEED_ADMIN_PASSWORD=<password> bun run src/generate/prisma/seed.ts
 
-# Agent user (credentials hardcoded in script)
-bun run src/generate/prisma/seed-agent.ts
-# → agent@example.com / Password@123
+
 ```
 
 To inspect DB tables in the browser:

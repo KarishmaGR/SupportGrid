@@ -23,8 +23,7 @@ const updateSchema = z.object({
 });
 
 const replySchema = z.object({
-  from: z.string().min(1),
-  body: z.string().min(1),
+  body: z.string().min(1).max(10_000),
 });
 
 const listQuerySchema = z.object({
@@ -93,7 +92,8 @@ ticketsRouter.post("/:id/replies", async (req, res, next) => {
     if (!parsed.success) {
       return res.status(400).json({ error: "Invalid body", details: parsed.error.flatten() });
     }
-    const message = await store.addReply(req.params.id, parsed.data.from, parsed.data.body);
+    const from = (res.locals.session as { user: { email: string } }).user.email;
+    const message = await store.addReply(req.params.id, from, parsed.data.body);
     if (!message) return res.status(404).json({ error: "Ticket not found" });
     res.status(201).json(message);
   } catch (err) {
