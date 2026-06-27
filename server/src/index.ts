@@ -5,6 +5,7 @@ import rateLimit from "express-rate-limit";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./auth.ts";
 import { ticketsRouter } from "./routes/tickets.ts";
+import { usersRouter } from "./routes/users.ts";
 
 const app = express();
 const PORT = Number(process.env.PORT ?? 4000);
@@ -46,6 +47,7 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.use("/api/tickets", ticketsRouter);
+app.use("/api/users", usersRouter);
 
 // Centralized error handler.
 app.use(

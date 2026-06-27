@@ -1,25 +1,45 @@
+import axios from "axios";
 import type {
   CreateTicketInput,
   Paginated,
   Ticket,
   TicketDetail,
   UpdateTicketInput,
+  User,
 } from "@supportgrid/shared";
 
-const BASE = "/api";
+const client = axios.create({
+  baseURL: "/api",
+  withCredentials: true,
+  headers: { "Content-Type": "application/json" },
+});
 
-async function http<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, {
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    ...init,
-  });
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}));
-    throw new Error(body.error ?? `Request failed: ${res.status}`);
-  }
-  return res.json() as Promise<T>;
-}
+client.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    const message =
+      err.response?.data?.error ??
+      err.response?.data?.message ??
+      `Request failed: ${err.response?.status ?? "unknown"}`;
+    return Promise.reject(new Error(message));
+  },
+);
+
+const authClient = axios.create({
+  withCredentials: true,
+  headers: { "Content-Type": "application/json" },
+});
+
+authClient.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    const message =
+      err.response?.data?.message ??
+      err.response?.data?.error ??
+      `Request failed: ${err.response?.status ?? "unknown"}`;
+    return Promise.reject(new Error(message));
+  },
+);
 
 interface SessionUser {
   id: string;
@@ -28,44 +48,32 @@ interface SessionUser {
   role: string;
 }
 
-async function authHttp<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(path, {
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    ...init,
-  });
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({}));
-    throw new Error(body.message ?? body.error ?? `Request failed: ${res.status}`);
-  }
-  return res.json() as Promise<T>;
-}
-
 export const auth = {
   getSession: () =>
-    authHttp<{ user: SessionUser } | null>("/api/auth/get-session"),
+    authClient
+      .get<{ user: SessionUser } | null>("/api/auth/get-session")
+      .then((r) => r.data),
   signIn: (email: string, password: string) =>
-    authHttp<{ user: SessionUser }>("/api/auth/sign-in/email", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    }),
+    authClient
+      .post<{ user: SessionUser }>("/api/auth/sign-in/email", { email, password })
+      .then((r) => r.data),
   signOut: () =>
-    authHttp<void>("/api/auth/sign-out", { method: "POST" }),
+    authClient.post<void>("/api/auth/sign-out").then((r) => r.data),
 };
 
 export const api = {
-  listTickets: (params: Record<string, string> = {}) => {
-    const qs = new URLSearchParams(params).toString();
-    return http<Paginated<Ticket>>(`/tickets${qs ? `?${qs}` : ""}`);
-  },
-  getTicket: (id: string) => http<TicketDetail>(`/tickets/${id}`),
+  listTickets: (params: Record<string, string> = {}) =>
+    client
+      .get<Paginated<Ticket>>("/tickets", { params })
+      .then((r) => r.data),
+  getTicket: (id: string) =>
+    client.get<TicketDetail>(`/tickets/${id}`).then((r) => r.data),
   createTicket: (input: CreateTicketInput) =>
-    http<TicketDetail>("/tickets", { method: "POST", body: JSON.stringify(input) }),
+    client.post<TicketDetail>("/tickets", input).then((r) => r.data),
   updateTicket: (id: string, patch: UpdateTicketInput) =>
-    http<Ticket>(`/tickets/${id}`, { method: "PATCH", body: JSON.stringify(patch) }),
+    client.patch<Ticket>(`/tickets/${id}`, patch).then((r) => r.data),
   addReply: (id: string, from: string, body: string) =>
-    http(`/tickets/${id}/replies`, {
-      method: "POST",
-      body: JSON.stringify({ from, body }),
-    }),
+    client.post(`/tickets/${id}/replies`, { from, body }).then((r) => r.data),
+  listUsers: () =>
+    client.get<User[]>("/users").then((r) => r.data),
 };

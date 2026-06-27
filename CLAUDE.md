@@ -23,6 +23,8 @@ A web console for AI-assisted support ticket management. Students never use the 
 - **Frontend:** React 18 + Vite + TypeScript, TanStack Query, React Router — `web/`
 - **Shared:** `@supportgrid/shared` — domain types + API contract, imported by both — `shared/src/index.ts`
 - **Auth:** `better-auth` (email/password, session cookies, JWT plugin) — `server/src/auth.ts`
+- **HTTP client:** Axios — `web/src/api.ts` (two instances: `client` for `/api/*`, `authClient` for better-auth endpoints; both use `withCredentials: true`; errors are normalized in response interceptors)
+- **Data fetching:** TanStack Query (`useQuery` / `useMutation`) — always use it to call `api.*` functions from components; never call `api.*` directly outside of query/mutation functions
 - **UI components:** shadcn/ui (Radix-based) — `web/src/components/ui/`
 - **Form validation:** React Hook Form + Zod (`@hookform/resolvers/zod`) — used in Login
 - **Database:** PostgreSQL on port `5432`, accessed via Prisma ORM — DB name `SupportGrid`
