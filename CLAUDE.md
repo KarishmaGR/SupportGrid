@@ -98,6 +98,22 @@ cd server && bunx prisma studio   # opens http://localhost:5555
 - Shared types are the source of truth for the API contract — update `shared/src/index.ts` first, then server and web.
 - Validate all request bodies/queries with Zod in `server/src/routes/`.
 
+## E2E Testing
+
+Use the **`e2e-test-writer` agent** to write Playwright tests after implementing any new page, route, or significant feature.
+
+```bash
+bun run test:e2e       # run all tests headlessly
+bun run test:e2e:ui    # open Playwright UI
+```
+
+- Test files go in `e2e/tests/*.spec.ts`
+- Import `test` and `expect` from `../fixtures/index.ts` (not directly from `@playwright/test`)
+- Always use `SupportGrid_test` database for tests — never the dev `SupportGrid` DB
+- Test DB config lives in `e2e/.env.test` (gitignored); `global-setup.ts` runs migrations + seeds automatically
+- Test admin: `admin@e2e.test` / `E2ePassword@123` (read from `process.env.TEST_ADMIN_EMAIL` / `TEST_ADMIN_PASSWORD`)
+- Rate limiting is disabled in dev/test — only active when `NODE_ENV=production`
+
 ## Roadmap
 
 See `implementation-plan.md`. Phase 0 (auth + DB) done. Next: Phase 4 (Redis + BullMQ), Phase 7 (Anthropic AI: classification, summaries, suggested replies — Haiku for classify/summary, Opus for drafted replies).
