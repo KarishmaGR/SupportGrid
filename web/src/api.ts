@@ -1,6 +1,7 @@
 import axios from "axios";
 import type {
   CreateTicketInput,
+  CreateUserInput,
   Paginated,
   Ticket,
   TicketDetail,
@@ -76,4 +77,6 @@ export const api = {
     client.post(`/tickets/${id}/replies`, { from, body }).then((r) => r.data),
   listUsers: () =>
     client.get<User[]>("/users").then((r) => r.data),
+  createUser: (input: CreateUserInput) =>
+    client.post<User>("/users", input).then((r) => r.data),
 };

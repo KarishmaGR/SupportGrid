@@ -66,7 +66,9 @@ Web: http://localhost:5173 · API: http://localhost:4000 · health: `GET /api/he
 | Role | Value (`UserRole`) | Access |
 |------|--------------------|--------|
 | Admin | `UserRole.Admin` = `"Admin"` | All routes including `/users` |
-| Agent | `UserRole.Agent` | All routes except `/users` |
+| Agent | `UserRole.Agent` = `"Agent"` | All routes except `/users` |
+
+**Rule:** Always use the `UserRole` enum from `@supportgrid/shared` — never hardcode `"Admin"` or `"Agent"` strings anywhere in server or web code. This applies to route guards, API payloads, Prisma queries, and form submissions (e.g. `role: UserRole.Agent` when creating a new user).
 
 ## Seeds
 

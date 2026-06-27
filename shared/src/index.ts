@@ -86,6 +86,13 @@ export interface Paginated<T> {
   total: number;
 }
 
+export interface CreateUserInput {
+  name: string;
+  email: string;
+  password: string;
+  role: UserRole;
+}
+
 export interface ApiError {
   error: string;
   details?: unknown;
