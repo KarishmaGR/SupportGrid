@@ -75,6 +75,19 @@ export async function createTicket(input: CreateTicketInput): Promise<TicketDeta
   return { ...toTicket(ticket), replies: ticket.replies.map(toReply) };
 }
 
+export async function getTicketStats() {
+  const rows = await prisma.ticket.groupBy({ by: ["status"], _count: { _all: true } });
+  const map = Object.fromEntries(rows.map((r) => [r.status, r._count._all]));
+  const total = rows.reduce((s, r) => s + r._count._all, 0);
+  return {
+    total,
+    open:     map["Open"]     ?? 0,
+    resolved: map["Resolved"] ?? 0,
+    closed:   map["Closed"]   ?? 0,
+    new:      map["New"]      ?? 0,
+  };
+}
+
 export async function listTickets(
   query: ListTicketsQuery,
 ): Promise<{ items: Ticket[]; total: number; page: number; pageSize: number }> {
@@ -85,6 +98,16 @@ export async function listTickets(
   const where = {
     ...(query.status ? { status: query.status } : {}),
     ...(query.category ? { category: query.category } : {}),
+    ...(query.search
+      ? {
+          OR: [
+            { subject:     { contains: query.search, mode: "insensitive" as const } },
+            { senderEmail: { contains: query.search, mode: "insensitive" as const } },
+            { senderName:  { contains: query.search, mode: "insensitive" as const } },
+            { body:        { contains: query.search, mode: "insensitive" as const } },
+          ],
+        }
+      : {}),
   };
   const [items, total] = await Promise.all([
     prisma.ticket.findMany({

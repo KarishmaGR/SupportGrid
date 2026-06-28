@@ -32,10 +32,19 @@ const replySchema = z.object({
 const listQuerySchema = z.object({
   status: z.nativeEnum(TicketStatus).optional(),
   category: z.nativeEnum(TicketCategory).optional(),
+  search: z.string().optional(),
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(100).default(20),
-  sort: z.enum(["createdAt", "updatedAt"]).default("createdAt"),
+  sort: z.enum(["subject", "senderEmail", "status", "category", "createdAt", "updatedAt"]).default("createdAt"),
   order: z.enum(["asc", "desc"]).default("desc"),
+});
+
+ticketsRouter.get("/stats", async (_req, res, next) => {
+  try {
+    res.json(await store.getTicketStats());
+  } catch (err) {
+    next(err);
+  }
 });
 
 ticketsRouter.get("/", async (req, res, next) => {

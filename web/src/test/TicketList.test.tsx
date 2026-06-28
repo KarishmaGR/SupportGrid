@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MemoryRouter } from "react-router-dom";
 import { TicketList } from "../pages/TicketList.tsx";
@@ -73,11 +73,12 @@ describe("TicketList", () => {
 
     await waitFor(() => screen.getByText("Cannot log in"));
 
-    expect(screen.getByText("Subject")).toBeInTheDocument();
-    expect(screen.getByText("Requester")).toBeInTheDocument();
-    expect(screen.getByText("Status")).toBeInTheDocument();
-    expect(screen.getByText("Category")).toBeInTheDocument();
-    expect(screen.getByText("Created")).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: /subject/i })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: /requester/i })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: /status/i })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: /category/i })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: /created/i })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: /updated/i })).toBeInTheDocument();
   });
 
   it("renders ticket rows with subject, sender email and category", async () => {
@@ -132,6 +133,41 @@ describe("TicketList", () => {
     await waitFor(() => {
       expect(screen.getByText("Failed to load tickets")).toBeInTheDocument();
     });
+  });
+
+  it("calls listTickets with sort params when a column header is clicked", async () => {
+    vi.mocked(api.listTickets).mockResolvedValue(mockPaginated);
+    renderWithProviders(<TicketList />);
+
+    await waitFor(() => screen.getByText("Cannot log in"));
+
+    fireEvent.click(screen.getByRole("columnheader", { name: /created/i }));
+
+    await waitFor(() => {
+      expect(api.listTickets).toHaveBeenCalledWith(
+        expect.objectContaining({ sort: "createdAt", order: "asc" }),
+      );
+    });
+  });
+
+  it("toggles sort order to desc on second click of the same header", async () => {
+    vi.mocked(api.listTickets).mockResolvedValue(mockPaginated);
+    renderWithProviders(<TicketList />);
+
+    await waitFor(() => screen.getByText("Cannot log in"));
+
+    // First click → asc
+    fireEvent.click(screen.getByRole("columnheader", { name: /created/i }));
+    await waitFor(() =>
+      expect(api.listTickets).toHaveBeenCalledWith(expect.objectContaining({ order: "asc" })),
+    );
+
+    // Wait for data to re-render, then second click → desc
+    await waitFor(() => screen.getByText("Cannot log in"));
+    fireEvent.click(screen.getByRole("columnheader", { name: /created/i }));
+    await waitFor(() =>
+      expect(api.listTickets).toHaveBeenCalledWith(expect.objectContaining({ order: "desc" })),
+    );
   });
 
   it("renders an empty table body when there are no tickets", async () => {

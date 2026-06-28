@@ -64,6 +64,8 @@ export const auth = {
 };
 
 export const api = {
+  getTicketStats: () =>
+    client.get<import("@supportgrid/shared").TicketStats>("/tickets/stats").then((r) => r.data),
   listTickets: (params: Record<string, string> = {}) =>
     client
       .get<Paginated<Ticket>>("/tickets", { params })

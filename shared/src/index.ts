@@ -85,12 +85,21 @@ export interface InboundEmailPayload {
   inReplyTo?: string; // email In-Reply-To for threading
 }
 
+export interface TicketStats {
+  total: number;
+  open: number;
+  resolved: number;
+  closed: number;
+  new: number;
+}
+
 export interface ListTicketsQuery {
   status?: TicketStatus;
   category?: TicketCategory;
+  search?: string;
   page?: number;
   pageSize?: number;
-  sort?: "createdAt" | "updatedAt";
+  sort?: "subject" | "senderEmail" | "status" | "category" | "createdAt" | "updatedAt";
   order?: "asc" | "desc";
 }
 
