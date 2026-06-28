@@ -179,21 +179,26 @@ exports.Prisma.JwksScalarFieldEnum = {
 exports.Prisma.TicketScalarFieldEnum = {
   id: 'id',
   subject: 'subject',
-  requesterEmail: 'requesterEmail',
+  body: 'body',
+  bodyHtml: 'bodyHtml',
   status: 'status',
   category: 'category',
-  summary: 'summary',
-  assigneeId: 'assigneeId',
+  senderName: 'senderName',
+  senderEmail: 'senderEmail',
+  assignedToId: 'assignedToId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.MessageScalarFieldEnum = {
+exports.Prisma.ReplyScalarFieldEnum = {
   id: 'id',
   ticketId: 'ticketId',
-  direction: 'direction',
-  from: 'from',
   body: 'body',
+  bodyHtml: 'bodyHtml',
+  senderName: 'senderName',
+  senderEmail: 'senderEmail',
+  direction: 'direction',
+  messageId: 'messageId',
   createdAt: 'createdAt'
 };
 
@@ -228,6 +233,7 @@ exports.UserRole = exports.$Enums.UserRole = {
 };
 
 exports.TicketStatus = exports.$Enums.TicketStatus = {
+  New: 'New',
   Open: 'Open',
   Resolved: 'Resolved',
   Closed: 'Closed'
@@ -239,7 +245,7 @@ exports.TicketCategory = exports.$Enums.TicketCategory = {
   Refund: 'Refund'
 };
 
-exports.MessageDirection = exports.$Enums.MessageDirection = {
+exports.ReplyDirection = exports.$Enums.ReplyDirection = {
   inbound: 'inbound',
   outbound: 'outbound'
 };
@@ -251,7 +257,7 @@ exports.Prisma.ModelName = {
   Verification: 'Verification',
   Jwks: 'Jwks',
   Ticket: 'Ticket',
-  Message: 'Message',
+  Reply: 'Reply',
   AiSuggestion: 'AiSuggestion'
 };
 

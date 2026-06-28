@@ -64,7 +64,7 @@ export function TicketList() {
                   {t.subject}
                 </Link>
               </TableCell>
-              <TableCell>{t.requesterEmail}</TableCell>
+              <TableCell>{t.senderEmail}</TableCell>
               <TableCell>
                 <Badge variant={badgeVariant[t.status.toLowerCase()] ?? "outline"}>
                   {t.status}

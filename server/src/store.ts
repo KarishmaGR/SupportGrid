@@ -1,56 +1,62 @@
 
-// Prisma-backed data access for tickets, messages, and users.
+// Prisma-backed data access for tickets, replies, and users.
 import type {
   CreateTicketInput,
   ListTicketsQuery,
-  Message,
+  Reply,
   Ticket,
   TicketDetail,
   UpdateTicketInput,
 } from "@supportgrid/shared";
 import { prisma } from "./db.ts";
 
-// Prisma returns DateTime as Date and enums as strings that match our shared
-// union types, so we serialize dates to ISO strings to match the API contract.
 function toTicket(t: {
-  id: string;
+  id: number;
   subject: string;
-  requesterEmail: string;
+  body: string;
+  bodyHtml: string | null;
+  senderName: string;
+  senderEmail: string;
   status: string;
   category: string | null;
-  assigneeId: string | null;
-  summary: string | null;
+  assignedToId: string | null;
   createdAt: Date;
   updatedAt: Date;
 }): Ticket {
   return {
     id: t.id,
     subject: t.subject,
-    requesterEmail: t.requesterEmail,
+    body: t.body,
+    bodyHtml: t.bodyHtml,
+    senderName: t.senderName,
+    senderEmail: t.senderEmail,
     status: t.status as Ticket["status"],
     category: t.category as Ticket["category"],
-    assigneeId: t.assigneeId,
-    summary: t.summary,
+    assignedToId: t.assignedToId,
     createdAt: t.createdAt.toISOString(),
     updatedAt: t.updatedAt.toISOString(),
   };
 }
 
-function toMessage(m: {
-  id: string;
-  ticketId: string;
+function toReply(r: {
+  id: number;
+  ticketId: number;
   direction: string;
-  from: string;
+  senderName: string | null;
+  senderEmail: string;
   body: string;
+  bodyHtml: string | null;
   createdAt: Date;
-}): Message {
+}): Reply {
   return {
-    id: m.id,
-    ticketId: m.ticketId,
-    direction: m.direction as Message["direction"],
-    from: m.from,
-    body: m.body,
-    createdAt: m.createdAt.toISOString(),
+    id: r.id,
+    ticketId: r.ticketId,
+    direction: r.direction as Reply["direction"],
+    senderName: r.senderName,
+    senderEmail: r.senderEmail,
+    body: r.body,
+    bodyHtml: r.bodyHtml,
+    createdAt: r.createdAt.toISOString(),
   };
 }
 
@@ -58,19 +64,15 @@ export async function createTicket(input: CreateTicketInput): Promise<TicketDeta
   const ticket = await prisma.ticket.create({
     data: {
       subject: input.subject,
-      requesterEmail: input.requesterEmail,
+      body: input.body,
+      bodyHtml: input.bodyHtml ?? null,
+      senderName: input.senderName,
+      senderEmail: input.senderEmail,
       category: input.category ?? null,
-      messages: {
-        create: {
-          direction: "inbound",
-          from: input.requesterEmail,
-          body: input.body,
-        },
-      },
     },
-    include: { messages: { orderBy: { createdAt: "asc" } } },
+    include: { replies: { orderBy: { createdAt: "asc" } } },
   });
-  return { ...toTicket(ticket), messages: ticket.messages.map(toMessage) };
+  return { ...toTicket(ticket), replies: ticket.replies.map(toReply) };
 }
 
 export async function listTickets(
@@ -96,17 +98,17 @@ export async function listTickets(
   return { items: items.map(toTicket), total, page, pageSize };
 }
 
-export async function getTicket(id: string): Promise<TicketDetail | null> {
+export async function getTicket(id: number): Promise<TicketDetail | null> {
   const ticket = await prisma.ticket.findUnique({
     where: { id },
-    include: { messages: { orderBy: { createdAt: "asc" } } },
+    include: { replies: { orderBy: { createdAt: "asc" } } },
   });
   if (!ticket) return null;
-  return { ...toTicket(ticket), messages: ticket.messages.map(toMessage) };
+  return { ...toTicket(ticket), replies: ticket.replies.map(toReply) };
 }
 
 export async function updateTicket(
-  id: string,
+  id: number,
   patch: UpdateTicketInput,
 ): Promise<Ticket | null> {
   const exists = await prisma.ticket.findUnique({ where: { id } });
@@ -116,24 +118,88 @@ export async function updateTicket(
     data: {
       ...(patch.status ? { status: patch.status } : {}),
       ...(patch.category ? { category: patch.category } : {}),
-      ...(patch.assigneeId !== undefined ? { assigneeId: patch.assigneeId } : {}),
+      ...(patch.assignedToId !== undefined ? { assignedToId: patch.assignedToId } : {}),
     },
   });
   return toTicket(ticket);
 }
 
 export async function addReply(
-  ticketId: string,
-  from: string,
+  ticketId: number,
+  senderEmail: string,
+  senderName: string | null,
   body: string,
-): Promise<Message | null> {
+  bodyHtml?: string,
+  direction: "inbound" | "outbound" = "outbound",
+  messageId?: string,
+): Promise<Reply | null> {
   const exists = await prisma.ticket.findUnique({ where: { id: ticketId } });
   if (!exists) return null;
-  const [message] = await prisma.$transaction([
-    prisma.message.create({
-      data: { ticketId, direction: "outbound", from, body },
+  const [reply] = await prisma.$transaction([
+    prisma.reply.create({
+      data: {
+        ticketId,
+        direction,
+        senderEmail,
+        senderName: senderName ?? null,
+        body,
+        bodyHtml: bodyHtml ?? null,
+        messageId: messageId ?? null,
+      },
     }),
     prisma.ticket.update({ where: { id: ticketId }, data: { updatedAt: new Date() } }),
   ]);
-  return toMessage(message);
+  return toReply(reply);
+}
+
+export async function findTicketForThread(
+  senderEmail: string,
+  normalizedSubject: string,
+): Promise<Ticket | null> {
+  const ticket = await prisma.ticket.findFirst({
+    where: {
+      senderEmail,
+      subject: { equals: normalizedSubject, mode: "insensitive" },
+      status: { in: ["New", "Open"] },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+  return ticket ? toTicket(ticket) : null;
+}
+
+export async function findReplyByMessageId(messageId: string): Promise<boolean> {
+  const reply = await prisma.reply.findUnique({ where: { messageId } });
+  return reply !== null;
+}
+
+export async function createTicketFromEmail(data: {
+  subject: string;
+  body: string;
+  bodyHtml?: string;
+  senderName: string;
+  senderEmail: string;
+  messageId?: string;
+}): Promise<{ ticket: Ticket; reply: Reply }> {
+  const ticket = await prisma.ticket.create({
+    data: {
+      subject: data.subject,
+      body: data.body,
+      bodyHtml: data.bodyHtml ?? null,
+      senderName: data.senderName,
+      senderEmail: data.senderEmail,
+      replies: {
+        create: {
+          direction: "inbound",
+          senderEmail: data.senderEmail,
+          senderName: data.senderName,
+          body: data.body,
+          bodyHtml: data.bodyHtml ?? null,
+          messageId: data.messageId ?? null,
+        },
+      },
+    },
+    include: { replies: true },
+  });
+  const reply = ticket.replies[0]!;
+  return { ticket: toTicket(ticket), reply: toReply(reply) };
 }

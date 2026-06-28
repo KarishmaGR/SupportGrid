@@ -1,0 +1,84 @@
+import { Router } from "express";
+import { z } from "zod";
+import { requireWebhookSecret } from "../middleware/requireWebhookSecret.ts";
+import * as store from "../store.ts";
+
+export const webhooksRouter = Router();
+
+const inboundEmailSchema = z.object({
+  from: z.string().min(1),
+  subject: z.string().min(1),
+  body: z.string().min(1),
+  bodyHtml: z.string().optional(),
+  messageId: z.string().optional(),
+  inReplyTo: z.string().optional(),
+});
+
+// Strip Re:/Fwd:/Fw: prefixes recursively for thread matching.
+function normalizeSubject(subject: string): string {
+  return subject.replace(/^(re|fwd?)\s*:\s*/i, "").trim();
+}
+
+// Parse "Name <email>" or bare email into { name, email }.
+function parseFrom(from: string): { senderName: string; senderEmail: string } {
+  const match = from.match(/^(.+?)\s*<([^>]+)>\s*$/);
+  if (match) {
+    return { senderName: match[1]!.trim(), senderEmail: match[2]!.trim().toLowerCase() };
+  }
+  return { senderName: from.trim(), senderEmail: from.trim().toLowerCase() };
+}
+
+webhooksRouter.post("/webhooks/inbound-email", requireWebhookSecret, async (req, res, next) => {
+  try {
+    const parsed = inboundEmailSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({ error: "Invalid body", details: parsed.error.flatten() });
+    }
+
+    const { from, subject, body, bodyHtml, messageId, inReplyTo } = parsed.data;
+    const { senderName, senderEmail } = parseFrom(from);
+
+    // Dedup: skip if we've already stored this messageId.
+    if (messageId && (await store.findReplyByMessageId(messageId))) {
+      return res.status(200).json({ duplicate: true });
+    }
+
+    // Thread matching: try inReplyTo first (most reliable), then subject.
+    const normalizedSubject = normalizeSubject(subject);
+    let existingTicket = null;
+
+    if (inReplyTo) {
+      // Find a ticket whose sender matches and subject normalizes to the same string.
+      existingTicket = await store.findTicketForThread(senderEmail, normalizedSubject);
+    }
+    if (!existingTicket) {
+      existingTicket = await store.findTicketForThread(senderEmail, normalizedSubject);
+    }
+
+    if (existingTicket) {
+      await store.addReply(
+        existingTicket.id,
+        senderEmail,
+        senderName,
+        body,
+        bodyHtml,
+        "inbound",
+        messageId,
+      );
+      return res.status(201).json({ ticketId: existingTicket.id, created: false });
+    }
+
+    const { ticket } = await store.createTicketFromEmail({
+      subject: normalizedSubject,
+      body,
+      bodyHtml,
+      senderName,
+      senderEmail,
+      messageId,
+    });
+
+    res.status(201).json({ ticketId: ticket.id, created: true });
+  } catch (err) {
+    next(err);
+  }
+});

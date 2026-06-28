@@ -45,7 +45,7 @@ export function TicketDetailPage() {
       </Link>
       <h1 className="text-3xl font-semibold mt-2 mb-1">{ticket.subject}</h1>
       <div className="flex gap-4 items-center mb-6">
-        <span className="text-muted-foreground text-base">From: {ticket.requesterEmail}</span>
+        <span className="text-muted-foreground text-base">From: {ticket.senderName} &lt;{ticket.senderEmail}&gt;</span>
         <Select
           value={ticket.status}
           onValueChange={(v) => updateStatus.mutate(v as Status)}
@@ -62,7 +62,7 @@ export function TicketDetailPage() {
       </div>
 
       <div className="flex flex-col gap-3">
-        {ticket.messages.map((m) => (
+        {ticket.replies.map((m) => (
           <div
             key={m.id}
             className={`px-4 py-3 rounded-lg bg-card ring-1 ring-foreground/10 max-w-[80%] border-l-[3px] ${
@@ -71,7 +71,7 @@ export function TicketDetailPage() {
                 : "self-end border-green-600"
             }`}
           >
-            <div className="font-semibold text-base mb-1">{m.from}</div>
+            <div className="font-semibold text-base mb-1">{m.senderName ?? m.senderEmail}</div>
             <div className="whitespace-pre-wrap text-sm leading-relaxed">{m.body}</div>
             <div className="text-muted-foreground text-xs mt-2">
               {new Date(m.createdAt).toLocaleString()}

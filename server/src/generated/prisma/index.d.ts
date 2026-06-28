@@ -44,10 +44,10 @@ export type Jwks = $Result.DefaultSelection<Prisma.$JwksPayload>
  */
 export type Ticket = $Result.DefaultSelection<Prisma.$TicketPayload>
 /**
- * Model Message
+ * Model Reply
  * 
  */
-export type Message = $Result.DefaultSelection<Prisma.$MessagePayload>
+export type Reply = $Result.DefaultSelection<Prisma.$ReplyPayload>
 /**
  * Model AiSuggestion
  * 
@@ -59,6 +59,7 @@ export type AiSuggestion = $Result.DefaultSelection<Prisma.$AiSuggestionPayload>
  */
 export namespace $Enums {
   export const TicketStatus: {
+  New: 'New',
   Open: 'Open',
   Resolved: 'Resolved',
   Closed: 'Closed'
@@ -84,12 +85,12 @@ export const UserRole: {
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
-export const MessageDirection: {
+export const ReplyDirection: {
   inbound: 'inbound',
   outbound: 'outbound'
 };
 
-export type MessageDirection = (typeof MessageDirection)[keyof typeof MessageDirection]
+export type ReplyDirection = (typeof ReplyDirection)[keyof typeof ReplyDirection]
 
 }
 
@@ -105,9 +106,9 @@ export type UserRole = $Enums.UserRole
 
 export const UserRole: typeof $Enums.UserRole
 
-export type MessageDirection = $Enums.MessageDirection
+export type ReplyDirection = $Enums.ReplyDirection
 
-export const MessageDirection: typeof $Enums.MessageDirection
+export const ReplyDirection: typeof $Enums.ReplyDirection
 
 /**
  * ##  Prisma Client ʲˢ
@@ -291,14 +292,14 @@ export class PrismaClient<
   get ticket(): Prisma.TicketDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.message`: Exposes CRUD operations for the **Message** model.
+   * `prisma.reply`: Exposes CRUD operations for the **Reply** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Messages
-    * const messages = await prisma.message.findMany()
+    * // Fetch zero or more Replies
+    * const replies = await prisma.reply.findMany()
     * ```
     */
-  get message(): Prisma.MessageDelegate<ExtArgs, ClientOptions>;
+  get reply(): Prisma.ReplyDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.aiSuggestion`: Exposes CRUD operations for the **AiSuggestion** model.
@@ -749,7 +750,7 @@ export namespace Prisma {
     Verification: 'Verification',
     Jwks: 'Jwks',
     Ticket: 'Ticket',
-    Message: 'Message',
+    Reply: 'Reply',
     AiSuggestion: 'AiSuggestion'
   };
 
@@ -766,7 +767,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "session" | "account" | "verification" | "jwks" | "ticket" | "message" | "aiSuggestion"
+      modelProps: "user" | "session" | "account" | "verification" | "jwks" | "ticket" | "reply" | "aiSuggestion"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1214,77 +1215,77 @@ export namespace Prisma {
           }
         }
       }
-      Message: {
-        payload: Prisma.$MessagePayload<ExtArgs>
-        fields: Prisma.MessageFieldRefs
+      Reply: {
+        payload: Prisma.$ReplyPayload<ExtArgs>
+        fields: Prisma.ReplyFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.MessageFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload> | null
+            args: Prisma.ReplyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReplyPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.MessageFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
+            args: Prisma.ReplyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReplyPayload>
           }
           findFirst: {
-            args: Prisma.MessageFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload> | null
+            args: Prisma.ReplyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReplyPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.MessageFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
+            args: Prisma.ReplyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReplyPayload>
           }
           findMany: {
-            args: Prisma.MessageFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>[]
+            args: Prisma.ReplyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReplyPayload>[]
           }
           create: {
-            args: Prisma.MessageCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
+            args: Prisma.ReplyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReplyPayload>
           }
           createMany: {
-            args: Prisma.MessageCreateManyArgs<ExtArgs>
+            args: Prisma.ReplyCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.MessageCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>[]
+            args: Prisma.ReplyCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReplyPayload>[]
           }
           delete: {
-            args: Prisma.MessageDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
+            args: Prisma.ReplyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReplyPayload>
           }
           update: {
-            args: Prisma.MessageUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
+            args: Prisma.ReplyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReplyPayload>
           }
           deleteMany: {
-            args: Prisma.MessageDeleteManyArgs<ExtArgs>
+            args: Prisma.ReplyDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.MessageUpdateManyArgs<ExtArgs>
+            args: Prisma.ReplyUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.MessageUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>[]
+            args: Prisma.ReplyUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReplyPayload>[]
           }
           upsert: {
-            args: Prisma.MessageUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
+            args: Prisma.ReplyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReplyPayload>
           }
           aggregate: {
-            args: Prisma.MessageAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateMessage>
+            args: Prisma.ReplyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateReply>
           }
           groupBy: {
-            args: Prisma.MessageGroupByArgs<ExtArgs>
-            result: $Utils.Optional<MessageGroupByOutputType>[]
+            args: Prisma.ReplyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ReplyGroupByOutputType>[]
           }
           count: {
-            args: Prisma.MessageCountArgs<ExtArgs>
-            result: $Utils.Optional<MessageCountAggregateOutputType> | number
+            args: Prisma.ReplyCountArgs<ExtArgs>
+            result: $Utils.Optional<ReplyCountAggregateOutputType> | number
           }
         }
       }
@@ -1476,7 +1477,7 @@ export namespace Prisma {
     verification?: VerificationOmit
     jwks?: JwksOmit
     ticket?: TicketOmit
-    message?: MessageOmit
+    reply?: ReplyOmit
     aiSuggestion?: AiSuggestionOmit
   }
 
@@ -1607,12 +1608,12 @@ export namespace Prisma {
    */
 
   export type TicketCountOutputType = {
-    messages: number
+    replies: number
     aiSuggestions: number
   }
 
   export type TicketCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    messages?: boolean | TicketCountOutputTypeCountMessagesArgs
+    replies?: boolean | TicketCountOutputTypeCountRepliesArgs
     aiSuggestions?: boolean | TicketCountOutputTypeCountAiSuggestionsArgs
   }
 
@@ -1630,8 +1631,8 @@ export namespace Prisma {
   /**
    * TicketCountOutputType without action
    */
-  export type TicketCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MessageWhereInput
+  export type TicketCountOutputTypeCountRepliesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReplyWhereInput
   }
 
   /**
@@ -7117,30 +7118,44 @@ export namespace Prisma {
 
   export type AggregateTicket = {
     _count: TicketCountAggregateOutputType | null
+    _avg: TicketAvgAggregateOutputType | null
+    _sum: TicketSumAggregateOutputType | null
     _min: TicketMinAggregateOutputType | null
     _max: TicketMaxAggregateOutputType | null
   }
 
+  export type TicketAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type TicketSumAggregateOutputType = {
+    id: number | null
+  }
+
   export type TicketMinAggregateOutputType = {
-    id: string | null
+    id: number | null
     subject: string | null
-    requesterEmail: string | null
+    body: string | null
+    bodyHtml: string | null
     status: $Enums.TicketStatus | null
     category: $Enums.TicketCategory | null
-    summary: string | null
-    assigneeId: string | null
+    senderName: string | null
+    senderEmail: string | null
+    assignedToId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
   export type TicketMaxAggregateOutputType = {
-    id: string | null
+    id: number | null
     subject: string | null
-    requesterEmail: string | null
+    body: string | null
+    bodyHtml: string | null
     status: $Enums.TicketStatus | null
     category: $Enums.TicketCategory | null
-    summary: string | null
-    assigneeId: string | null
+    senderName: string | null
+    senderEmail: string | null
+    assignedToId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7148,25 +7163,37 @@ export namespace Prisma {
   export type TicketCountAggregateOutputType = {
     id: number
     subject: number
-    requesterEmail: number
+    body: number
+    bodyHtml: number
     status: number
     category: number
-    summary: number
-    assigneeId: number
+    senderName: number
+    senderEmail: number
+    assignedToId: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
 
+  export type TicketAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type TicketSumAggregateInputType = {
+    id?: true
+  }
+
   export type TicketMinAggregateInputType = {
     id?: true
     subject?: true
-    requesterEmail?: true
+    body?: true
+    bodyHtml?: true
     status?: true
     category?: true
-    summary?: true
-    assigneeId?: true
+    senderName?: true
+    senderEmail?: true
+    assignedToId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -7174,11 +7201,13 @@ export namespace Prisma {
   export type TicketMaxAggregateInputType = {
     id?: true
     subject?: true
-    requesterEmail?: true
+    body?: true
+    bodyHtml?: true
     status?: true
     category?: true
-    summary?: true
-    assigneeId?: true
+    senderName?: true
+    senderEmail?: true
+    assignedToId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -7186,11 +7215,13 @@ export namespace Prisma {
   export type TicketCountAggregateInputType = {
     id?: true
     subject?: true
-    requesterEmail?: true
+    body?: true
+    bodyHtml?: true
     status?: true
     category?: true
-    summary?: true
-    assigneeId?: true
+    senderName?: true
+    senderEmail?: true
+    assignedToId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -7234,6 +7265,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: TicketAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TicketSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: TicketMinAggregateInputType
@@ -7264,21 +7307,27 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: TicketCountAggregateInputType | true
+    _avg?: TicketAvgAggregateInputType
+    _sum?: TicketSumAggregateInputType
     _min?: TicketMinAggregateInputType
     _max?: TicketMaxAggregateInputType
   }
 
   export type TicketGroupByOutputType = {
-    id: string
+    id: number
     subject: string
-    requesterEmail: string
+    body: string
+    bodyHtml: string | null
     status: $Enums.TicketStatus
     category: $Enums.TicketCategory | null
-    summary: string | null
-    assigneeId: string | null
+    senderName: string
+    senderEmail: string
+    assignedToId: string | null
     createdAt: Date
     updatedAt: Date
     _count: TicketCountAggregateOutputType | null
+    _avg: TicketAvgAggregateOutputType | null
+    _sum: TicketSumAggregateOutputType | null
     _min: TicketMinAggregateOutputType | null
     _max: TicketMaxAggregateOutputType | null
   }
@@ -7300,15 +7349,17 @@ export namespace Prisma {
   export type TicketSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     subject?: boolean
-    requesterEmail?: boolean
+    body?: boolean
+    bodyHtml?: boolean
     status?: boolean
     category?: boolean
-    summary?: boolean
-    assigneeId?: boolean
+    senderName?: boolean
+    senderEmail?: boolean
+    assignedToId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    assignee?: boolean | Ticket$assigneeArgs<ExtArgs>
-    messages?: boolean | Ticket$messagesArgs<ExtArgs>
+    assignedTo?: boolean | Ticket$assignedToArgs<ExtArgs>
+    replies?: boolean | Ticket$repliesArgs<ExtArgs>
     aiSuggestions?: boolean | Ticket$aiSuggestionsArgs<ExtArgs>
     _count?: boolean | TicketCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["ticket"]>
@@ -7316,70 +7367,78 @@ export namespace Prisma {
   export type TicketSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     subject?: boolean
-    requesterEmail?: boolean
+    body?: boolean
+    bodyHtml?: boolean
     status?: boolean
     category?: boolean
-    summary?: boolean
-    assigneeId?: boolean
+    senderName?: boolean
+    senderEmail?: boolean
+    assignedToId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    assignee?: boolean | Ticket$assigneeArgs<ExtArgs>
+    assignedTo?: boolean | Ticket$assignedToArgs<ExtArgs>
   }, ExtArgs["result"]["ticket"]>
 
   export type TicketSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     subject?: boolean
-    requesterEmail?: boolean
+    body?: boolean
+    bodyHtml?: boolean
     status?: boolean
     category?: boolean
-    summary?: boolean
-    assigneeId?: boolean
+    senderName?: boolean
+    senderEmail?: boolean
+    assignedToId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    assignee?: boolean | Ticket$assigneeArgs<ExtArgs>
+    assignedTo?: boolean | Ticket$assignedToArgs<ExtArgs>
   }, ExtArgs["result"]["ticket"]>
 
   export type TicketSelectScalar = {
     id?: boolean
     subject?: boolean
-    requesterEmail?: boolean
+    body?: boolean
+    bodyHtml?: boolean
     status?: boolean
     category?: boolean
-    summary?: boolean
-    assigneeId?: boolean
+    senderName?: boolean
+    senderEmail?: boolean
+    assignedToId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "subject" | "requesterEmail" | "status" | "category" | "summary" | "assigneeId" | "createdAt" | "updatedAt", ExtArgs["result"]["ticket"]>
+  export type TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "subject" | "body" | "bodyHtml" | "status" | "category" | "senderName" | "senderEmail" | "assignedToId" | "createdAt" | "updatedAt", ExtArgs["result"]["ticket"]>
   export type TicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    assignee?: boolean | Ticket$assigneeArgs<ExtArgs>
-    messages?: boolean | Ticket$messagesArgs<ExtArgs>
+    assignedTo?: boolean | Ticket$assignedToArgs<ExtArgs>
+    replies?: boolean | Ticket$repliesArgs<ExtArgs>
     aiSuggestions?: boolean | Ticket$aiSuggestionsArgs<ExtArgs>
     _count?: boolean | TicketCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TicketIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    assignee?: boolean | Ticket$assigneeArgs<ExtArgs>
+    assignedTo?: boolean | Ticket$assignedToArgs<ExtArgs>
   }
   export type TicketIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    assignee?: boolean | Ticket$assigneeArgs<ExtArgs>
+    assignedTo?: boolean | Ticket$assignedToArgs<ExtArgs>
   }
 
   export type $TicketPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Ticket"
     objects: {
-      assignee: Prisma.$UserPayload<ExtArgs> | null
-      messages: Prisma.$MessagePayload<ExtArgs>[]
+      assignedTo: Prisma.$UserPayload<ExtArgs> | null
+      replies: Prisma.$ReplyPayload<ExtArgs>[]
       aiSuggestions: Prisma.$AiSuggestionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
+      id: number
       subject: string
-      requesterEmail: string
+      body: string
+      bodyHtml: string | null
       status: $Enums.TicketStatus
       category: $Enums.TicketCategory | null
-      summary: string | null
-      assigneeId: string | null
+      senderName: string
+      senderEmail: string
+      assignedToId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["ticket"]>
@@ -7776,8 +7835,8 @@ export namespace Prisma {
    */
   export interface Prisma__TicketClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    assignee<T extends Ticket$assigneeArgs<ExtArgs> = {}>(args?: Subset<T, Ticket$assigneeArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    messages<T extends Ticket$messagesArgs<ExtArgs> = {}>(args?: Subset<T, Ticket$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    assignedTo<T extends Ticket$assignedToArgs<ExtArgs> = {}>(args?: Subset<T, Ticket$assignedToArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    replies<T extends Ticket$repliesArgs<ExtArgs> = {}>(args?: Subset<T, Ticket$repliesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReplyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     aiSuggestions<T extends Ticket$aiSuggestionsArgs<ExtArgs> = {}>(args?: Subset<T, Ticket$aiSuggestionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AiSuggestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -7808,13 +7867,15 @@ export namespace Prisma {
    * Fields of the Ticket model
    */
   interface TicketFieldRefs {
-    readonly id: FieldRef<"Ticket", 'String'>
+    readonly id: FieldRef<"Ticket", 'Int'>
     readonly subject: FieldRef<"Ticket", 'String'>
-    readonly requesterEmail: FieldRef<"Ticket", 'String'>
+    readonly body: FieldRef<"Ticket", 'String'>
+    readonly bodyHtml: FieldRef<"Ticket", 'String'>
     readonly status: FieldRef<"Ticket", 'TicketStatus'>
     readonly category: FieldRef<"Ticket", 'TicketCategory'>
-    readonly summary: FieldRef<"Ticket", 'String'>
-    readonly assigneeId: FieldRef<"Ticket", 'String'>
+    readonly senderName: FieldRef<"Ticket", 'String'>
+    readonly senderEmail: FieldRef<"Ticket", 'String'>
+    readonly assignedToId: FieldRef<"Ticket", 'String'>
     readonly createdAt: FieldRef<"Ticket", 'DateTime'>
     readonly updatedAt: FieldRef<"Ticket", 'DateTime'>
   }
@@ -8218,9 +8279,9 @@ export namespace Prisma {
   }
 
   /**
-   * Ticket.assignee
+   * Ticket.assignedTo
    */
-  export type Ticket$assigneeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Ticket$assignedToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the User
      */
@@ -8237,27 +8298,27 @@ export namespace Prisma {
   }
 
   /**
-   * Ticket.messages
+   * Ticket.replies
    */
-  export type Ticket$messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Ticket$repliesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Message
+     * Select specific fields to fetch from the Reply
      */
-    select?: MessageSelect<ExtArgs> | null
+    select?: ReplySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Message
+     * Omit specific fields from the Reply
      */
-    omit?: MessageOmit<ExtArgs> | null
+    omit?: ReplyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MessageInclude<ExtArgs> | null
-    where?: MessageWhereInput
-    orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
-    cursor?: MessageWhereUniqueInput
+    include?: ReplyInclude<ExtArgs> | null
+    where?: ReplyWhereInput
+    orderBy?: ReplyOrderByWithRelationInput | ReplyOrderByWithRelationInput[]
+    cursor?: ReplyWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
+    distinct?: ReplyScalarFieldEnum | ReplyScalarFieldEnum[]
   }
 
   /**
@@ -8304,362 +8365,436 @@ export namespace Prisma {
 
 
   /**
-   * Model Message
+   * Model Reply
    */
 
-  export type AggregateMessage = {
-    _count: MessageCountAggregateOutputType | null
-    _min: MessageMinAggregateOutputType | null
-    _max: MessageMaxAggregateOutputType | null
+  export type AggregateReply = {
+    _count: ReplyCountAggregateOutputType | null
+    _avg: ReplyAvgAggregateOutputType | null
+    _sum: ReplySumAggregateOutputType | null
+    _min: ReplyMinAggregateOutputType | null
+    _max: ReplyMaxAggregateOutputType | null
   }
 
-  export type MessageMinAggregateOutputType = {
-    id: string | null
-    ticketId: string | null
-    direction: $Enums.MessageDirection | null
-    from: string | null
+  export type ReplyAvgAggregateOutputType = {
+    id: number | null
+    ticketId: number | null
+  }
+
+  export type ReplySumAggregateOutputType = {
+    id: number | null
+    ticketId: number | null
+  }
+
+  export type ReplyMinAggregateOutputType = {
+    id: number | null
+    ticketId: number | null
     body: string | null
+    bodyHtml: string | null
+    senderName: string | null
+    senderEmail: string | null
+    direction: $Enums.ReplyDirection | null
+    messageId: string | null
     createdAt: Date | null
   }
 
-  export type MessageMaxAggregateOutputType = {
-    id: string | null
-    ticketId: string | null
-    direction: $Enums.MessageDirection | null
-    from: string | null
+  export type ReplyMaxAggregateOutputType = {
+    id: number | null
+    ticketId: number | null
     body: string | null
+    bodyHtml: string | null
+    senderName: string | null
+    senderEmail: string | null
+    direction: $Enums.ReplyDirection | null
+    messageId: string | null
     createdAt: Date | null
   }
 
-  export type MessageCountAggregateOutputType = {
+  export type ReplyCountAggregateOutputType = {
     id: number
     ticketId: number
-    direction: number
-    from: number
     body: number
+    bodyHtml: number
+    senderName: number
+    senderEmail: number
+    direction: number
+    messageId: number
     createdAt: number
     _all: number
   }
 
 
-  export type MessageMinAggregateInputType = {
+  export type ReplyAvgAggregateInputType = {
     id?: true
     ticketId?: true
-    direction?: true
-    from?: true
+  }
+
+  export type ReplySumAggregateInputType = {
+    id?: true
+    ticketId?: true
+  }
+
+  export type ReplyMinAggregateInputType = {
+    id?: true
+    ticketId?: true
     body?: true
+    bodyHtml?: true
+    senderName?: true
+    senderEmail?: true
+    direction?: true
+    messageId?: true
     createdAt?: true
   }
 
-  export type MessageMaxAggregateInputType = {
+  export type ReplyMaxAggregateInputType = {
     id?: true
     ticketId?: true
-    direction?: true
-    from?: true
     body?: true
+    bodyHtml?: true
+    senderName?: true
+    senderEmail?: true
+    direction?: true
+    messageId?: true
     createdAt?: true
   }
 
-  export type MessageCountAggregateInputType = {
+  export type ReplyCountAggregateInputType = {
     id?: true
     ticketId?: true
-    direction?: true
-    from?: true
     body?: true
+    bodyHtml?: true
+    senderName?: true
+    senderEmail?: true
+    direction?: true
+    messageId?: true
     createdAt?: true
     _all?: true
   }
 
-  export type MessageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Message to aggregate.
+     * Filter which Reply to aggregate.
      */
-    where?: MessageWhereInput
+    where?: ReplyWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Messages to fetch.
+     * Determine the order of Replies to fetch.
      */
-    orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
+    orderBy?: ReplyOrderByWithRelationInput | ReplyOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: MessageWhereUniqueInput
+    cursor?: ReplyWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Messages from the position of the cursor.
+     * Take `±n` Replies from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Messages.
+     * Skip the first `n` Replies.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Messages
+     * Count returned Replies
     **/
-    _count?: true | MessageCountAggregateInputType
+    _count?: true | ReplyCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ReplyAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ReplySumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: MessageMinAggregateInputType
+    _min?: ReplyMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: MessageMaxAggregateInputType
+    _max?: ReplyMaxAggregateInputType
   }
 
-  export type GetMessageAggregateType<T extends MessageAggregateArgs> = {
-        [P in keyof T & keyof AggregateMessage]: P extends '_count' | 'count'
+  export type GetReplyAggregateType<T extends ReplyAggregateArgs> = {
+        [P in keyof T & keyof AggregateReply]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateMessage[P]>
-      : GetScalarType<T[P], AggregateMessage[P]>
+        : GetScalarType<T[P], AggregateReply[P]>
+      : GetScalarType<T[P], AggregateReply[P]>
   }
 
 
 
 
-  export type MessageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: MessageWhereInput
-    orderBy?: MessageOrderByWithAggregationInput | MessageOrderByWithAggregationInput[]
-    by: MessageScalarFieldEnum[] | MessageScalarFieldEnum
-    having?: MessageScalarWhereWithAggregatesInput
+  export type ReplyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReplyWhereInput
+    orderBy?: ReplyOrderByWithAggregationInput | ReplyOrderByWithAggregationInput[]
+    by: ReplyScalarFieldEnum[] | ReplyScalarFieldEnum
+    having?: ReplyScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: MessageCountAggregateInputType | true
-    _min?: MessageMinAggregateInputType
-    _max?: MessageMaxAggregateInputType
+    _count?: ReplyCountAggregateInputType | true
+    _avg?: ReplyAvgAggregateInputType
+    _sum?: ReplySumAggregateInputType
+    _min?: ReplyMinAggregateInputType
+    _max?: ReplyMaxAggregateInputType
   }
 
-  export type MessageGroupByOutputType = {
-    id: string
-    ticketId: string
-    direction: $Enums.MessageDirection
-    from: string
+  export type ReplyGroupByOutputType = {
+    id: number
+    ticketId: number
     body: string
+    bodyHtml: string | null
+    senderName: string | null
+    senderEmail: string
+    direction: $Enums.ReplyDirection
+    messageId: string | null
     createdAt: Date
-    _count: MessageCountAggregateOutputType | null
-    _min: MessageMinAggregateOutputType | null
-    _max: MessageMaxAggregateOutputType | null
+    _count: ReplyCountAggregateOutputType | null
+    _avg: ReplyAvgAggregateOutputType | null
+    _sum: ReplySumAggregateOutputType | null
+    _min: ReplyMinAggregateOutputType | null
+    _max: ReplyMaxAggregateOutputType | null
   }
 
-  type GetMessageGroupByPayload<T extends MessageGroupByArgs> = Prisma.PrismaPromise<
+  type GetReplyGroupByPayload<T extends ReplyGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<MessageGroupByOutputType, T['by']> &
+      PickEnumerable<ReplyGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof MessageGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof ReplyGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], MessageGroupByOutputType[P]>
-            : GetScalarType<T[P], MessageGroupByOutputType[P]>
+              : GetScalarType<T[P], ReplyGroupByOutputType[P]>
+            : GetScalarType<T[P], ReplyGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type MessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ReplySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     ticketId?: boolean
-    direction?: boolean
-    from?: boolean
     body?: boolean
+    bodyHtml?: boolean
+    senderName?: boolean
+    senderEmail?: boolean
+    direction?: boolean
+    messageId?: boolean
     createdAt?: boolean
     ticket?: boolean | TicketDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["message"]>
+  }, ExtArgs["result"]["reply"]>
 
-  export type MessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ReplySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     ticketId?: boolean
-    direction?: boolean
-    from?: boolean
     body?: boolean
+    bodyHtml?: boolean
+    senderName?: boolean
+    senderEmail?: boolean
+    direction?: boolean
+    messageId?: boolean
     createdAt?: boolean
     ticket?: boolean | TicketDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["message"]>
+  }, ExtArgs["result"]["reply"]>
 
-  export type MessageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ReplySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     ticketId?: boolean
-    direction?: boolean
-    from?: boolean
     body?: boolean
+    bodyHtml?: boolean
+    senderName?: boolean
+    senderEmail?: boolean
+    direction?: boolean
+    messageId?: boolean
     createdAt?: boolean
     ticket?: boolean | TicketDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["message"]>
+  }, ExtArgs["result"]["reply"]>
 
-  export type MessageSelectScalar = {
+  export type ReplySelectScalar = {
     id?: boolean
     ticketId?: boolean
-    direction?: boolean
-    from?: boolean
     body?: boolean
+    bodyHtml?: boolean
+    senderName?: boolean
+    senderEmail?: boolean
+    direction?: boolean
+    messageId?: boolean
     createdAt?: boolean
   }
 
-  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "ticketId" | "direction" | "from" | "body" | "createdAt", ExtArgs["result"]["message"]>
-  export type MessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "ticketId" | "body" | "bodyHtml" | "senderName" | "senderEmail" | "direction" | "messageId" | "createdAt", ExtArgs["result"]["reply"]>
+  export type ReplyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ticket?: boolean | TicketDefaultArgs<ExtArgs>
   }
-  export type MessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ticket?: boolean | TicketDefaultArgs<ExtArgs>
   }
-  export type MessageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ticket?: boolean | TicketDefaultArgs<ExtArgs>
   }
 
-  export type $MessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Message"
+  export type $ReplyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Reply"
     objects: {
       ticket: Prisma.$TicketPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      id: string
-      ticketId: string
-      direction: $Enums.MessageDirection
-      from: string
+      id: number
+      ticketId: number
       body: string
+      bodyHtml: string | null
+      senderName: string | null
+      senderEmail: string
+      direction: $Enums.ReplyDirection
+      messageId: string | null
       createdAt: Date
-    }, ExtArgs["result"]["message"]>
+    }, ExtArgs["result"]["reply"]>
     composites: {}
   }
 
-  type MessageGetPayload<S extends boolean | null | undefined | MessageDefaultArgs> = $Result.GetResult<Prisma.$MessagePayload, S>
+  type ReplyGetPayload<S extends boolean | null | undefined | ReplyDefaultArgs> = $Result.GetResult<Prisma.$ReplyPayload, S>
 
-  type MessageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<MessageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: MessageCountAggregateInputType | true
+  type ReplyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ReplyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ReplyCountAggregateInputType | true
     }
 
-  export interface MessageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Message'], meta: { name: 'Message' } }
+  export interface ReplyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Reply'], meta: { name: 'Reply' } }
     /**
-     * Find zero or one Message that matches the filter.
-     * @param {MessageFindUniqueArgs} args - Arguments to find a Message
+     * Find zero or one Reply that matches the filter.
+     * @param {ReplyFindUniqueArgs} args - Arguments to find a Reply
      * @example
-     * // Get one Message
-     * const message = await prisma.message.findUnique({
+     * // Get one Reply
+     * const reply = await prisma.reply.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends MessageFindUniqueArgs>(args: SelectSubset<T, MessageFindUniqueArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends ReplyFindUniqueArgs>(args: SelectSubset<T, ReplyFindUniqueArgs<ExtArgs>>): Prisma__ReplyClient<$Result.GetResult<Prisma.$ReplyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Message that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Reply that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {MessageFindUniqueOrThrowArgs} args - Arguments to find a Message
+     * @param {ReplyFindUniqueOrThrowArgs} args - Arguments to find a Reply
      * @example
-     * // Get one Message
-     * const message = await prisma.message.findUniqueOrThrow({
+     * // Get one Reply
+     * const reply = await prisma.reply.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends MessageFindUniqueOrThrowArgs>(args: SelectSubset<T, MessageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends ReplyFindUniqueOrThrowArgs>(args: SelectSubset<T, ReplyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReplyClient<$Result.GetResult<Prisma.$ReplyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Message that matches the filter.
+     * Find the first Reply that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MessageFindFirstArgs} args - Arguments to find a Message
+     * @param {ReplyFindFirstArgs} args - Arguments to find a Reply
      * @example
-     * // Get one Message
-     * const message = await prisma.message.findFirst({
+     * // Get one Reply
+     * const reply = await prisma.reply.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends MessageFindFirstArgs>(args?: SelectSubset<T, MessageFindFirstArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends ReplyFindFirstArgs>(args?: SelectSubset<T, ReplyFindFirstArgs<ExtArgs>>): Prisma__ReplyClient<$Result.GetResult<Prisma.$ReplyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Message that matches the filter or
+     * Find the first Reply that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MessageFindFirstOrThrowArgs} args - Arguments to find a Message
+     * @param {ReplyFindFirstOrThrowArgs} args - Arguments to find a Reply
      * @example
-     * // Get one Message
-     * const message = await prisma.message.findFirstOrThrow({
+     * // Get one Reply
+     * const reply = await prisma.reply.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends MessageFindFirstOrThrowArgs>(args?: SelectSubset<T, MessageFindFirstOrThrowArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends ReplyFindFirstOrThrowArgs>(args?: SelectSubset<T, ReplyFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReplyClient<$Result.GetResult<Prisma.$ReplyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Messages that matches the filter.
+     * Find zero or more Replies that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MessageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {ReplyFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Messages
-     * const messages = await prisma.message.findMany()
+     * // Get all Replies
+     * const replies = await prisma.reply.findMany()
      * 
-     * // Get first 10 Messages
-     * const messages = await prisma.message.findMany({ take: 10 })
+     * // Get first 10 Replies
+     * const replies = await prisma.reply.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const messageWithIdOnly = await prisma.message.findMany({ select: { id: true } })
+     * const replyWithIdOnly = await prisma.reply.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends MessageFindManyArgs>(args?: SelectSubset<T, MessageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends ReplyFindManyArgs>(args?: SelectSubset<T, ReplyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReplyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Message.
-     * @param {MessageCreateArgs} args - Arguments to create a Message.
+     * Create a Reply.
+     * @param {ReplyCreateArgs} args - Arguments to create a Reply.
      * @example
-     * // Create one Message
-     * const Message = await prisma.message.create({
+     * // Create one Reply
+     * const Reply = await prisma.reply.create({
      *   data: {
-     *     // ... data to create a Message
+     *     // ... data to create a Reply
      *   }
      * })
      * 
      */
-    create<T extends MessageCreateArgs>(args: SelectSubset<T, MessageCreateArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends ReplyCreateArgs>(args: SelectSubset<T, ReplyCreateArgs<ExtArgs>>): Prisma__ReplyClient<$Result.GetResult<Prisma.$ReplyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Messages.
-     * @param {MessageCreateManyArgs} args - Arguments to create many Messages.
+     * Create many Replies.
+     * @param {ReplyCreateManyArgs} args - Arguments to create many Replies.
      * @example
-     * // Create many Messages
-     * const message = await prisma.message.createMany({
+     * // Create many Replies
+     * const reply = await prisma.reply.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends MessageCreateManyArgs>(args?: SelectSubset<T, MessageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends ReplyCreateManyArgs>(args?: SelectSubset<T, ReplyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Messages and returns the data saved in the database.
-     * @param {MessageCreateManyAndReturnArgs} args - Arguments to create many Messages.
+     * Create many Replies and returns the data saved in the database.
+     * @param {ReplyCreateManyAndReturnArgs} args - Arguments to create many Replies.
      * @example
-     * // Create many Messages
-     * const message = await prisma.message.createManyAndReturn({
+     * // Create many Replies
+     * const reply = await prisma.reply.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Messages and only return the `id`
-     * const messageWithIdOnly = await prisma.message.createManyAndReturn({
+     * // Create many Replies and only return the `id`
+     * const replyWithIdOnly = await prisma.reply.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -8669,28 +8804,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends MessageCreateManyAndReturnArgs>(args?: SelectSubset<T, MessageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends ReplyCreateManyAndReturnArgs>(args?: SelectSubset<T, ReplyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReplyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Message.
-     * @param {MessageDeleteArgs} args - Arguments to delete one Message.
+     * Delete a Reply.
+     * @param {ReplyDeleteArgs} args - Arguments to delete one Reply.
      * @example
-     * // Delete one Message
-     * const Message = await prisma.message.delete({
+     * // Delete one Reply
+     * const Reply = await prisma.reply.delete({
      *   where: {
-     *     // ... filter to delete one Message
+     *     // ... filter to delete one Reply
      *   }
      * })
      * 
      */
-    delete<T extends MessageDeleteArgs>(args: SelectSubset<T, MessageDeleteArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends ReplyDeleteArgs>(args: SelectSubset<T, ReplyDeleteArgs<ExtArgs>>): Prisma__ReplyClient<$Result.GetResult<Prisma.$ReplyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Message.
-     * @param {MessageUpdateArgs} args - Arguments to update one Message.
+     * Update one Reply.
+     * @param {ReplyUpdateArgs} args - Arguments to update one Reply.
      * @example
-     * // Update one Message
-     * const message = await prisma.message.update({
+     * // Update one Reply
+     * const reply = await prisma.reply.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -8700,30 +8835,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends MessageUpdateArgs>(args: SelectSubset<T, MessageUpdateArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends ReplyUpdateArgs>(args: SelectSubset<T, ReplyUpdateArgs<ExtArgs>>): Prisma__ReplyClient<$Result.GetResult<Prisma.$ReplyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Messages.
-     * @param {MessageDeleteManyArgs} args - Arguments to filter Messages to delete.
+     * Delete zero or more Replies.
+     * @param {ReplyDeleteManyArgs} args - Arguments to filter Replies to delete.
      * @example
-     * // Delete a few Messages
-     * const { count } = await prisma.message.deleteMany({
+     * // Delete a few Replies
+     * const { count } = await prisma.reply.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends MessageDeleteManyArgs>(args?: SelectSubset<T, MessageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends ReplyDeleteManyArgs>(args?: SelectSubset<T, ReplyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Messages.
+     * Update zero or more Replies.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MessageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {ReplyUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Messages
-     * const message = await prisma.message.updateMany({
+     * // Update many Replies
+     * const reply = await prisma.reply.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -8733,14 +8868,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends MessageUpdateManyArgs>(args: SelectSubset<T, MessageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends ReplyUpdateManyArgs>(args: SelectSubset<T, ReplyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Messages and returns the data updated in the database.
-     * @param {MessageUpdateManyAndReturnArgs} args - Arguments to update many Messages.
+     * Update zero or more Replies and returns the data updated in the database.
+     * @param {ReplyUpdateManyAndReturnArgs} args - Arguments to update many Replies.
      * @example
-     * // Update many Messages
-     * const message = await prisma.message.updateManyAndReturn({
+     * // Update many Replies
+     * const reply = await prisma.reply.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -8749,8 +8884,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Messages and only return the `id`
-     * const messageWithIdOnly = await prisma.message.updateManyAndReturn({
+     * // Update zero or more Replies and only return the `id`
+     * const replyWithIdOnly = await prisma.reply.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -8763,56 +8898,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends MessageUpdateManyAndReturnArgs>(args: SelectSubset<T, MessageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends ReplyUpdateManyAndReturnArgs>(args: SelectSubset<T, ReplyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReplyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one Message.
-     * @param {MessageUpsertArgs} args - Arguments to update or create a Message.
+     * Create or update one Reply.
+     * @param {ReplyUpsertArgs} args - Arguments to update or create a Reply.
      * @example
-     * // Update or create a Message
-     * const message = await prisma.message.upsert({
+     * // Update or create a Reply
+     * const reply = await prisma.reply.upsert({
      *   create: {
-     *     // ... data to create a Message
+     *     // ... data to create a Reply
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Message we want to update
+     *     // ... the filter for the Reply we want to update
      *   }
      * })
      */
-    upsert<T extends MessageUpsertArgs>(args: SelectSubset<T, MessageUpsertArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends ReplyUpsertArgs>(args: SelectSubset<T, ReplyUpsertArgs<ExtArgs>>): Prisma__ReplyClient<$Result.GetResult<Prisma.$ReplyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Messages.
+     * Count the number of Replies.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MessageCountArgs} args - Arguments to filter Messages to count.
+     * @param {ReplyCountArgs} args - Arguments to filter Replies to count.
      * @example
-     * // Count the number of Messages
-     * const count = await prisma.message.count({
+     * // Count the number of Replies
+     * const count = await prisma.reply.count({
      *   where: {
-     *     // ... the filter for the Messages we want to count
+     *     // ... the filter for the Replies we want to count
      *   }
      * })
     **/
-    count<T extends MessageCountArgs>(
-      args?: Subset<T, MessageCountArgs>,
+    count<T extends ReplyCountArgs>(
+      args?: Subset<T, ReplyCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], MessageCountAggregateOutputType>
+          : GetScalarType<T['select'], ReplyCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Message.
+     * Allows you to perform aggregations operations on a Reply.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MessageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {ReplyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -8832,13 +8967,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends MessageAggregateArgs>(args: Subset<T, MessageAggregateArgs>): Prisma.PrismaPromise<GetMessageAggregateType<T>>
+    aggregate<T extends ReplyAggregateArgs>(args: Subset<T, ReplyAggregateArgs>): Prisma.PrismaPromise<GetReplyAggregateType<T>>
 
     /**
-     * Group by Message.
+     * Group by Reply.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {MessageGroupByArgs} args - Group by arguments.
+     * @param {ReplyGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -8853,14 +8988,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends MessageGroupByArgs,
+      T extends ReplyGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: MessageGroupByArgs['orderBy'] }
-        : { orderBy?: MessageGroupByArgs['orderBy'] },
+        ? { orderBy: ReplyGroupByArgs['orderBy'] }
+        : { orderBy?: ReplyGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -8909,20 +9044,20 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, MessageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMessageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, ReplyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReplyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Message model
+   * Fields of the Reply model
    */
-  readonly fields: MessageFieldRefs;
+  readonly fields: ReplyFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Message.
+   * The delegate class that acts as a "Promise-like" for Reply.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__MessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__ReplyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     ticket<T extends TicketDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TicketDefaultArgs<ExtArgs>>): Prisma__TicketClient<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
@@ -8951,431 +9086,434 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Message model
+   * Fields of the Reply model
    */
-  interface MessageFieldRefs {
-    readonly id: FieldRef<"Message", 'String'>
-    readonly ticketId: FieldRef<"Message", 'String'>
-    readonly direction: FieldRef<"Message", 'MessageDirection'>
-    readonly from: FieldRef<"Message", 'String'>
-    readonly body: FieldRef<"Message", 'String'>
-    readonly createdAt: FieldRef<"Message", 'DateTime'>
+  interface ReplyFieldRefs {
+    readonly id: FieldRef<"Reply", 'Int'>
+    readonly ticketId: FieldRef<"Reply", 'Int'>
+    readonly body: FieldRef<"Reply", 'String'>
+    readonly bodyHtml: FieldRef<"Reply", 'String'>
+    readonly senderName: FieldRef<"Reply", 'String'>
+    readonly senderEmail: FieldRef<"Reply", 'String'>
+    readonly direction: FieldRef<"Reply", 'ReplyDirection'>
+    readonly messageId: FieldRef<"Reply", 'String'>
+    readonly createdAt: FieldRef<"Reply", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * Message findUnique
+   * Reply findUnique
    */
-  export type MessageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Message
+     * Select specific fields to fetch from the Reply
      */
-    select?: MessageSelect<ExtArgs> | null
+    select?: ReplySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Message
+     * Omit specific fields from the Reply
      */
-    omit?: MessageOmit<ExtArgs> | null
+    omit?: ReplyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MessageInclude<ExtArgs> | null
+    include?: ReplyInclude<ExtArgs> | null
     /**
-     * Filter, which Message to fetch.
+     * Filter, which Reply to fetch.
      */
-    where: MessageWhereUniqueInput
+    where: ReplyWhereUniqueInput
   }
 
   /**
-   * Message findUniqueOrThrow
+   * Reply findUniqueOrThrow
    */
-  export type MessageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Message
+     * Select specific fields to fetch from the Reply
      */
-    select?: MessageSelect<ExtArgs> | null
+    select?: ReplySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Message
+     * Omit specific fields from the Reply
      */
-    omit?: MessageOmit<ExtArgs> | null
+    omit?: ReplyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MessageInclude<ExtArgs> | null
+    include?: ReplyInclude<ExtArgs> | null
     /**
-     * Filter, which Message to fetch.
+     * Filter, which Reply to fetch.
      */
-    where: MessageWhereUniqueInput
+    where: ReplyWhereUniqueInput
   }
 
   /**
-   * Message findFirst
+   * Reply findFirst
    */
-  export type MessageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Message
+     * Select specific fields to fetch from the Reply
      */
-    select?: MessageSelect<ExtArgs> | null
+    select?: ReplySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Message
+     * Omit specific fields from the Reply
      */
-    omit?: MessageOmit<ExtArgs> | null
+    omit?: ReplyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MessageInclude<ExtArgs> | null
+    include?: ReplyInclude<ExtArgs> | null
     /**
-     * Filter, which Message to fetch.
+     * Filter, which Reply to fetch.
      */
-    where?: MessageWhereInput
+    where?: ReplyWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Messages to fetch.
+     * Determine the order of Replies to fetch.
      */
-    orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
+    orderBy?: ReplyOrderByWithRelationInput | ReplyOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Messages.
+     * Sets the position for searching for Replies.
      */
-    cursor?: MessageWhereUniqueInput
+    cursor?: ReplyWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Messages from the position of the cursor.
+     * Take `±n` Replies from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Messages.
+     * Skip the first `n` Replies.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Messages.
+     * Filter by unique combinations of Replies.
      */
-    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
+    distinct?: ReplyScalarFieldEnum | ReplyScalarFieldEnum[]
   }
 
   /**
-   * Message findFirstOrThrow
+   * Reply findFirstOrThrow
    */
-  export type MessageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Message
+     * Select specific fields to fetch from the Reply
      */
-    select?: MessageSelect<ExtArgs> | null
+    select?: ReplySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Message
+     * Omit specific fields from the Reply
      */
-    omit?: MessageOmit<ExtArgs> | null
+    omit?: ReplyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MessageInclude<ExtArgs> | null
+    include?: ReplyInclude<ExtArgs> | null
     /**
-     * Filter, which Message to fetch.
+     * Filter, which Reply to fetch.
      */
-    where?: MessageWhereInput
+    where?: ReplyWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Messages to fetch.
+     * Determine the order of Replies to fetch.
      */
-    orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
+    orderBy?: ReplyOrderByWithRelationInput | ReplyOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Messages.
+     * Sets the position for searching for Replies.
      */
-    cursor?: MessageWhereUniqueInput
+    cursor?: ReplyWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Messages from the position of the cursor.
+     * Take `±n` Replies from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Messages.
+     * Skip the first `n` Replies.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Messages.
+     * Filter by unique combinations of Replies.
      */
-    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
+    distinct?: ReplyScalarFieldEnum | ReplyScalarFieldEnum[]
   }
 
   /**
-   * Message findMany
+   * Reply findMany
    */
-  export type MessageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Message
+     * Select specific fields to fetch from the Reply
      */
-    select?: MessageSelect<ExtArgs> | null
+    select?: ReplySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Message
+     * Omit specific fields from the Reply
      */
-    omit?: MessageOmit<ExtArgs> | null
+    omit?: ReplyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MessageInclude<ExtArgs> | null
+    include?: ReplyInclude<ExtArgs> | null
     /**
-     * Filter, which Messages to fetch.
+     * Filter, which Replies to fetch.
      */
-    where?: MessageWhereInput
+    where?: ReplyWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Messages to fetch.
+     * Determine the order of Replies to fetch.
      */
-    orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
+    orderBy?: ReplyOrderByWithRelationInput | ReplyOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Messages.
+     * Sets the position for listing Replies.
      */
-    cursor?: MessageWhereUniqueInput
+    cursor?: ReplyWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Messages from the position of the cursor.
+     * Take `±n` Replies from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Messages.
+     * Skip the first `n` Replies.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Messages.
+     * Filter by unique combinations of Replies.
      */
-    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
+    distinct?: ReplyScalarFieldEnum | ReplyScalarFieldEnum[]
   }
 
   /**
-   * Message create
+   * Reply create
    */
-  export type MessageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Message
+     * Select specific fields to fetch from the Reply
      */
-    select?: MessageSelect<ExtArgs> | null
+    select?: ReplySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Message
+     * Omit specific fields from the Reply
      */
-    omit?: MessageOmit<ExtArgs> | null
+    omit?: ReplyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MessageInclude<ExtArgs> | null
+    include?: ReplyInclude<ExtArgs> | null
     /**
-     * The data needed to create a Message.
+     * The data needed to create a Reply.
      */
-    data: XOR<MessageCreateInput, MessageUncheckedCreateInput>
+    data: XOR<ReplyCreateInput, ReplyUncheckedCreateInput>
   }
 
   /**
-   * Message createMany
+   * Reply createMany
    */
-  export type MessageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Messages.
+     * The data used to create many Replies.
      */
-    data: MessageCreateManyInput | MessageCreateManyInput[]
+    data: ReplyCreateManyInput | ReplyCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Message createManyAndReturn
+   * Reply createManyAndReturn
    */
-  export type MessageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Message
+     * Select specific fields to fetch from the Reply
      */
-    select?: MessageSelectCreateManyAndReturn<ExtArgs> | null
+    select?: ReplySelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Message
+     * Omit specific fields from the Reply
      */
-    omit?: MessageOmit<ExtArgs> | null
+    omit?: ReplyOmit<ExtArgs> | null
     /**
-     * The data used to create many Messages.
+     * The data used to create many Replies.
      */
-    data: MessageCreateManyInput | MessageCreateManyInput[]
+    data: ReplyCreateManyInput | ReplyCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MessageIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: ReplyIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Message update
+   * Reply update
    */
-  export type MessageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Message
+     * Select specific fields to fetch from the Reply
      */
-    select?: MessageSelect<ExtArgs> | null
+    select?: ReplySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Message
+     * Omit specific fields from the Reply
      */
-    omit?: MessageOmit<ExtArgs> | null
+    omit?: ReplyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MessageInclude<ExtArgs> | null
+    include?: ReplyInclude<ExtArgs> | null
     /**
-     * The data needed to update a Message.
+     * The data needed to update a Reply.
      */
-    data: XOR<MessageUpdateInput, MessageUncheckedUpdateInput>
+    data: XOR<ReplyUpdateInput, ReplyUncheckedUpdateInput>
     /**
-     * Choose, which Message to update.
+     * Choose, which Reply to update.
      */
-    where: MessageWhereUniqueInput
+    where: ReplyWhereUniqueInput
   }
 
   /**
-   * Message updateMany
+   * Reply updateMany
    */
-  export type MessageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Messages.
+     * The data used to update Replies.
      */
-    data: XOR<MessageUpdateManyMutationInput, MessageUncheckedUpdateManyInput>
+    data: XOR<ReplyUpdateManyMutationInput, ReplyUncheckedUpdateManyInput>
     /**
-     * Filter which Messages to update
+     * Filter which Replies to update
      */
-    where?: MessageWhereInput
+    where?: ReplyWhereInput
     /**
-     * Limit how many Messages to update.
+     * Limit how many Replies to update.
      */
     limit?: number
   }
 
   /**
-   * Message updateManyAndReturn
+   * Reply updateManyAndReturn
    */
-  export type MessageUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Message
+     * Select specific fields to fetch from the Reply
      */
-    select?: MessageSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: ReplySelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Message
+     * Omit specific fields from the Reply
      */
-    omit?: MessageOmit<ExtArgs> | null
+    omit?: ReplyOmit<ExtArgs> | null
     /**
-     * The data used to update Messages.
+     * The data used to update Replies.
      */
-    data: XOR<MessageUpdateManyMutationInput, MessageUncheckedUpdateManyInput>
+    data: XOR<ReplyUpdateManyMutationInput, ReplyUncheckedUpdateManyInput>
     /**
-     * Filter which Messages to update
+     * Filter which Replies to update
      */
-    where?: MessageWhereInput
+    where?: ReplyWhereInput
     /**
-     * Limit how many Messages to update.
+     * Limit how many Replies to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MessageIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: ReplyIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Message upsert
+   * Reply upsert
    */
-  export type MessageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Message
+     * Select specific fields to fetch from the Reply
      */
-    select?: MessageSelect<ExtArgs> | null
+    select?: ReplySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Message
+     * Omit specific fields from the Reply
      */
-    omit?: MessageOmit<ExtArgs> | null
+    omit?: ReplyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MessageInclude<ExtArgs> | null
+    include?: ReplyInclude<ExtArgs> | null
     /**
-     * The filter to search for the Message to update in case it exists.
+     * The filter to search for the Reply to update in case it exists.
      */
-    where: MessageWhereUniqueInput
+    where: ReplyWhereUniqueInput
     /**
-     * In case the Message found by the `where` argument doesn't exist, create a new Message with this data.
+     * In case the Reply found by the `where` argument doesn't exist, create a new Reply with this data.
      */
-    create: XOR<MessageCreateInput, MessageUncheckedCreateInput>
+    create: XOR<ReplyCreateInput, ReplyUncheckedCreateInput>
     /**
-     * In case the Message was found with the provided `where` argument, update it with this data.
+     * In case the Reply was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<MessageUpdateInput, MessageUncheckedUpdateInput>
+    update: XOR<ReplyUpdateInput, ReplyUncheckedUpdateInput>
   }
 
   /**
-   * Message delete
+   * Reply delete
    */
-  export type MessageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Message
+     * Select specific fields to fetch from the Reply
      */
-    select?: MessageSelect<ExtArgs> | null
+    select?: ReplySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Message
+     * Omit specific fields from the Reply
      */
-    omit?: MessageOmit<ExtArgs> | null
+    omit?: ReplyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MessageInclude<ExtArgs> | null
+    include?: ReplyInclude<ExtArgs> | null
     /**
-     * Filter which Message to delete.
+     * Filter which Reply to delete.
      */
-    where: MessageWhereUniqueInput
+    where: ReplyWhereUniqueInput
   }
 
   /**
-   * Message deleteMany
+   * Reply deleteMany
    */
-  export type MessageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Messages to delete
+     * Filter which Replies to delete
      */
-    where?: MessageWhereInput
+    where?: ReplyWhereInput
     /**
-     * Limit how many Messages to delete.
+     * Limit how many Replies to delete.
      */
     limit?: number
   }
 
   /**
-   * Message without action
+   * Reply without action
    */
-  export type MessageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ReplyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Message
+     * Select specific fields to fetch from the Reply
      */
-    select?: MessageSelect<ExtArgs> | null
+    select?: ReplySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Message
+     * Omit specific fields from the Reply
      */
-    omit?: MessageOmit<ExtArgs> | null
+    omit?: ReplyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: MessageInclude<ExtArgs> | null
+    include?: ReplyInclude<ExtArgs> | null
   }
 
 
@@ -9392,18 +9530,20 @@ export namespace Prisma {
   }
 
   export type AiSuggestionAvgAggregateOutputType = {
+    ticketId: number | null
     confidence: number | null
     tokens: number | null
   }
 
   export type AiSuggestionSumAggregateOutputType = {
+    ticketId: number | null
     confidence: number | null
     tokens: number | null
   }
 
   export type AiSuggestionMinAggregateOutputType = {
     id: string | null
-    ticketId: string | null
+    ticketId: number | null
     kind: string | null
     content: string | null
     confidence: number | null
@@ -9414,7 +9554,7 @@ export namespace Prisma {
 
   export type AiSuggestionMaxAggregateOutputType = {
     id: string | null
-    ticketId: string | null
+    ticketId: number | null
     kind: string | null
     content: string | null
     confidence: number | null
@@ -9437,11 +9577,13 @@ export namespace Prisma {
 
 
   export type AiSuggestionAvgAggregateInputType = {
+    ticketId?: true
     confidence?: true
     tokens?: true
   }
 
   export type AiSuggestionSumAggregateInputType = {
+    ticketId?: true
     confidence?: true
     tokens?: true
   }
@@ -9568,7 +9710,7 @@ export namespace Prisma {
 
   export type AiSuggestionGroupByOutputType = {
     id: string
-    ticketId: string
+    ticketId: number
     kind: string
     content: string
     confidence: number | null
@@ -9661,7 +9803,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      ticketId: string
+      ticketId: number
       kind: string
       content: string
       confidence: number | null
@@ -10093,7 +10235,7 @@ export namespace Prisma {
    */
   interface AiSuggestionFieldRefs {
     readonly id: FieldRef<"AiSuggestion", 'String'>
-    readonly ticketId: FieldRef<"AiSuggestion", 'String'>
+    readonly ticketId: FieldRef<"AiSuggestion", 'Int'>
     readonly kind: FieldRef<"AiSuggestion", 'String'>
     readonly content: FieldRef<"AiSuggestion", 'String'>
     readonly confidence: FieldRef<"AiSuggestion", 'Float'>
@@ -10607,11 +10749,13 @@ export namespace Prisma {
   export const TicketScalarFieldEnum: {
     id: 'id',
     subject: 'subject',
-    requesterEmail: 'requesterEmail',
+    body: 'body',
+    bodyHtml: 'bodyHtml',
     status: 'status',
     category: 'category',
-    summary: 'summary',
-    assigneeId: 'assigneeId',
+    senderName: 'senderName',
+    senderEmail: 'senderEmail',
+    assignedToId: 'assignedToId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -10619,16 +10763,19 @@ export namespace Prisma {
   export type TicketScalarFieldEnum = (typeof TicketScalarFieldEnum)[keyof typeof TicketScalarFieldEnum]
 
 
-  export const MessageScalarFieldEnum: {
+  export const ReplyScalarFieldEnum: {
     id: 'id',
     ticketId: 'ticketId',
-    direction: 'direction',
-    from: 'from',
     body: 'body',
+    bodyHtml: 'bodyHtml',
+    senderName: 'senderName',
+    senderEmail: 'senderEmail',
+    direction: 'direction',
+    messageId: 'messageId',
     createdAt: 'createdAt'
   };
 
-  export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
+  export type ReplyScalarFieldEnum = (typeof ReplyScalarFieldEnum)[keyof typeof ReplyScalarFieldEnum]
 
 
   export const AiSuggestionScalarFieldEnum: {
@@ -10724,6 +10871,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
    * Reference to a field of type 'TicketStatus'
    */
   export type EnumTicketStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TicketStatus'>
@@ -10752,16 +10913,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'MessageDirection'
+   * Reference to a field of type 'ReplyDirection'
    */
-  export type EnumMessageDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageDirection'>
+  export type EnumReplyDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReplyDirection'>
     
 
 
   /**
-   * Reference to a field of type 'MessageDirection[]'
+   * Reference to a field of type 'ReplyDirection[]'
    */
-  export type ListEnumMessageDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageDirection[]'>
+  export type ListEnumReplyDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReplyDirection[]'>
     
 
 
@@ -10776,20 +10937,6 @@ export namespace Prisma {
    * Reference to a field of type 'Float[]'
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
   /**
    * Deep Input Types
@@ -11155,141 +11302,170 @@ export namespace Prisma {
     AND?: TicketWhereInput | TicketWhereInput[]
     OR?: TicketWhereInput[]
     NOT?: TicketWhereInput | TicketWhereInput[]
-    id?: StringFilter<"Ticket"> | string
+    id?: IntFilter<"Ticket"> | number
     subject?: StringFilter<"Ticket"> | string
-    requesterEmail?: StringFilter<"Ticket"> | string
+    body?: StringFilter<"Ticket"> | string
+    bodyHtml?: StringNullableFilter<"Ticket"> | string | null
     status?: EnumTicketStatusFilter<"Ticket"> | $Enums.TicketStatus
     category?: EnumTicketCategoryNullableFilter<"Ticket"> | $Enums.TicketCategory | null
-    summary?: StringNullableFilter<"Ticket"> | string | null
-    assigneeId?: StringNullableFilter<"Ticket"> | string | null
+    senderName?: StringFilter<"Ticket"> | string
+    senderEmail?: StringFilter<"Ticket"> | string
+    assignedToId?: StringNullableFilter<"Ticket"> | string | null
     createdAt?: DateTimeFilter<"Ticket"> | Date | string
     updatedAt?: DateTimeFilter<"Ticket"> | Date | string
-    assignee?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    messages?: MessageListRelationFilter
+    assignedTo?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    replies?: ReplyListRelationFilter
     aiSuggestions?: AiSuggestionListRelationFilter
   }
 
   export type TicketOrderByWithRelationInput = {
     id?: SortOrder
     subject?: SortOrder
-    requesterEmail?: SortOrder
+    body?: SortOrder
+    bodyHtml?: SortOrderInput | SortOrder
     status?: SortOrder
     category?: SortOrderInput | SortOrder
-    summary?: SortOrderInput | SortOrder
-    assigneeId?: SortOrderInput | SortOrder
+    senderName?: SortOrder
+    senderEmail?: SortOrder
+    assignedToId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    assignee?: UserOrderByWithRelationInput
-    messages?: MessageOrderByRelationAggregateInput
+    assignedTo?: UserOrderByWithRelationInput
+    replies?: ReplyOrderByRelationAggregateInput
     aiSuggestions?: AiSuggestionOrderByRelationAggregateInput
   }
 
   export type TicketWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
+    id?: number
     AND?: TicketWhereInput | TicketWhereInput[]
     OR?: TicketWhereInput[]
     NOT?: TicketWhereInput | TicketWhereInput[]
     subject?: StringFilter<"Ticket"> | string
-    requesterEmail?: StringFilter<"Ticket"> | string
+    body?: StringFilter<"Ticket"> | string
+    bodyHtml?: StringNullableFilter<"Ticket"> | string | null
     status?: EnumTicketStatusFilter<"Ticket"> | $Enums.TicketStatus
     category?: EnumTicketCategoryNullableFilter<"Ticket"> | $Enums.TicketCategory | null
-    summary?: StringNullableFilter<"Ticket"> | string | null
-    assigneeId?: StringNullableFilter<"Ticket"> | string | null
+    senderName?: StringFilter<"Ticket"> | string
+    senderEmail?: StringFilter<"Ticket"> | string
+    assignedToId?: StringNullableFilter<"Ticket"> | string | null
     createdAt?: DateTimeFilter<"Ticket"> | Date | string
     updatedAt?: DateTimeFilter<"Ticket"> | Date | string
-    assignee?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    messages?: MessageListRelationFilter
+    assignedTo?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    replies?: ReplyListRelationFilter
     aiSuggestions?: AiSuggestionListRelationFilter
   }, "id">
 
   export type TicketOrderByWithAggregationInput = {
     id?: SortOrder
     subject?: SortOrder
-    requesterEmail?: SortOrder
+    body?: SortOrder
+    bodyHtml?: SortOrderInput | SortOrder
     status?: SortOrder
     category?: SortOrderInput | SortOrder
-    summary?: SortOrderInput | SortOrder
-    assigneeId?: SortOrderInput | SortOrder
+    senderName?: SortOrder
+    senderEmail?: SortOrder
+    assignedToId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: TicketCountOrderByAggregateInput
+    _avg?: TicketAvgOrderByAggregateInput
     _max?: TicketMaxOrderByAggregateInput
     _min?: TicketMinOrderByAggregateInput
+    _sum?: TicketSumOrderByAggregateInput
   }
 
   export type TicketScalarWhereWithAggregatesInput = {
     AND?: TicketScalarWhereWithAggregatesInput | TicketScalarWhereWithAggregatesInput[]
     OR?: TicketScalarWhereWithAggregatesInput[]
     NOT?: TicketScalarWhereWithAggregatesInput | TicketScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Ticket"> | string
+    id?: IntWithAggregatesFilter<"Ticket"> | number
     subject?: StringWithAggregatesFilter<"Ticket"> | string
-    requesterEmail?: StringWithAggregatesFilter<"Ticket"> | string
+    body?: StringWithAggregatesFilter<"Ticket"> | string
+    bodyHtml?: StringNullableWithAggregatesFilter<"Ticket"> | string | null
     status?: EnumTicketStatusWithAggregatesFilter<"Ticket"> | $Enums.TicketStatus
     category?: EnumTicketCategoryNullableWithAggregatesFilter<"Ticket"> | $Enums.TicketCategory | null
-    summary?: StringNullableWithAggregatesFilter<"Ticket"> | string | null
-    assigneeId?: StringNullableWithAggregatesFilter<"Ticket"> | string | null
+    senderName?: StringWithAggregatesFilter<"Ticket"> | string
+    senderEmail?: StringWithAggregatesFilter<"Ticket"> | string
+    assignedToId?: StringNullableWithAggregatesFilter<"Ticket"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Ticket"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Ticket"> | Date | string
   }
 
-  export type MessageWhereInput = {
-    AND?: MessageWhereInput | MessageWhereInput[]
-    OR?: MessageWhereInput[]
-    NOT?: MessageWhereInput | MessageWhereInput[]
-    id?: StringFilter<"Message"> | string
-    ticketId?: StringFilter<"Message"> | string
-    direction?: EnumMessageDirectionFilter<"Message"> | $Enums.MessageDirection
-    from?: StringFilter<"Message"> | string
-    body?: StringFilter<"Message"> | string
-    createdAt?: DateTimeFilter<"Message"> | Date | string
+  export type ReplyWhereInput = {
+    AND?: ReplyWhereInput | ReplyWhereInput[]
+    OR?: ReplyWhereInput[]
+    NOT?: ReplyWhereInput | ReplyWhereInput[]
+    id?: IntFilter<"Reply"> | number
+    ticketId?: IntFilter<"Reply"> | number
+    body?: StringFilter<"Reply"> | string
+    bodyHtml?: StringNullableFilter<"Reply"> | string | null
+    senderName?: StringNullableFilter<"Reply"> | string | null
+    senderEmail?: StringFilter<"Reply"> | string
+    direction?: EnumReplyDirectionFilter<"Reply"> | $Enums.ReplyDirection
+    messageId?: StringNullableFilter<"Reply"> | string | null
+    createdAt?: DateTimeFilter<"Reply"> | Date | string
     ticket?: XOR<TicketScalarRelationFilter, TicketWhereInput>
   }
 
-  export type MessageOrderByWithRelationInput = {
+  export type ReplyOrderByWithRelationInput = {
     id?: SortOrder
     ticketId?: SortOrder
-    direction?: SortOrder
-    from?: SortOrder
     body?: SortOrder
+    bodyHtml?: SortOrderInput | SortOrder
+    senderName?: SortOrderInput | SortOrder
+    senderEmail?: SortOrder
+    direction?: SortOrder
+    messageId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     ticket?: TicketOrderByWithRelationInput
   }
 
-  export type MessageWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: MessageWhereInput | MessageWhereInput[]
-    OR?: MessageWhereInput[]
-    NOT?: MessageWhereInput | MessageWhereInput[]
-    ticketId?: StringFilter<"Message"> | string
-    direction?: EnumMessageDirectionFilter<"Message"> | $Enums.MessageDirection
-    from?: StringFilter<"Message"> | string
-    body?: StringFilter<"Message"> | string
-    createdAt?: DateTimeFilter<"Message"> | Date | string
+  export type ReplyWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    messageId?: string
+    AND?: ReplyWhereInput | ReplyWhereInput[]
+    OR?: ReplyWhereInput[]
+    NOT?: ReplyWhereInput | ReplyWhereInput[]
+    ticketId?: IntFilter<"Reply"> | number
+    body?: StringFilter<"Reply"> | string
+    bodyHtml?: StringNullableFilter<"Reply"> | string | null
+    senderName?: StringNullableFilter<"Reply"> | string | null
+    senderEmail?: StringFilter<"Reply"> | string
+    direction?: EnumReplyDirectionFilter<"Reply"> | $Enums.ReplyDirection
+    createdAt?: DateTimeFilter<"Reply"> | Date | string
     ticket?: XOR<TicketScalarRelationFilter, TicketWhereInput>
-  }, "id">
+  }, "id" | "messageId">
 
-  export type MessageOrderByWithAggregationInput = {
+  export type ReplyOrderByWithAggregationInput = {
     id?: SortOrder
     ticketId?: SortOrder
-    direction?: SortOrder
-    from?: SortOrder
     body?: SortOrder
+    bodyHtml?: SortOrderInput | SortOrder
+    senderName?: SortOrderInput | SortOrder
+    senderEmail?: SortOrder
+    direction?: SortOrder
+    messageId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
-    _count?: MessageCountOrderByAggregateInput
-    _max?: MessageMaxOrderByAggregateInput
-    _min?: MessageMinOrderByAggregateInput
+    _count?: ReplyCountOrderByAggregateInput
+    _avg?: ReplyAvgOrderByAggregateInput
+    _max?: ReplyMaxOrderByAggregateInput
+    _min?: ReplyMinOrderByAggregateInput
+    _sum?: ReplySumOrderByAggregateInput
   }
 
-  export type MessageScalarWhereWithAggregatesInput = {
-    AND?: MessageScalarWhereWithAggregatesInput | MessageScalarWhereWithAggregatesInput[]
-    OR?: MessageScalarWhereWithAggregatesInput[]
-    NOT?: MessageScalarWhereWithAggregatesInput | MessageScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Message"> | string
-    ticketId?: StringWithAggregatesFilter<"Message"> | string
-    direction?: EnumMessageDirectionWithAggregatesFilter<"Message"> | $Enums.MessageDirection
-    from?: StringWithAggregatesFilter<"Message"> | string
-    body?: StringWithAggregatesFilter<"Message"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"Message"> | Date | string
+  export type ReplyScalarWhereWithAggregatesInput = {
+    AND?: ReplyScalarWhereWithAggregatesInput | ReplyScalarWhereWithAggregatesInput[]
+    OR?: ReplyScalarWhereWithAggregatesInput[]
+    NOT?: ReplyScalarWhereWithAggregatesInput | ReplyScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Reply"> | number
+    ticketId?: IntWithAggregatesFilter<"Reply"> | number
+    body?: StringWithAggregatesFilter<"Reply"> | string
+    bodyHtml?: StringNullableWithAggregatesFilter<"Reply"> | string | null
+    senderName?: StringNullableWithAggregatesFilter<"Reply"> | string | null
+    senderEmail?: StringWithAggregatesFilter<"Reply"> | string
+    direction?: EnumReplyDirectionWithAggregatesFilter<"Reply"> | $Enums.ReplyDirection
+    messageId?: StringNullableWithAggregatesFilter<"Reply"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Reply"> | Date | string
   }
 
   export type AiSuggestionWhereInput = {
@@ -11297,7 +11473,7 @@ export namespace Prisma {
     OR?: AiSuggestionWhereInput[]
     NOT?: AiSuggestionWhereInput | AiSuggestionWhereInput[]
     id?: StringFilter<"AiSuggestion"> | string
-    ticketId?: StringFilter<"AiSuggestion"> | string
+    ticketId?: IntFilter<"AiSuggestion"> | number
     kind?: StringFilter<"AiSuggestion"> | string
     content?: StringFilter<"AiSuggestion"> | string
     confidence?: FloatNullableFilter<"AiSuggestion"> | number | null
@@ -11324,7 +11500,7 @@ export namespace Prisma {
     AND?: AiSuggestionWhereInput | AiSuggestionWhereInput[]
     OR?: AiSuggestionWhereInput[]
     NOT?: AiSuggestionWhereInput | AiSuggestionWhereInput[]
-    ticketId?: StringFilter<"AiSuggestion"> | string
+    ticketId?: IntFilter<"AiSuggestion"> | number
     kind?: StringFilter<"AiSuggestion"> | string
     content?: StringFilter<"AiSuggestion"> | string
     confidence?: FloatNullableFilter<"AiSuggestion"> | number | null
@@ -11355,7 +11531,7 @@ export namespace Prisma {
     OR?: AiSuggestionScalarWhereWithAggregatesInput[]
     NOT?: AiSuggestionScalarWhereWithAggregatesInput | AiSuggestionScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"AiSuggestion"> | string
-    ticketId?: StringWithAggregatesFilter<"AiSuggestion"> | string
+    ticketId?: IntWithAggregatesFilter<"AiSuggestion"> | number
     kind?: StringWithAggregatesFilter<"AiSuggestion"> | string
     content?: StringWithAggregatesFilter<"AiSuggestion"> | string
     confidence?: FloatNullableWithAggregatesFilter<"AiSuggestion"> | number | null
@@ -11375,7 +11551,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    assignedTickets?: TicketCreateNestedManyWithoutAssigneeInput
+    assignedTickets?: TicketCreateNestedManyWithoutAssignedToInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
   }
@@ -11391,7 +11567,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    assignedTickets?: TicketUncheckedCreateNestedManyWithoutAssigneeInput
+    assignedTickets?: TicketUncheckedCreateNestedManyWithoutAssignedToInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
   }
@@ -11407,7 +11583,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedTickets?: TicketUpdateManyWithoutAssigneeNestedInput
+    assignedTickets?: TicketUpdateManyWithoutAssignedToNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
   }
@@ -11423,7 +11599,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedTickets?: TicketUncheckedUpdateManyWithoutAssigneeNestedInput
+    assignedTickets?: TicketUncheckedUpdateManyWithoutAssignedToNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -11767,155 +11943,184 @@ export namespace Prisma {
   }
 
   export type TicketCreateInput = {
-    id?: string
     subject: string
-    requesterEmail: string
+    body: string
+    bodyHtml?: string | null
     status?: $Enums.TicketStatus
     category?: $Enums.TicketCategory | null
-    summary?: string | null
+    senderName: string
+    senderEmail: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    assignee?: UserCreateNestedOneWithoutAssignedTicketsInput
-    messages?: MessageCreateNestedManyWithoutTicketInput
+    assignedTo?: UserCreateNestedOneWithoutAssignedTicketsInput
+    replies?: ReplyCreateNestedManyWithoutTicketInput
     aiSuggestions?: AiSuggestionCreateNestedManyWithoutTicketInput
   }
 
   export type TicketUncheckedCreateInput = {
-    id?: string
+    id?: number
     subject: string
-    requesterEmail: string
+    body: string
+    bodyHtml?: string | null
     status?: $Enums.TicketStatus
     category?: $Enums.TicketCategory | null
-    summary?: string | null
-    assigneeId?: string | null
+    senderName: string
+    senderEmail: string
+    assignedToId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    messages?: MessageUncheckedCreateNestedManyWithoutTicketInput
+    replies?: ReplyUncheckedCreateNestedManyWithoutTicketInput
     aiSuggestions?: AiSuggestionUncheckedCreateNestedManyWithoutTicketInput
   }
 
   export type TicketUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
-    requesterEmail?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
     category?: NullableEnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory | null
-    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: StringFieldUpdateOperationsInput | string
+    senderEmail?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignee?: UserUpdateOneWithoutAssignedTicketsNestedInput
-    messages?: MessageUpdateManyWithoutTicketNestedInput
+    assignedTo?: UserUpdateOneWithoutAssignedTicketsNestedInput
+    replies?: ReplyUpdateManyWithoutTicketNestedInput
     aiSuggestions?: AiSuggestionUpdateManyWithoutTicketNestedInput
   }
 
   export type TicketUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     subject?: StringFieldUpdateOperationsInput | string
-    requesterEmail?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
     category?: NullableEnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory | null
-    summary?: NullableStringFieldUpdateOperationsInput | string | null
-    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: StringFieldUpdateOperationsInput | string
+    senderEmail?: StringFieldUpdateOperationsInput | string
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    messages?: MessageUncheckedUpdateManyWithoutTicketNestedInput
+    replies?: ReplyUncheckedUpdateManyWithoutTicketNestedInput
     aiSuggestions?: AiSuggestionUncheckedUpdateManyWithoutTicketNestedInput
   }
 
   export type TicketCreateManyInput = {
-    id?: string
+    id?: number
     subject: string
-    requesterEmail: string
+    body: string
+    bodyHtml?: string | null
     status?: $Enums.TicketStatus
     category?: $Enums.TicketCategory | null
-    summary?: string | null
-    assigneeId?: string | null
+    senderName: string
+    senderEmail: string
+    assignedToId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type TicketUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
-    requesterEmail?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
     category?: NullableEnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory | null
-    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: StringFieldUpdateOperationsInput | string
+    senderEmail?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TicketUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     subject?: StringFieldUpdateOperationsInput | string
-    requesterEmail?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
     category?: NullableEnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory | null
-    summary?: NullableStringFieldUpdateOperationsInput | string | null
-    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: StringFieldUpdateOperationsInput | string
+    senderEmail?: StringFieldUpdateOperationsInput | string
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MessageCreateInput = {
-    id?: string
-    direction: $Enums.MessageDirection
-    from: string
+  export type ReplyCreateInput = {
     body: string
+    bodyHtml?: string | null
+    senderName?: string | null
+    senderEmail: string
+    direction?: $Enums.ReplyDirection
+    messageId?: string | null
     createdAt?: Date | string
-    ticket: TicketCreateNestedOneWithoutMessagesInput
+    ticket: TicketCreateNestedOneWithoutRepliesInput
   }
 
-  export type MessageUncheckedCreateInput = {
-    id?: string
-    ticketId: string
-    direction: $Enums.MessageDirection
-    from: string
+  export type ReplyUncheckedCreateInput = {
+    id?: number
+    ticketId: number
     body: string
-    createdAt?: Date | string
-  }
-
-  export type MessageUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    direction?: EnumMessageDirectionFieldUpdateOperationsInput | $Enums.MessageDirection
-    from?: StringFieldUpdateOperationsInput | string
-    body?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ticket?: TicketUpdateOneRequiredWithoutMessagesNestedInput
-  }
-
-  export type MessageUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    ticketId?: StringFieldUpdateOperationsInput | string
-    direction?: EnumMessageDirectionFieldUpdateOperationsInput | $Enums.MessageDirection
-    from?: StringFieldUpdateOperationsInput | string
-    body?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MessageCreateManyInput = {
-    id?: string
-    ticketId: string
-    direction: $Enums.MessageDirection
-    from: string
-    body: string
+    bodyHtml?: string | null
+    senderName?: string | null
+    senderEmail: string
+    direction?: $Enums.ReplyDirection
+    messageId?: string | null
     createdAt?: Date | string
   }
 
-  export type MessageUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    direction?: EnumMessageDirectionFieldUpdateOperationsInput | $Enums.MessageDirection
-    from?: StringFieldUpdateOperationsInput | string
+  export type ReplyUpdateInput = {
     body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: NullableStringFieldUpdateOperationsInput | string | null
+    senderEmail?: StringFieldUpdateOperationsInput | string
+    direction?: EnumReplyDirectionFieldUpdateOperationsInput | $Enums.ReplyDirection
+    messageId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ticket?: TicketUpdateOneRequiredWithoutRepliesNestedInput
+  }
+
+  export type ReplyUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    ticketId?: IntFieldUpdateOperationsInput | number
+    body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: NullableStringFieldUpdateOperationsInput | string | null
+    senderEmail?: StringFieldUpdateOperationsInput | string
+    direction?: EnumReplyDirectionFieldUpdateOperationsInput | $Enums.ReplyDirection
+    messageId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MessageUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    ticketId?: StringFieldUpdateOperationsInput | string
-    direction?: EnumMessageDirectionFieldUpdateOperationsInput | $Enums.MessageDirection
-    from?: StringFieldUpdateOperationsInput | string
+  export type ReplyCreateManyInput = {
+    id?: number
+    ticketId: number
+    body: string
+    bodyHtml?: string | null
+    senderName?: string | null
+    senderEmail: string
+    direction?: $Enums.ReplyDirection
+    messageId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ReplyUpdateManyMutationInput = {
     body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: NullableStringFieldUpdateOperationsInput | string | null
+    senderEmail?: StringFieldUpdateOperationsInput | string
+    direction?: EnumReplyDirectionFieldUpdateOperationsInput | $Enums.ReplyDirection
+    messageId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReplyUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    ticketId?: IntFieldUpdateOperationsInput | number
+    body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: NullableStringFieldUpdateOperationsInput | string | null
+    senderEmail?: StringFieldUpdateOperationsInput | string
+    direction?: EnumReplyDirectionFieldUpdateOperationsInput | $Enums.ReplyDirection
+    messageId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -11932,7 +12137,7 @@ export namespace Prisma {
 
   export type AiSuggestionUncheckedCreateInput = {
     id?: string
-    ticketId: string
+    ticketId: number
     kind: string
     content: string
     confidence?: number | null
@@ -11954,7 +12159,7 @@ export namespace Prisma {
 
   export type AiSuggestionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    ticketId?: StringFieldUpdateOperationsInput | string
+    ticketId?: IntFieldUpdateOperationsInput | number
     kind?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     confidence?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -11965,7 +12170,7 @@ export namespace Prisma {
 
   export type AiSuggestionCreateManyInput = {
     id?: string
-    ticketId: string
+    ticketId: number
     kind: string
     content: string
     confidence?: number | null
@@ -11986,7 +12191,7 @@ export namespace Prisma {
 
   export type AiSuggestionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    ticketId?: StringFieldUpdateOperationsInput | string
+    ticketId?: IntFieldUpdateOperationsInput | number
     kind?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
     confidence?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -12349,6 +12554,17 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type EnumTicketStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TicketStatus | EnumTicketStatusFieldRefInput<$PrismaModel>
     in?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
@@ -12368,10 +12584,10 @@ export namespace Prisma {
     isNot?: UserWhereInput | null
   }
 
-  export type MessageListRelationFilter = {
-    every?: MessageWhereInput
-    some?: MessageWhereInput
-    none?: MessageWhereInput
+  export type ReplyListRelationFilter = {
+    every?: ReplyWhereInput
+    some?: ReplyWhereInput
+    none?: ReplyWhereInput
   }
 
   export type AiSuggestionListRelationFilter = {
@@ -12380,7 +12596,7 @@ export namespace Prisma {
     none?: AiSuggestionWhereInput
   }
 
-  export type MessageOrderByRelationAggregateInput = {
+  export type ReplyOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -12391,23 +12607,31 @@ export namespace Prisma {
   export type TicketCountOrderByAggregateInput = {
     id?: SortOrder
     subject?: SortOrder
-    requesterEmail?: SortOrder
+    body?: SortOrder
+    bodyHtml?: SortOrder
     status?: SortOrder
     category?: SortOrder
-    summary?: SortOrder
-    assigneeId?: SortOrder
+    senderName?: SortOrder
+    senderEmail?: SortOrder
+    assignedToId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type TicketAvgOrderByAggregateInput = {
+    id?: SortOrder
   }
 
   export type TicketMaxOrderByAggregateInput = {
     id?: SortOrder
     subject?: SortOrder
-    requesterEmail?: SortOrder
+    body?: SortOrder
+    bodyHtml?: SortOrder
     status?: SortOrder
     category?: SortOrder
-    summary?: SortOrder
-    assigneeId?: SortOrder
+    senderName?: SortOrder
+    senderEmail?: SortOrder
+    assignedToId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12415,13 +12639,35 @@ export namespace Prisma {
   export type TicketMinOrderByAggregateInput = {
     id?: SortOrder
     subject?: SortOrder
-    requesterEmail?: SortOrder
+    body?: SortOrder
+    bodyHtml?: SortOrder
     status?: SortOrder
     category?: SortOrder
-    summary?: SortOrder
-    assigneeId?: SortOrder
+    senderName?: SortOrder
+    senderEmail?: SortOrder
+    assignedToId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type TicketSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumTicketStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -12444,11 +12690,11 @@ export namespace Prisma {
     _max?: NestedEnumTicketCategoryNullableFilter<$PrismaModel>
   }
 
-  export type EnumMessageDirectionFilter<$PrismaModel = never> = {
-    equals?: $Enums.MessageDirection | EnumMessageDirectionFieldRefInput<$PrismaModel>
-    in?: $Enums.MessageDirection[] | ListEnumMessageDirectionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.MessageDirection[] | ListEnumMessageDirectionFieldRefInput<$PrismaModel>
-    not?: NestedEnumMessageDirectionFilter<$PrismaModel> | $Enums.MessageDirection
+  export type EnumReplyDirectionFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReplyDirection | EnumReplyDirectionFieldRefInput<$PrismaModel>
+    in?: $Enums.ReplyDirection[] | ListEnumReplyDirectionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReplyDirection[] | ListEnumReplyDirectionFieldRefInput<$PrismaModel>
+    not?: NestedEnumReplyDirectionFilter<$PrismaModel> | $Enums.ReplyDirection
   }
 
   export type TicketScalarRelationFilter = {
@@ -12456,41 +12702,60 @@ export namespace Prisma {
     isNot?: TicketWhereInput
   }
 
-  export type MessageCountOrderByAggregateInput = {
+  export type ReplyCountOrderByAggregateInput = {
     id?: SortOrder
     ticketId?: SortOrder
-    direction?: SortOrder
-    from?: SortOrder
     body?: SortOrder
+    bodyHtml?: SortOrder
+    senderName?: SortOrder
+    senderEmail?: SortOrder
+    direction?: SortOrder
+    messageId?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type MessageMaxOrderByAggregateInput = {
+  export type ReplyAvgOrderByAggregateInput = {
     id?: SortOrder
     ticketId?: SortOrder
-    direction?: SortOrder
-    from?: SortOrder
+  }
+
+  export type ReplyMaxOrderByAggregateInput = {
+    id?: SortOrder
+    ticketId?: SortOrder
     body?: SortOrder
+    bodyHtml?: SortOrder
+    senderName?: SortOrder
+    senderEmail?: SortOrder
+    direction?: SortOrder
+    messageId?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type MessageMinOrderByAggregateInput = {
+  export type ReplyMinOrderByAggregateInput = {
     id?: SortOrder
     ticketId?: SortOrder
-    direction?: SortOrder
-    from?: SortOrder
     body?: SortOrder
+    bodyHtml?: SortOrder
+    senderName?: SortOrder
+    senderEmail?: SortOrder
+    direction?: SortOrder
+    messageId?: SortOrder
     createdAt?: SortOrder
   }
 
-  export type EnumMessageDirectionWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.MessageDirection | EnumMessageDirectionFieldRefInput<$PrismaModel>
-    in?: $Enums.MessageDirection[] | ListEnumMessageDirectionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.MessageDirection[] | ListEnumMessageDirectionFieldRefInput<$PrismaModel>
-    not?: NestedEnumMessageDirectionWithAggregatesFilter<$PrismaModel> | $Enums.MessageDirection
+  export type ReplySumOrderByAggregateInput = {
+    id?: SortOrder
+    ticketId?: SortOrder
+  }
+
+  export type EnumReplyDirectionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReplyDirection | EnumReplyDirectionFieldRefInput<$PrismaModel>
+    in?: $Enums.ReplyDirection[] | ListEnumReplyDirectionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReplyDirection[] | ListEnumReplyDirectionFieldRefInput<$PrismaModel>
+    not?: NestedEnumReplyDirectionWithAggregatesFilter<$PrismaModel> | $Enums.ReplyDirection
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumMessageDirectionFilter<$PrismaModel>
-    _max?: NestedEnumMessageDirectionFilter<$PrismaModel>
+    _min?: NestedEnumReplyDirectionFilter<$PrismaModel>
+    _max?: NestedEnumReplyDirectionFilter<$PrismaModel>
   }
 
   export type FloatNullableFilter<$PrismaModel = never> = {
@@ -12527,6 +12792,7 @@ export namespace Prisma {
   }
 
   export type AiSuggestionAvgOrderByAggregateInput = {
+    ticketId?: SortOrder
     confidence?: SortOrder
     tokens?: SortOrder
   }
@@ -12554,6 +12820,7 @@ export namespace Prisma {
   }
 
   export type AiSuggestionSumOrderByAggregateInput = {
+    ticketId?: SortOrder
     confidence?: SortOrder
     tokens?: SortOrder
   }
@@ -12590,10 +12857,10 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type TicketCreateNestedManyWithoutAssigneeInput = {
-    create?: XOR<TicketCreateWithoutAssigneeInput, TicketUncheckedCreateWithoutAssigneeInput> | TicketCreateWithoutAssigneeInput[] | TicketUncheckedCreateWithoutAssigneeInput[]
-    connectOrCreate?: TicketCreateOrConnectWithoutAssigneeInput | TicketCreateOrConnectWithoutAssigneeInput[]
-    createMany?: TicketCreateManyAssigneeInputEnvelope
+  export type TicketCreateNestedManyWithoutAssignedToInput = {
+    create?: XOR<TicketCreateWithoutAssignedToInput, TicketUncheckedCreateWithoutAssignedToInput> | TicketCreateWithoutAssignedToInput[] | TicketUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutAssignedToInput | TicketCreateOrConnectWithoutAssignedToInput[]
+    createMany?: TicketCreateManyAssignedToInputEnvelope
     connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
   }
 
@@ -12611,10 +12878,10 @@ export namespace Prisma {
     connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
   }
 
-  export type TicketUncheckedCreateNestedManyWithoutAssigneeInput = {
-    create?: XOR<TicketCreateWithoutAssigneeInput, TicketUncheckedCreateWithoutAssigneeInput> | TicketCreateWithoutAssigneeInput[] | TicketUncheckedCreateWithoutAssigneeInput[]
-    connectOrCreate?: TicketCreateOrConnectWithoutAssigneeInput | TicketCreateOrConnectWithoutAssigneeInput[]
-    createMany?: TicketCreateManyAssigneeInputEnvelope
+  export type TicketUncheckedCreateNestedManyWithoutAssignedToInput = {
+    create?: XOR<TicketCreateWithoutAssignedToInput, TicketUncheckedCreateWithoutAssignedToInput> | TicketCreateWithoutAssignedToInput[] | TicketUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutAssignedToInput | TicketCreateOrConnectWithoutAssignedToInput[]
+    createMany?: TicketCreateManyAssignedToInputEnvelope
     connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
   }
 
@@ -12656,17 +12923,17 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type TicketUpdateManyWithoutAssigneeNestedInput = {
-    create?: XOR<TicketCreateWithoutAssigneeInput, TicketUncheckedCreateWithoutAssigneeInput> | TicketCreateWithoutAssigneeInput[] | TicketUncheckedCreateWithoutAssigneeInput[]
-    connectOrCreate?: TicketCreateOrConnectWithoutAssigneeInput | TicketCreateOrConnectWithoutAssigneeInput[]
-    upsert?: TicketUpsertWithWhereUniqueWithoutAssigneeInput | TicketUpsertWithWhereUniqueWithoutAssigneeInput[]
-    createMany?: TicketCreateManyAssigneeInputEnvelope
+  export type TicketUpdateManyWithoutAssignedToNestedInput = {
+    create?: XOR<TicketCreateWithoutAssignedToInput, TicketUncheckedCreateWithoutAssignedToInput> | TicketCreateWithoutAssignedToInput[] | TicketUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutAssignedToInput | TicketCreateOrConnectWithoutAssignedToInput[]
+    upsert?: TicketUpsertWithWhereUniqueWithoutAssignedToInput | TicketUpsertWithWhereUniqueWithoutAssignedToInput[]
+    createMany?: TicketCreateManyAssignedToInputEnvelope
     set?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
     disconnect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
     delete?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
     connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
-    update?: TicketUpdateWithWhereUniqueWithoutAssigneeInput | TicketUpdateWithWhereUniqueWithoutAssigneeInput[]
-    updateMany?: TicketUpdateManyWithWhereWithoutAssigneeInput | TicketUpdateManyWithWhereWithoutAssigneeInput[]
+    update?: TicketUpdateWithWhereUniqueWithoutAssignedToInput | TicketUpdateWithWhereUniqueWithoutAssignedToInput[]
+    updateMany?: TicketUpdateManyWithWhereWithoutAssignedToInput | TicketUpdateManyWithWhereWithoutAssignedToInput[]
     deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[]
   }
 
@@ -12698,17 +12965,17 @@ export namespace Prisma {
     deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
   }
 
-  export type TicketUncheckedUpdateManyWithoutAssigneeNestedInput = {
-    create?: XOR<TicketCreateWithoutAssigneeInput, TicketUncheckedCreateWithoutAssigneeInput> | TicketCreateWithoutAssigneeInput[] | TicketUncheckedCreateWithoutAssigneeInput[]
-    connectOrCreate?: TicketCreateOrConnectWithoutAssigneeInput | TicketCreateOrConnectWithoutAssigneeInput[]
-    upsert?: TicketUpsertWithWhereUniqueWithoutAssigneeInput | TicketUpsertWithWhereUniqueWithoutAssigneeInput[]
-    createMany?: TicketCreateManyAssigneeInputEnvelope
+  export type TicketUncheckedUpdateManyWithoutAssignedToNestedInput = {
+    create?: XOR<TicketCreateWithoutAssignedToInput, TicketUncheckedCreateWithoutAssignedToInput> | TicketCreateWithoutAssignedToInput[] | TicketUncheckedCreateWithoutAssignedToInput[]
+    connectOrCreate?: TicketCreateOrConnectWithoutAssignedToInput | TicketCreateOrConnectWithoutAssignedToInput[]
+    upsert?: TicketUpsertWithWhereUniqueWithoutAssignedToInput | TicketUpsertWithWhereUniqueWithoutAssignedToInput[]
+    createMany?: TicketCreateManyAssignedToInputEnvelope
     set?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
     disconnect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
     delete?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
     connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
-    update?: TicketUpdateWithWhereUniqueWithoutAssigneeInput | TicketUpdateWithWhereUniqueWithoutAssigneeInput[]
-    updateMany?: TicketUpdateManyWithWhereWithoutAssigneeInput | TicketUpdateManyWithWhereWithoutAssigneeInput[]
+    update?: TicketUpdateWithWhereUniqueWithoutAssignedToInput | TicketUpdateWithWhereUniqueWithoutAssignedToInput[]
+    updateMany?: TicketUpdateManyWithWhereWithoutAssignedToInput | TicketUpdateManyWithWhereWithoutAssignedToInput[]
     deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[]
   }
 
@@ -12774,11 +13041,11 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type MessageCreateNestedManyWithoutTicketInput = {
-    create?: XOR<MessageCreateWithoutTicketInput, MessageUncheckedCreateWithoutTicketInput> | MessageCreateWithoutTicketInput[] | MessageUncheckedCreateWithoutTicketInput[]
-    connectOrCreate?: MessageCreateOrConnectWithoutTicketInput | MessageCreateOrConnectWithoutTicketInput[]
-    createMany?: MessageCreateManyTicketInputEnvelope
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  export type ReplyCreateNestedManyWithoutTicketInput = {
+    create?: XOR<ReplyCreateWithoutTicketInput, ReplyUncheckedCreateWithoutTicketInput> | ReplyCreateWithoutTicketInput[] | ReplyUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: ReplyCreateOrConnectWithoutTicketInput | ReplyCreateOrConnectWithoutTicketInput[]
+    createMany?: ReplyCreateManyTicketInputEnvelope
+    connect?: ReplyWhereUniqueInput | ReplyWhereUniqueInput[]
   }
 
   export type AiSuggestionCreateNestedManyWithoutTicketInput = {
@@ -12788,11 +13055,11 @@ export namespace Prisma {
     connect?: AiSuggestionWhereUniqueInput | AiSuggestionWhereUniqueInput[]
   }
 
-  export type MessageUncheckedCreateNestedManyWithoutTicketInput = {
-    create?: XOR<MessageCreateWithoutTicketInput, MessageUncheckedCreateWithoutTicketInput> | MessageCreateWithoutTicketInput[] | MessageUncheckedCreateWithoutTicketInput[]
-    connectOrCreate?: MessageCreateOrConnectWithoutTicketInput | MessageCreateOrConnectWithoutTicketInput[]
-    createMany?: MessageCreateManyTicketInputEnvelope
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  export type ReplyUncheckedCreateNestedManyWithoutTicketInput = {
+    create?: XOR<ReplyCreateWithoutTicketInput, ReplyUncheckedCreateWithoutTicketInput> | ReplyCreateWithoutTicketInput[] | ReplyUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: ReplyCreateOrConnectWithoutTicketInput | ReplyCreateOrConnectWithoutTicketInput[]
+    createMany?: ReplyCreateManyTicketInputEnvelope
+    connect?: ReplyWhereUniqueInput | ReplyWhereUniqueInput[]
   }
 
   export type AiSuggestionUncheckedCreateNestedManyWithoutTicketInput = {
@@ -12820,18 +13087,18 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAssignedTicketsInput, UserUpdateWithoutAssignedTicketsInput>, UserUncheckedUpdateWithoutAssignedTicketsInput>
   }
 
-  export type MessageUpdateManyWithoutTicketNestedInput = {
-    create?: XOR<MessageCreateWithoutTicketInput, MessageUncheckedCreateWithoutTicketInput> | MessageCreateWithoutTicketInput[] | MessageUncheckedCreateWithoutTicketInput[]
-    connectOrCreate?: MessageCreateOrConnectWithoutTicketInput | MessageCreateOrConnectWithoutTicketInput[]
-    upsert?: MessageUpsertWithWhereUniqueWithoutTicketInput | MessageUpsertWithWhereUniqueWithoutTicketInput[]
-    createMany?: MessageCreateManyTicketInputEnvelope
-    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    update?: MessageUpdateWithWhereUniqueWithoutTicketInput | MessageUpdateWithWhereUniqueWithoutTicketInput[]
-    updateMany?: MessageUpdateManyWithWhereWithoutTicketInput | MessageUpdateManyWithWhereWithoutTicketInput[]
-    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
+  export type ReplyUpdateManyWithoutTicketNestedInput = {
+    create?: XOR<ReplyCreateWithoutTicketInput, ReplyUncheckedCreateWithoutTicketInput> | ReplyCreateWithoutTicketInput[] | ReplyUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: ReplyCreateOrConnectWithoutTicketInput | ReplyCreateOrConnectWithoutTicketInput[]
+    upsert?: ReplyUpsertWithWhereUniqueWithoutTicketInput | ReplyUpsertWithWhereUniqueWithoutTicketInput[]
+    createMany?: ReplyCreateManyTicketInputEnvelope
+    set?: ReplyWhereUniqueInput | ReplyWhereUniqueInput[]
+    disconnect?: ReplyWhereUniqueInput | ReplyWhereUniqueInput[]
+    delete?: ReplyWhereUniqueInput | ReplyWhereUniqueInput[]
+    connect?: ReplyWhereUniqueInput | ReplyWhereUniqueInput[]
+    update?: ReplyUpdateWithWhereUniqueWithoutTicketInput | ReplyUpdateWithWhereUniqueWithoutTicketInput[]
+    updateMany?: ReplyUpdateManyWithWhereWithoutTicketInput | ReplyUpdateManyWithWhereWithoutTicketInput[]
+    deleteMany?: ReplyScalarWhereInput | ReplyScalarWhereInput[]
   }
 
   export type AiSuggestionUpdateManyWithoutTicketNestedInput = {
@@ -12848,18 +13115,26 @@ export namespace Prisma {
     deleteMany?: AiSuggestionScalarWhereInput | AiSuggestionScalarWhereInput[]
   }
 
-  export type MessageUncheckedUpdateManyWithoutTicketNestedInput = {
-    create?: XOR<MessageCreateWithoutTicketInput, MessageUncheckedCreateWithoutTicketInput> | MessageCreateWithoutTicketInput[] | MessageUncheckedCreateWithoutTicketInput[]
-    connectOrCreate?: MessageCreateOrConnectWithoutTicketInput | MessageCreateOrConnectWithoutTicketInput[]
-    upsert?: MessageUpsertWithWhereUniqueWithoutTicketInput | MessageUpsertWithWhereUniqueWithoutTicketInput[]
-    createMany?: MessageCreateManyTicketInputEnvelope
-    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    update?: MessageUpdateWithWhereUniqueWithoutTicketInput | MessageUpdateWithWhereUniqueWithoutTicketInput[]
-    updateMany?: MessageUpdateManyWithWhereWithoutTicketInput | MessageUpdateManyWithWhereWithoutTicketInput[]
-    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type ReplyUncheckedUpdateManyWithoutTicketNestedInput = {
+    create?: XOR<ReplyCreateWithoutTicketInput, ReplyUncheckedCreateWithoutTicketInput> | ReplyCreateWithoutTicketInput[] | ReplyUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: ReplyCreateOrConnectWithoutTicketInput | ReplyCreateOrConnectWithoutTicketInput[]
+    upsert?: ReplyUpsertWithWhereUniqueWithoutTicketInput | ReplyUpsertWithWhereUniqueWithoutTicketInput[]
+    createMany?: ReplyCreateManyTicketInputEnvelope
+    set?: ReplyWhereUniqueInput | ReplyWhereUniqueInput[]
+    disconnect?: ReplyWhereUniqueInput | ReplyWhereUniqueInput[]
+    delete?: ReplyWhereUniqueInput | ReplyWhereUniqueInput[]
+    connect?: ReplyWhereUniqueInput | ReplyWhereUniqueInput[]
+    update?: ReplyUpdateWithWhereUniqueWithoutTicketInput | ReplyUpdateWithWhereUniqueWithoutTicketInput[]
+    updateMany?: ReplyUpdateManyWithWhereWithoutTicketInput | ReplyUpdateManyWithWhereWithoutTicketInput[]
+    deleteMany?: ReplyScalarWhereInput | ReplyScalarWhereInput[]
   }
 
   export type AiSuggestionUncheckedUpdateManyWithoutTicketNestedInput = {
@@ -12876,22 +13151,22 @@ export namespace Prisma {
     deleteMany?: AiSuggestionScalarWhereInput | AiSuggestionScalarWhereInput[]
   }
 
-  export type TicketCreateNestedOneWithoutMessagesInput = {
-    create?: XOR<TicketCreateWithoutMessagesInput, TicketUncheckedCreateWithoutMessagesInput>
-    connectOrCreate?: TicketCreateOrConnectWithoutMessagesInput
+  export type TicketCreateNestedOneWithoutRepliesInput = {
+    create?: XOR<TicketCreateWithoutRepliesInput, TicketUncheckedCreateWithoutRepliesInput>
+    connectOrCreate?: TicketCreateOrConnectWithoutRepliesInput
     connect?: TicketWhereUniqueInput
   }
 
-  export type EnumMessageDirectionFieldUpdateOperationsInput = {
-    set?: $Enums.MessageDirection
+  export type EnumReplyDirectionFieldUpdateOperationsInput = {
+    set?: $Enums.ReplyDirection
   }
 
-  export type TicketUpdateOneRequiredWithoutMessagesNestedInput = {
-    create?: XOR<TicketCreateWithoutMessagesInput, TicketUncheckedCreateWithoutMessagesInput>
-    connectOrCreate?: TicketCreateOrConnectWithoutMessagesInput
-    upsert?: TicketUpsertWithoutMessagesInput
+  export type TicketUpdateOneRequiredWithoutRepliesNestedInput = {
+    create?: XOR<TicketCreateWithoutRepliesInput, TicketUncheckedCreateWithoutRepliesInput>
+    connectOrCreate?: TicketCreateOrConnectWithoutRepliesInput
+    upsert?: TicketUpsertWithoutRepliesInput
     connect?: TicketWhereUniqueInput
-    update?: XOR<XOR<TicketUpdateToOneWithWhereWithoutMessagesInput, TicketUpdateWithoutMessagesInput>, TicketUncheckedUpdateWithoutMessagesInput>
+    update?: XOR<XOR<TicketUpdateToOneWithWhereWithoutRepliesInput, TicketUpdateWithoutRepliesInput>, TicketUncheckedUpdateWithoutRepliesInput>
   }
 
   export type TicketCreateNestedOneWithoutAiSuggestionsInput = {
@@ -13102,6 +13377,33 @@ export namespace Prisma {
     not?: NestedEnumTicketCategoryNullableFilter<$PrismaModel> | $Enums.TicketCategory | null
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type NestedEnumTicketStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TicketStatus | EnumTicketStatusFieldRefInput<$PrismaModel>
     in?: $Enums.TicketStatus[] | ListEnumTicketStatusFieldRefInput<$PrismaModel>
@@ -13122,21 +13424,21 @@ export namespace Prisma {
     _max?: NestedEnumTicketCategoryNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumMessageDirectionFilter<$PrismaModel = never> = {
-    equals?: $Enums.MessageDirection | EnumMessageDirectionFieldRefInput<$PrismaModel>
-    in?: $Enums.MessageDirection[] | ListEnumMessageDirectionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.MessageDirection[] | ListEnumMessageDirectionFieldRefInput<$PrismaModel>
-    not?: NestedEnumMessageDirectionFilter<$PrismaModel> | $Enums.MessageDirection
+  export type NestedEnumReplyDirectionFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReplyDirection | EnumReplyDirectionFieldRefInput<$PrismaModel>
+    in?: $Enums.ReplyDirection[] | ListEnumReplyDirectionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReplyDirection[] | ListEnumReplyDirectionFieldRefInput<$PrismaModel>
+    not?: NestedEnumReplyDirectionFilter<$PrismaModel> | $Enums.ReplyDirection
   }
 
-  export type NestedEnumMessageDirectionWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.MessageDirection | EnumMessageDirectionFieldRefInput<$PrismaModel>
-    in?: $Enums.MessageDirection[] | ListEnumMessageDirectionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.MessageDirection[] | ListEnumMessageDirectionFieldRefInput<$PrismaModel>
-    not?: NestedEnumMessageDirectionWithAggregatesFilter<$PrismaModel> | $Enums.MessageDirection
+  export type NestedEnumReplyDirectionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ReplyDirection | EnumReplyDirectionFieldRefInput<$PrismaModel>
+    in?: $Enums.ReplyDirection[] | ListEnumReplyDirectionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ReplyDirection[] | ListEnumReplyDirectionFieldRefInput<$PrismaModel>
+    not?: NestedEnumReplyDirectionWithAggregatesFilter<$PrismaModel> | $Enums.ReplyDirection
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumMessageDirectionFilter<$PrismaModel>
-    _max?: NestedEnumMessageDirectionFilter<$PrismaModel>
+    _min?: NestedEnumReplyDirectionFilter<$PrismaModel>
+    _max?: NestedEnumReplyDirectionFilter<$PrismaModel>
   }
 
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
@@ -13182,39 +13484,42 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type TicketCreateWithoutAssigneeInput = {
-    id?: string
+  export type TicketCreateWithoutAssignedToInput = {
     subject: string
-    requesterEmail: string
+    body: string
+    bodyHtml?: string | null
     status?: $Enums.TicketStatus
     category?: $Enums.TicketCategory | null
-    summary?: string | null
+    senderName: string
+    senderEmail: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    messages?: MessageCreateNestedManyWithoutTicketInput
+    replies?: ReplyCreateNestedManyWithoutTicketInput
     aiSuggestions?: AiSuggestionCreateNestedManyWithoutTicketInput
   }
 
-  export type TicketUncheckedCreateWithoutAssigneeInput = {
-    id?: string
+  export type TicketUncheckedCreateWithoutAssignedToInput = {
+    id?: number
     subject: string
-    requesterEmail: string
+    body: string
+    bodyHtml?: string | null
     status?: $Enums.TicketStatus
     category?: $Enums.TicketCategory | null
-    summary?: string | null
+    senderName: string
+    senderEmail: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    messages?: MessageUncheckedCreateNestedManyWithoutTicketInput
+    replies?: ReplyUncheckedCreateNestedManyWithoutTicketInput
     aiSuggestions?: AiSuggestionUncheckedCreateNestedManyWithoutTicketInput
   }
 
-  export type TicketCreateOrConnectWithoutAssigneeInput = {
+  export type TicketCreateOrConnectWithoutAssignedToInput = {
     where: TicketWhereUniqueInput
-    create: XOR<TicketCreateWithoutAssigneeInput, TicketUncheckedCreateWithoutAssigneeInput>
+    create: XOR<TicketCreateWithoutAssignedToInput, TicketUncheckedCreateWithoutAssignedToInput>
   }
 
-  export type TicketCreateManyAssigneeInputEnvelope = {
-    data: TicketCreateManyAssigneeInput | TicketCreateManyAssigneeInput[]
+  export type TicketCreateManyAssignedToInputEnvelope = {
+    data: TicketCreateManyAssignedToInput | TicketCreateManyAssignedToInput[]
     skipDuplicates?: boolean
   }
 
@@ -13288,33 +13593,35 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type TicketUpsertWithWhereUniqueWithoutAssigneeInput = {
+  export type TicketUpsertWithWhereUniqueWithoutAssignedToInput = {
     where: TicketWhereUniqueInput
-    update: XOR<TicketUpdateWithoutAssigneeInput, TicketUncheckedUpdateWithoutAssigneeInput>
-    create: XOR<TicketCreateWithoutAssigneeInput, TicketUncheckedCreateWithoutAssigneeInput>
+    update: XOR<TicketUpdateWithoutAssignedToInput, TicketUncheckedUpdateWithoutAssignedToInput>
+    create: XOR<TicketCreateWithoutAssignedToInput, TicketUncheckedCreateWithoutAssignedToInput>
   }
 
-  export type TicketUpdateWithWhereUniqueWithoutAssigneeInput = {
+  export type TicketUpdateWithWhereUniqueWithoutAssignedToInput = {
     where: TicketWhereUniqueInput
-    data: XOR<TicketUpdateWithoutAssigneeInput, TicketUncheckedUpdateWithoutAssigneeInput>
+    data: XOR<TicketUpdateWithoutAssignedToInput, TicketUncheckedUpdateWithoutAssignedToInput>
   }
 
-  export type TicketUpdateManyWithWhereWithoutAssigneeInput = {
+  export type TicketUpdateManyWithWhereWithoutAssignedToInput = {
     where: TicketScalarWhereInput
-    data: XOR<TicketUpdateManyMutationInput, TicketUncheckedUpdateManyWithoutAssigneeInput>
+    data: XOR<TicketUpdateManyMutationInput, TicketUncheckedUpdateManyWithoutAssignedToInput>
   }
 
   export type TicketScalarWhereInput = {
     AND?: TicketScalarWhereInput | TicketScalarWhereInput[]
     OR?: TicketScalarWhereInput[]
     NOT?: TicketScalarWhereInput | TicketScalarWhereInput[]
-    id?: StringFilter<"Ticket"> | string
+    id?: IntFilter<"Ticket"> | number
     subject?: StringFilter<"Ticket"> | string
-    requesterEmail?: StringFilter<"Ticket"> | string
+    body?: StringFilter<"Ticket"> | string
+    bodyHtml?: StringNullableFilter<"Ticket"> | string | null
     status?: EnumTicketStatusFilter<"Ticket"> | $Enums.TicketStatus
     category?: EnumTicketCategoryNullableFilter<"Ticket"> | $Enums.TicketCategory | null
-    summary?: StringNullableFilter<"Ticket"> | string | null
-    assigneeId?: StringNullableFilter<"Ticket"> | string | null
+    senderName?: StringFilter<"Ticket"> | string
+    senderEmail?: StringFilter<"Ticket"> | string
+    assignedToId?: StringNullableFilter<"Ticket"> | string | null
     createdAt?: DateTimeFilter<"Ticket"> | Date | string
     updatedAt?: DateTimeFilter<"Ticket"> | Date | string
   }
@@ -13395,7 +13702,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    assignedTickets?: TicketCreateNestedManyWithoutAssigneeInput
+    assignedTickets?: TicketCreateNestedManyWithoutAssignedToInput
     accounts?: AccountCreateNestedManyWithoutUserInput
   }
 
@@ -13410,7 +13717,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    assignedTickets?: TicketUncheckedCreateNestedManyWithoutAssigneeInput
+    assignedTickets?: TicketUncheckedCreateNestedManyWithoutAssignedToInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -13441,7 +13748,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedTickets?: TicketUpdateManyWithoutAssigneeNestedInput
+    assignedTickets?: TicketUpdateManyWithoutAssignedToNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
   }
 
@@ -13456,7 +13763,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedTickets?: TicketUncheckedUpdateManyWithoutAssigneeNestedInput
+    assignedTickets?: TicketUncheckedUpdateManyWithoutAssignedToNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -13471,7 +13778,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    assignedTickets?: TicketCreateNestedManyWithoutAssigneeInput
+    assignedTickets?: TicketCreateNestedManyWithoutAssignedToInput
     sessions?: SessionCreateNestedManyWithoutUserInput
   }
 
@@ -13486,7 +13793,7 @@ export namespace Prisma {
     deletedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    assignedTickets?: TicketUncheckedCreateNestedManyWithoutAssigneeInput
+    assignedTickets?: TicketUncheckedCreateNestedManyWithoutAssignedToInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -13517,7 +13824,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedTickets?: TicketUpdateManyWithoutAssigneeNestedInput
+    assignedTickets?: TicketUpdateManyWithoutAssignedToNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
   }
 
@@ -13532,7 +13839,7 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignedTickets?: TicketUncheckedUpdateManyWithoutAssigneeNestedInput
+    assignedTickets?: TicketUncheckedUpdateManyWithoutAssignedToNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -13571,29 +13878,34 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutAssignedTicketsInput, UserUncheckedCreateWithoutAssignedTicketsInput>
   }
 
-  export type MessageCreateWithoutTicketInput = {
-    id?: string
-    direction: $Enums.MessageDirection
-    from: string
+  export type ReplyCreateWithoutTicketInput = {
     body: string
+    bodyHtml?: string | null
+    senderName?: string | null
+    senderEmail: string
+    direction?: $Enums.ReplyDirection
+    messageId?: string | null
     createdAt?: Date | string
   }
 
-  export type MessageUncheckedCreateWithoutTicketInput = {
-    id?: string
-    direction: $Enums.MessageDirection
-    from: string
+  export type ReplyUncheckedCreateWithoutTicketInput = {
+    id?: number
     body: string
+    bodyHtml?: string | null
+    senderName?: string | null
+    senderEmail: string
+    direction?: $Enums.ReplyDirection
+    messageId?: string | null
     createdAt?: Date | string
   }
 
-  export type MessageCreateOrConnectWithoutTicketInput = {
-    where: MessageWhereUniqueInput
-    create: XOR<MessageCreateWithoutTicketInput, MessageUncheckedCreateWithoutTicketInput>
+  export type ReplyCreateOrConnectWithoutTicketInput = {
+    where: ReplyWhereUniqueInput
+    create: XOR<ReplyCreateWithoutTicketInput, ReplyUncheckedCreateWithoutTicketInput>
   }
 
-  export type MessageCreateManyTicketInputEnvelope = {
-    data: MessageCreateManyTicketInput | MessageCreateManyTicketInput[]
+  export type ReplyCreateManyTicketInputEnvelope = {
+    data: ReplyCreateManyTicketInput | ReplyCreateManyTicketInput[]
     skipDuplicates?: boolean
   }
 
@@ -13668,32 +13980,35 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
   }
 
-  export type MessageUpsertWithWhereUniqueWithoutTicketInput = {
-    where: MessageWhereUniqueInput
-    update: XOR<MessageUpdateWithoutTicketInput, MessageUncheckedUpdateWithoutTicketInput>
-    create: XOR<MessageCreateWithoutTicketInput, MessageUncheckedCreateWithoutTicketInput>
+  export type ReplyUpsertWithWhereUniqueWithoutTicketInput = {
+    where: ReplyWhereUniqueInput
+    update: XOR<ReplyUpdateWithoutTicketInput, ReplyUncheckedUpdateWithoutTicketInput>
+    create: XOR<ReplyCreateWithoutTicketInput, ReplyUncheckedCreateWithoutTicketInput>
   }
 
-  export type MessageUpdateWithWhereUniqueWithoutTicketInput = {
-    where: MessageWhereUniqueInput
-    data: XOR<MessageUpdateWithoutTicketInput, MessageUncheckedUpdateWithoutTicketInput>
+  export type ReplyUpdateWithWhereUniqueWithoutTicketInput = {
+    where: ReplyWhereUniqueInput
+    data: XOR<ReplyUpdateWithoutTicketInput, ReplyUncheckedUpdateWithoutTicketInput>
   }
 
-  export type MessageUpdateManyWithWhereWithoutTicketInput = {
-    where: MessageScalarWhereInput
-    data: XOR<MessageUpdateManyMutationInput, MessageUncheckedUpdateManyWithoutTicketInput>
+  export type ReplyUpdateManyWithWhereWithoutTicketInput = {
+    where: ReplyScalarWhereInput
+    data: XOR<ReplyUpdateManyMutationInput, ReplyUncheckedUpdateManyWithoutTicketInput>
   }
 
-  export type MessageScalarWhereInput = {
-    AND?: MessageScalarWhereInput | MessageScalarWhereInput[]
-    OR?: MessageScalarWhereInput[]
-    NOT?: MessageScalarWhereInput | MessageScalarWhereInput[]
-    id?: StringFilter<"Message"> | string
-    ticketId?: StringFilter<"Message"> | string
-    direction?: EnumMessageDirectionFilter<"Message"> | $Enums.MessageDirection
-    from?: StringFilter<"Message"> | string
-    body?: StringFilter<"Message"> | string
-    createdAt?: DateTimeFilter<"Message"> | Date | string
+  export type ReplyScalarWhereInput = {
+    AND?: ReplyScalarWhereInput | ReplyScalarWhereInput[]
+    OR?: ReplyScalarWhereInput[]
+    NOT?: ReplyScalarWhereInput | ReplyScalarWhereInput[]
+    id?: IntFilter<"Reply"> | number
+    ticketId?: IntFilter<"Reply"> | number
+    body?: StringFilter<"Reply"> | string
+    bodyHtml?: StringNullableFilter<"Reply"> | string | null
+    senderName?: StringNullableFilter<"Reply"> | string | null
+    senderEmail?: StringFilter<"Reply"> | string
+    direction?: EnumReplyDirectionFilter<"Reply"> | $Enums.ReplyDirection
+    messageId?: StringNullableFilter<"Reply"> | string | null
+    createdAt?: DateTimeFilter<"Reply"> | Date | string
   }
 
   export type AiSuggestionUpsertWithWhereUniqueWithoutTicketInput = {
@@ -13717,7 +14032,7 @@ export namespace Prisma {
     OR?: AiSuggestionScalarWhereInput[]
     NOT?: AiSuggestionScalarWhereInput | AiSuggestionScalarWhereInput[]
     id?: StringFilter<"AiSuggestion"> | string
-    ticketId?: StringFilter<"AiSuggestion"> | string
+    ticketId?: IntFilter<"AiSuggestion"> | number
     kind?: StringFilter<"AiSuggestion"> | string
     content?: StringFilter<"AiSuggestion"> | string
     confidence?: FloatNullableFilter<"AiSuggestion"> | number | null
@@ -13726,98 +14041,107 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"AiSuggestion"> | Date | string
   }
 
-  export type TicketCreateWithoutMessagesInput = {
-    id?: string
+  export type TicketCreateWithoutRepliesInput = {
     subject: string
-    requesterEmail: string
+    body: string
+    bodyHtml?: string | null
     status?: $Enums.TicketStatus
     category?: $Enums.TicketCategory | null
-    summary?: string | null
+    senderName: string
+    senderEmail: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    assignee?: UserCreateNestedOneWithoutAssignedTicketsInput
+    assignedTo?: UserCreateNestedOneWithoutAssignedTicketsInput
     aiSuggestions?: AiSuggestionCreateNestedManyWithoutTicketInput
   }
 
-  export type TicketUncheckedCreateWithoutMessagesInput = {
-    id?: string
+  export type TicketUncheckedCreateWithoutRepliesInput = {
+    id?: number
     subject: string
-    requesterEmail: string
+    body: string
+    bodyHtml?: string | null
     status?: $Enums.TicketStatus
     category?: $Enums.TicketCategory | null
-    summary?: string | null
-    assigneeId?: string | null
+    senderName: string
+    senderEmail: string
+    assignedToId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     aiSuggestions?: AiSuggestionUncheckedCreateNestedManyWithoutTicketInput
   }
 
-  export type TicketCreateOrConnectWithoutMessagesInput = {
+  export type TicketCreateOrConnectWithoutRepliesInput = {
     where: TicketWhereUniqueInput
-    create: XOR<TicketCreateWithoutMessagesInput, TicketUncheckedCreateWithoutMessagesInput>
+    create: XOR<TicketCreateWithoutRepliesInput, TicketUncheckedCreateWithoutRepliesInput>
   }
 
-  export type TicketUpsertWithoutMessagesInput = {
-    update: XOR<TicketUpdateWithoutMessagesInput, TicketUncheckedUpdateWithoutMessagesInput>
-    create: XOR<TicketCreateWithoutMessagesInput, TicketUncheckedCreateWithoutMessagesInput>
+  export type TicketUpsertWithoutRepliesInput = {
+    update: XOR<TicketUpdateWithoutRepliesInput, TicketUncheckedUpdateWithoutRepliesInput>
+    create: XOR<TicketCreateWithoutRepliesInput, TicketUncheckedCreateWithoutRepliesInput>
     where?: TicketWhereInput
   }
 
-  export type TicketUpdateToOneWithWhereWithoutMessagesInput = {
+  export type TicketUpdateToOneWithWhereWithoutRepliesInput = {
     where?: TicketWhereInput
-    data: XOR<TicketUpdateWithoutMessagesInput, TicketUncheckedUpdateWithoutMessagesInput>
+    data: XOR<TicketUpdateWithoutRepliesInput, TicketUncheckedUpdateWithoutRepliesInput>
   }
 
-  export type TicketUpdateWithoutMessagesInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type TicketUpdateWithoutRepliesInput = {
     subject?: StringFieldUpdateOperationsInput | string
-    requesterEmail?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
     category?: NullableEnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory | null
-    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: StringFieldUpdateOperationsInput | string
+    senderEmail?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignee?: UserUpdateOneWithoutAssignedTicketsNestedInput
+    assignedTo?: UserUpdateOneWithoutAssignedTicketsNestedInput
     aiSuggestions?: AiSuggestionUpdateManyWithoutTicketNestedInput
   }
 
-  export type TicketUncheckedUpdateWithoutMessagesInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type TicketUncheckedUpdateWithoutRepliesInput = {
+    id?: IntFieldUpdateOperationsInput | number
     subject?: StringFieldUpdateOperationsInput | string
-    requesterEmail?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
     category?: NullableEnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory | null
-    summary?: NullableStringFieldUpdateOperationsInput | string | null
-    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: StringFieldUpdateOperationsInput | string
+    senderEmail?: StringFieldUpdateOperationsInput | string
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     aiSuggestions?: AiSuggestionUncheckedUpdateManyWithoutTicketNestedInput
   }
 
   export type TicketCreateWithoutAiSuggestionsInput = {
-    id?: string
     subject: string
-    requesterEmail: string
+    body: string
+    bodyHtml?: string | null
     status?: $Enums.TicketStatus
     category?: $Enums.TicketCategory | null
-    summary?: string | null
+    senderName: string
+    senderEmail: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    assignee?: UserCreateNestedOneWithoutAssignedTicketsInput
-    messages?: MessageCreateNestedManyWithoutTicketInput
+    assignedTo?: UserCreateNestedOneWithoutAssignedTicketsInput
+    replies?: ReplyCreateNestedManyWithoutTicketInput
   }
 
   export type TicketUncheckedCreateWithoutAiSuggestionsInput = {
-    id?: string
+    id?: number
     subject: string
-    requesterEmail: string
+    body: string
+    bodyHtml?: string | null
     status?: $Enums.TicketStatus
     category?: $Enums.TicketCategory | null
-    summary?: string | null
-    assigneeId?: string | null
+    senderName: string
+    senderEmail: string
+    assignedToId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    messages?: MessageUncheckedCreateNestedManyWithoutTicketInput
+    replies?: ReplyUncheckedCreateNestedManyWithoutTicketInput
   }
 
   export type TicketCreateOrConnectWithoutAiSuggestionsInput = {
@@ -13837,38 +14161,43 @@ export namespace Prisma {
   }
 
   export type TicketUpdateWithoutAiSuggestionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
-    requesterEmail?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
     category?: NullableEnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory | null
-    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: StringFieldUpdateOperationsInput | string
+    senderEmail?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    assignee?: UserUpdateOneWithoutAssignedTicketsNestedInput
-    messages?: MessageUpdateManyWithoutTicketNestedInput
+    assignedTo?: UserUpdateOneWithoutAssignedTicketsNestedInput
+    replies?: ReplyUpdateManyWithoutTicketNestedInput
   }
 
   export type TicketUncheckedUpdateWithoutAiSuggestionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    id?: IntFieldUpdateOperationsInput | number
     subject?: StringFieldUpdateOperationsInput | string
-    requesterEmail?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
     category?: NullableEnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory | null
-    summary?: NullableStringFieldUpdateOperationsInput | string | null
-    assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: StringFieldUpdateOperationsInput | string
+    senderEmail?: StringFieldUpdateOperationsInput | string
+    assignedToId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    messages?: MessageUncheckedUpdateManyWithoutTicketNestedInput
+    replies?: ReplyUncheckedUpdateManyWithoutTicketNestedInput
   }
 
-  export type TicketCreateManyAssigneeInput = {
-    id?: string
+  export type TicketCreateManyAssignedToInput = {
+    id?: number
     subject: string
-    requesterEmail: string
+    body: string
+    bodyHtml?: string | null
     status?: $Enums.TicketStatus
     category?: $Enums.TicketCategory | null
-    summary?: string | null
+    senderName: string
+    senderEmail: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13898,39 +14227,44 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type TicketUpdateWithoutAssigneeInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type TicketUpdateWithoutAssignedToInput = {
     subject?: StringFieldUpdateOperationsInput | string
-    requesterEmail?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
     category?: NullableEnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory | null
-    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: StringFieldUpdateOperationsInput | string
+    senderEmail?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    messages?: MessageUpdateManyWithoutTicketNestedInput
+    replies?: ReplyUpdateManyWithoutTicketNestedInput
     aiSuggestions?: AiSuggestionUpdateManyWithoutTicketNestedInput
   }
 
-  export type TicketUncheckedUpdateWithoutAssigneeInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type TicketUncheckedUpdateWithoutAssignedToInput = {
+    id?: IntFieldUpdateOperationsInput | number
     subject?: StringFieldUpdateOperationsInput | string
-    requesterEmail?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
     category?: NullableEnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory | null
-    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: StringFieldUpdateOperationsInput | string
+    senderEmail?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    messages?: MessageUncheckedUpdateManyWithoutTicketNestedInput
+    replies?: ReplyUncheckedUpdateManyWithoutTicketNestedInput
     aiSuggestions?: AiSuggestionUncheckedUpdateManyWithoutTicketNestedInput
   }
 
-  export type TicketUncheckedUpdateManyWithoutAssigneeInput = {
-    id?: StringFieldUpdateOperationsInput | string
+  export type TicketUncheckedUpdateManyWithoutAssignedToInput = {
+    id?: IntFieldUpdateOperationsInput | number
     subject?: StringFieldUpdateOperationsInput | string
-    requesterEmail?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus
     category?: NullableEnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory | null
-    summary?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: StringFieldUpdateOperationsInput | string
+    senderEmail?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14010,11 +14344,14 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MessageCreateManyTicketInput = {
-    id?: string
-    direction: $Enums.MessageDirection
-    from: string
+  export type ReplyCreateManyTicketInput = {
+    id?: number
     body: string
+    bodyHtml?: string | null
+    senderName?: string | null
+    senderEmail: string
+    direction?: $Enums.ReplyDirection
+    messageId?: string | null
     createdAt?: Date | string
   }
 
@@ -14028,27 +14365,35 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type MessageUpdateWithoutTicketInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    direction?: EnumMessageDirectionFieldUpdateOperationsInput | $Enums.MessageDirection
-    from?: StringFieldUpdateOperationsInput | string
+  export type ReplyUpdateWithoutTicketInput = {
     body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: NullableStringFieldUpdateOperationsInput | string | null
+    senderEmail?: StringFieldUpdateOperationsInput | string
+    direction?: EnumReplyDirectionFieldUpdateOperationsInput | $Enums.ReplyDirection
+    messageId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MessageUncheckedUpdateWithoutTicketInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    direction?: EnumMessageDirectionFieldUpdateOperationsInput | $Enums.MessageDirection
-    from?: StringFieldUpdateOperationsInput | string
+  export type ReplyUncheckedUpdateWithoutTicketInput = {
+    id?: IntFieldUpdateOperationsInput | number
     body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: NullableStringFieldUpdateOperationsInput | string | null
+    senderEmail?: StringFieldUpdateOperationsInput | string
+    direction?: EnumReplyDirectionFieldUpdateOperationsInput | $Enums.ReplyDirection
+    messageId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MessageUncheckedUpdateManyWithoutTicketInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    direction?: EnumMessageDirectionFieldUpdateOperationsInput | $Enums.MessageDirection
-    from?: StringFieldUpdateOperationsInput | string
+  export type ReplyUncheckedUpdateManyWithoutTicketInput = {
+    id?: IntFieldUpdateOperationsInput | number
     body?: StringFieldUpdateOperationsInput | string
+    bodyHtml?: NullableStringFieldUpdateOperationsInput | string | null
+    senderName?: NullableStringFieldUpdateOperationsInput | string | null
+    senderEmail?: StringFieldUpdateOperationsInput | string
+    direction?: EnumReplyDirectionFieldUpdateOperationsInput | $Enums.ReplyDirection
+    messageId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

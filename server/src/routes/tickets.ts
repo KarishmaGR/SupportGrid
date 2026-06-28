@@ -11,19 +11,22 @@ ticketsRouter.use(requireAuth);
 
 const createSchema = z.object({
   subject: z.string().min(1),
-  requesterEmail: z.string().email(),
+  senderName: z.string().min(1),
+  senderEmail: z.string().email(),
   body: z.string().min(1),
+  bodyHtml: z.string().optional(),
   category: z.nativeEnum(TicketCategory).optional(),
 });
 
 const updateSchema = z.object({
   status: z.nativeEnum(TicketStatus).optional(),
   category: z.nativeEnum(TicketCategory).optional(),
-  assigneeId: z.string().nullable().optional(),
+  assignedToId: z.string().nullable().optional(),
 });
 
 const replySchema = z.object({
   body: z.string().min(1).max(10_000),
+  bodyHtml: z.string().optional(),
 });
 
 const listQuerySchema = z.object({
@@ -64,7 +67,9 @@ ticketsRouter.post("/", async (req, res, next) => {
 
 ticketsRouter.get("/:id", async (req, res, next) => {
   try {
-    const ticket = await store.getTicket(req.params.id);
+    const id = Number(req.params.id);
+    if (isNaN(id)) return res.status(400).json({ error: "Invalid ticket id" });
+    const ticket = await store.getTicket(id);
     if (!ticket) return res.status(404).json({ error: "Ticket not found" });
     res.json(ticket);
   } catch (err) {
@@ -74,11 +79,13 @@ ticketsRouter.get("/:id", async (req, res, next) => {
 
 ticketsRouter.patch("/:id", async (req, res, next) => {
   try {
+    const id = Number(req.params.id);
+    if (isNaN(id)) return res.status(400).json({ error: "Invalid ticket id" });
     const parsed = updateSchema.safeParse(req.body);
     if (!parsed.success) {
       return res.status(400).json({ error: "Invalid body", details: parsed.error.flatten() });
     }
-    const ticket = await store.updateTicket(req.params.id, parsed.data);
+    const ticket = await store.updateTicket(id, parsed.data);
     if (!ticket) return res.status(404).json({ error: "Ticket not found" });
     res.json(ticket);
   } catch (err) {
@@ -88,14 +95,23 @@ ticketsRouter.patch("/:id", async (req, res, next) => {
 
 ticketsRouter.post("/:id/replies", async (req, res, next) => {
   try {
+    const id = Number(req.params.id);
+    if (isNaN(id)) return res.status(400).json({ error: "Invalid ticket id" });
     const parsed = replySchema.safeParse(req.body);
     if (!parsed.success) {
       return res.status(400).json({ error: "Invalid body", details: parsed.error.flatten() });
     }
-    const from = (res.locals.session as { user: { email: string } }).user.email;
-    const message = await store.addReply(req.params.id, from, parsed.data.body);
-    if (!message) return res.status(404).json({ error: "Ticket not found" });
-    res.status(201).json(message);
+    const from = (res.locals.session as { user: { email: string; name: string } }).user;
+    const reply = await store.addReply(
+      id,
+      from.email,
+      from.name,
+      parsed.data.body,
+      parsed.data.bodyHtml,
+      "outbound",
+    );
+    if (!reply) return res.status(404).json({ error: "Ticket not found" });
+    res.status(201).json(reply);
   } catch (err) {
     next(err);
   }

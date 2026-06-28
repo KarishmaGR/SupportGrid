@@ -16,6 +16,7 @@ const serverEnv = [
   `BETTER_AUTH_SECRET=${process.env.BETTER_AUTH_SECRET}`,
   `BETTER_AUTH_URL=${process.env.BETTER_AUTH_URL}`,
   `PORT=4000`,
+  `WEBHOOK_SECRET=${process.env.WEBHOOK_SECRET}`,
 ].join(" ");
 
 const ROOT = resolve(__dirname, "..");

@@ -2,6 +2,7 @@
 // See project-scop.md and tech-stack.md for the source of these definitions.
 
 export const TicketStatus = {
+  New: "New",
   Open: "Open",
   Resolved: "Resolved",
   Closed: "Closed",
@@ -30,44 +31,59 @@ export interface User {
   createdAt: string;
 }
 
-export interface Message {
-  id: string;
-  ticketId: string;
+export interface Reply {
+  id: number;
+  ticketId: number;
   direction: "inbound" | "outbound";
-  from: string;
+  senderName: string | null;
+  senderEmail: string;
   body: string;
+  bodyHtml: string | null;
   createdAt: string;
 }
 
 export interface Ticket {
-  id: string;
+  id: number;
   subject: string;
-  requesterEmail: string;
+  body: string;
+  bodyHtml: string | null;
+  senderName: string;
+  senderEmail: string;
   status: TicketStatus;
   category: TicketCategory | null;
-  assigneeId: string | null;
-  summary: string | null;
+  assignedToId: string | null;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface TicketDetail extends Ticket {
-  messages: Message[];
+  replies: Reply[];
 }
 
 // ---- API request/response shapes ----
 
 export interface CreateTicketInput {
   subject: string;
-  requesterEmail: string;
+  senderName: string;
+  senderEmail: string;
   body: string;
+  bodyHtml?: string;
   category?: TicketCategory;
 }
 
 export interface UpdateTicketInput {
   status?: TicketStatus;
   category?: TicketCategory;
-  assigneeId?: string | null;
+  assignedToId?: string | null;
+}
+
+export interface InboundEmailPayload {
+  from: string;       // "Name <email>" or bare email
+  subject: string;
+  body: string;
+  bodyHtml?: string;
+  messageId?: string; // email Message-ID for dedup
+  inReplyTo?: string; // email In-Reply-To for threading
 }
 
 export interface ListTicketsQuery {

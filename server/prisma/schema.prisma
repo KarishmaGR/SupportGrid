@@ -11,6 +11,7 @@ datasource db {
 }
 
 enum TicketStatus {
+  New
   Open
   Resolved
   Closed
@@ -27,7 +28,7 @@ enum UserRole {
   Agent
 }
 
-enum MessageDirection {
+enum ReplyDirection {
   inbound
   outbound
 }
@@ -106,45 +107,50 @@ model Jwks {
 }
 
 model Ticket {
-  id             String          @id @default(uuid())
-  subject        String
-  requesterEmail String
-  status         TicketStatus    @default(Open)
-  category       TicketCategory?
-  summary        String?
-  assigneeId     String?
-  assignee       User?           @relation("TicketAssignee", fields: [assigneeId], references: [id])
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  id           Int             @id @default(autoincrement())
+  subject      String
+  body         String
+  bodyHtml     String?
+  status       TicketStatus    @default(New)
+  category     TicketCategory?
+  senderName   String
+  senderEmail  String
+  assignedToId String?
+  assignedTo   User?           @relation("TicketAssignee", fields: [assignedToId], references: [id])
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
 
-  messages      Message[]
+  replies       Reply[]
   aiSuggestions AiSuggestion[]
 
-  // Indexes for ticket filtering/sorting (implementation-plan Phase 1).
   @@index([status])
   @@index([category])
-  @@index([assigneeId])
+  @@index([assignedToId])
   @@index([createdAt])
+  @@map("ticket")
 }
 
-model Message {
-  id        String           @id @default(uuid())
-  ticketId  String
-  ticket    Ticket           @relation(fields: [ticketId], references: [id], onDelete: Cascade)
-  direction MessageDirection
-  from      String
-  body      String
-  createdAt DateTime         @default(now())
+model Reply {
+  id          Int            @id @default(autoincrement())
+  ticketId    Int
+  ticket      Ticket         @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  body        String
+  bodyHtml    String?
+  senderName  String?
+  senderEmail String
+  direction   ReplyDirection @default(inbound)
+  messageId   String?        @unique
+  createdAt   DateTime       @default(now())
 
   @@index([ticketId])
+  @@map("reply")
 }
 
-// Reserved for Phase 7 (AI layer): drafted/suggested replies with confidence + model used.
 model AiSuggestion {
   id         String   @id @default(uuid())
-  ticketId   String
+  ticketId   Int
   ticket     Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
-  kind       String // "classification" | "summary" | "draft-reply"
+  kind       String
   content    String
   confidence Float?
   model      String?
