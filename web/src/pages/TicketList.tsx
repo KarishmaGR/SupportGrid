@@ -35,10 +35,10 @@ export function TicketList() {
         <h1 className="text-3xl font-semibold">Tickets</h1>
         <Select value={status} onValueChange={(v) => setStatus(v as Status | "")}>
           <SelectTrigger className="w-44 h-10 text-base">
-            <SelectValue placeholder="All statuses" />
+            <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All statuses</SelectItem>
+            <SelectItem value="">All</SelectItem>
             {Object.values(TicketStatus).map((s) => (
               <SelectItem key={s} value={s}>{s}</SelectItem>
             ))}

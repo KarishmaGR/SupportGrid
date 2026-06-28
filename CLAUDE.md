@@ -102,6 +102,21 @@ cd server && bunx prisma studio   # opens http://localhost:5555
 - Shared types are the source of truth for the API contract — update `shared/src/index.ts` first, then server and web.
 - Validate all request bodies/queries with Zod in `server/src/routes/`.
 
+## Testing Strategy
+
+**Default to component tests. Use E2E only when the real server + database is required.**
+
+| Scenario | Use |
+|----------|-----|
+| Loading / error / empty states | Component test |
+| Data renders correctly (fields, badges, headers) | Component test |
+| Form validation, dialog open/close, UI interactions | Component test |
+| API called with correct args (mutations) | Component test |
+| Full CRUD flow touching real DB (create → appears in list) | E2E |
+| Auth flows, session persistence, protected routes | E2E |
+| Server-side endpoint behaviour (webhooks, API contracts) | E2E |
+| Role-based access (redirect, route guard in browser) | E2E |
+
 ## Component Testing
 
 Use **Vitest + React Testing Library** for component-level tests in the `web/` workspace.
@@ -114,6 +129,7 @@ bun run --cwd web test:watch  # watch mode
 - Test files go in `web/src/test/*.test.tsx`
 - Import `describe`, `it`, `expect`, `vi`, `beforeEach` from `vitest` (globals are enabled — no explicit import needed, but be explicit for clarity)
 - Render with a fresh `QueryClient` per test — use a local `renderWithQuery` helper that wraps the component in `QueryClientProvider` with `retry: false`
+- Wrap components that use React Router (`Link`, `useParams`) in `MemoryRouter` (with `Routes`/`Route` when `useParams` is needed)
 - Always mock `../api.ts` with `vi.mock` — tests must never hit the network
 - Clear mocks in `beforeEach` with `vi.clearAllMocks()`
 - Use `waitFor` from `@testing-library/react` to assert after async data loads
@@ -129,6 +145,8 @@ bun run --cwd web test:watch  # watch mode
 
 ## E2E Testing
 
+Use E2E tests only for scenarios that **cannot** be covered by component tests — flows that require a real running server, database, or browser session state.
+
 Use the **`e2e-test-writer` agent** to write Playwright tests after implementing any new page, route, or significant feature.
 
 ```bash
@@ -142,6 +160,7 @@ bun run test:e2e:ui    # open Playwright UI
 - Test DB config lives in `e2e/.env.test` (gitignored); `global-setup.ts` runs migrations + seeds automatically
 - Test admin: `admin@e2e.test` / `E2ePassword@123` (read from `process.env.TEST_ADMIN_EMAIL` / `TEST_ADMIN_PASSWORD`)
 - Rate limiting is disabled in dev/test — only active when `NODE_ENV=production`
+- Do **not** duplicate in E2E what is already covered by component tests (e.g. column headers, dialog cancel, form validation)
 
 ## Roadmap
 

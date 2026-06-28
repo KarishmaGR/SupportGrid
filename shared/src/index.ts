@@ -2,7 +2,6 @@
 // See project-scop.md and tech-stack.md for the source of these definitions.
 
 export const TicketStatus = {
-  New: "New",
   Open: "Open",
   Resolved: "Resolved",
   Closed: "Closed",

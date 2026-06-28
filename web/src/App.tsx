@@ -18,6 +18,11 @@ export function App() {
               Users
             </Link>
           )}
+          {user && (
+            <Link to="/tickets" className="text-sm font-medium text-gray-600 hover:text-gray-900 no-underline">
+              Tickets
+            </Link>
+          )}
         </div>
         {user && (
           <div className="flex items-center gap-4">
