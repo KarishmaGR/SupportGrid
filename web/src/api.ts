@@ -2,6 +2,7 @@ import axios from "axios";
 import type {
   CreateTicketInput,
   CreateUserInput,
+  UpdateUserInput,
   Paginated,
   Ticket,
   TicketDetail,
@@ -79,4 +80,8 @@ export const api = {
     client.get<User[]>("/users").then((r) => r.data),
   createUser: (input: CreateUserInput) =>
     client.post<User>("/users", input).then((r) => r.data),
+  updateUser: (id: string, input: UpdateUserInput) =>
+    client.patch<User>(`/users/${id}`, input).then((r) => r.data),
+  deleteUser: (id: string) =>
+    client.delete(`/users/${id}`).then((r) => r.data),
 };

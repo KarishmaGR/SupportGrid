@@ -33,15 +33,16 @@ enum MessageDirection {
 }
 
 model User {
-  id            String   @id
-  email         String   @unique
+  id            String    @id
+  email         String    @unique
   name          String
-  emailVerified Boolean  @default(false)
+  emailVerified Boolean   @default(false)
   image         String?
-  role          UserRole @default(Agent)
-  active        Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  role          UserRole  @default(Agent)
+  active        Boolean   @default(true)
+  deletedAt     DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   assignedTickets Ticket[]  @relation("TicketAssignee")
   sessions        Session[]

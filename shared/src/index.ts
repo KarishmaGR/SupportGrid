@@ -93,6 +93,12 @@ export interface CreateUserInput {
   role: UserRole;
 }
 
+export interface UpdateUserInput {
+  name?: string;
+  email?: string;
+  password?: string;
+}
+
 export interface ApiError {
   error: string;
   details?: unknown;
