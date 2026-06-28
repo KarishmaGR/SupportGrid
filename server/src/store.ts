@@ -20,6 +20,7 @@ function toTicket(t: {
   status: string;
   category: string | null;
   assignedToId: string | null;
+  assignedTo?: { name: string } | null;
   createdAt: Date;
   updatedAt: Date;
 }): Ticket {
@@ -33,6 +34,7 @@ function toTicket(t: {
     status: t.status as Ticket["status"],
     category: t.category as Ticket["category"],
     assignedToId: t.assignedToId,
+    assignedToName: t.assignedTo?.name ?? null,
     createdAt: t.createdAt.toISOString(),
     updatedAt: t.updatedAt.toISOString(),
   };
@@ -84,7 +86,6 @@ export async function getTicketStats() {
     open:     map["Open"]     ?? 0,
     resolved: map["Resolved"] ?? 0,
     closed:   map["Closed"]   ?? 0,
-    new:      map["New"]      ?? 0,
   };
 }
 
@@ -115,6 +116,7 @@ export async function listTickets(
       orderBy: { [sort]: order },
       skip: (page - 1) * pageSize,
       take: pageSize,
+      include: { assignedTo: { select: { name: true } } },
     }),
     prisma.ticket.count({ where }),
   ]);
@@ -124,7 +126,10 @@ export async function listTickets(
 export async function getTicket(id: number): Promise<TicketDetail | null> {
   const ticket = await prisma.ticket.findUnique({
     where: { id },
-    include: { replies: { orderBy: { createdAt: "asc" } } },
+    include: {
+      replies: { orderBy: { createdAt: "asc" } },
+      assignedTo: { select: { name: true } },
+    },
   });
   if (!ticket) return null;
   return { ...toTicket(ticket), replies: ticket.replies.map(toReply) };
@@ -143,6 +148,7 @@ export async function updateTicket(
       ...(patch.category ? { category: patch.category } : {}),
       ...(patch.assignedToId !== undefined ? { assignedToId: patch.assignedToId } : {}),
     },
+    include: { assignedTo: { select: { name: true } } },
   });
   return toTicket(ticket);
 }
@@ -183,7 +189,7 @@ export async function findTicketForThread(
     where: {
       senderEmail,
       subject: { equals: normalizedSubject, mode: "insensitive" },
-      status: { in: ["New", "Open"] },
+      status: { in: ["Open"] },
     },
     orderBy: { createdAt: "desc" },
   });

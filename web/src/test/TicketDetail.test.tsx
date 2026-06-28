@@ -26,6 +26,7 @@ const mockTicket: TicketDetail = {
   status: "Open",
   category: "Technical",
   assignedToId: null,
+  assignedToName: null,
   createdAt: "2024-03-01T10:00:00.000Z",
   updatedAt: "2024-03-01T10:00:00.000Z",
   replies: [

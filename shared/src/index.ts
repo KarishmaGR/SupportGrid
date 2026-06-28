@@ -2,9 +2,9 @@
 // See project-scop.md and tech-stack.md for the source of these definitions.
 
 export const TicketStatus = {
-  Open: "Open",
+  Open:     "Open",
   Resolved: "Resolved",
-  Closed: "Closed",
+  Closed:   "Closed",
 } as const;
 export type TicketStatus = (typeof TicketStatus)[keyof typeof TicketStatus];
 
@@ -51,6 +51,7 @@ export interface Ticket {
   status: TicketStatus;
   category: TicketCategory | null;
   assignedToId: string | null;
+  assignedToName: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -90,7 +91,6 @@ export interface TicketStats {
   open: number;
   resolved: number;
   closed: number;
-  new: number;
 }
 
 export interface ListTicketsQuery {

@@ -62,6 +62,11 @@ const columns = [
     enableSorting: true,
     cell: (info) => info.getValue() ?? "—",
   }),
+  col.accessor("assignedToName", {
+    header: "Assigned to",
+    enableSorting: false,
+    cell: (info) => info.getValue() ?? <span className="text-muted-foreground text-xs">Unassigned</span>,
+  }),
   col.accessor("createdAt", {
     header: "Created",
     enableSorting: true,
