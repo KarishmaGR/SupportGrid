@@ -14,6 +14,7 @@ vi.mock("../api.ts", () => ({
     updateTicket: vi.fn(),
     addReply: vi.fn(),
     listUsers: vi.fn(),
+    polishReply: vi.fn(),
   },
   auth: { getSession: vi.fn(), signIn: vi.fn(), signOut: vi.fn() },
 }));
@@ -302,7 +303,11 @@ describe("Reply Form", () => {
     await userEvent.click(screen.getByRole("button", { name: /send reply/i }));
 
     await waitFor(() =>
-      expect(api.addReply).toHaveBeenCalledWith("42", "Thanks for reaching out!"),
+      expect(api.addReply).toHaveBeenCalledWith(
+        "42",
+        "Thanks for reaching out!",
+        expect.any(String),
+      ),
     );
   });
 
@@ -341,5 +346,86 @@ describe("Reply Form", () => {
     );
 
     resolve({});
+  });
+});
+
+// ── Polish Button ─────────────────────────────────────────────────────────────
+
+describe("Polish Button", () => {
+  beforeEach(() => {
+    vi.mocked(api.getTicket).mockResolvedValue(baseTicket);
+  });
+
+  it("is hidden when the reply textarea is empty", async () => {
+    renderPage();
+    await waitFor(() => screen.getByPlaceholderText("Write a reply…"));
+    expect(screen.queryByRole("button", { name: /polish/i })).not.toBeInTheDocument();
+  });
+
+  it("appears once text is typed in the reply textarea", async () => {
+    renderPage();
+    await waitFor(() => screen.getByPlaceholderText("Write a reply…"));
+    await userEvent.type(screen.getByPlaceholderText("Write a reply…"), "Draft reply");
+    expect(screen.getByRole("button", { name: /polish/i })).toBeInTheDocument();
+  });
+
+  it("calls api.polishReply with the ticket id, draft, and customer name", async () => {
+    vi.mocked(api.polishReply).mockResolvedValue({ polished: "Polished reply" });
+    renderPage();
+    await waitFor(() => screen.getByPlaceholderText("Write a reply…"));
+
+    await userEvent.type(screen.getByPlaceholderText("Write a reply…"), "Draft reply");
+    await userEvent.click(screen.getByRole("button", { name: /polish/i }));
+
+    await waitFor(() =>
+      expect(api.polishReply).toHaveBeenCalledWith(
+        "42",
+        "Draft reply",
+        baseTicket.body,
+        baseTicket.senderName,
+      ),
+    );
+  });
+
+  it("replaces the textarea content with the polished reply", async () => {
+    vi.mocked(api.polishReply).mockResolvedValue({ polished: "Polished reply" });
+    renderPage();
+    await waitFor(() => screen.getByPlaceholderText("Write a reply…"));
+
+    await userEvent.type(screen.getByPlaceholderText("Write a reply…"), "Draft reply");
+    await userEvent.click(screen.getByRole("button", { name: /polish/i }));
+
+    await waitFor(() =>
+      expect(screen.getByPlaceholderText("Write a reply…")).toHaveValue("Polished reply"),
+    );
+  });
+
+  it("shows 'Polishing…' and disables the button while in flight", async () => {
+    let resolve!: (v: { polished: string }) => void;
+    vi.mocked(api.polishReply).mockReturnValue(new Promise((r) => { resolve = r; }));
+    renderPage();
+    await waitFor(() => screen.getByPlaceholderText("Write a reply…"));
+
+    await userEvent.type(screen.getByPlaceholderText("Write a reply…"), "Draft");
+    await userEvent.click(screen.getByRole("button", { name: /polish/i }));
+
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: /polishing/i })).toBeDisabled(),
+    );
+
+    resolve({ polished: "Done" });
+  });
+
+  it("shows an error message when polishReply fails", async () => {
+    vi.mocked(api.polishReply).mockRejectedValue(new Error("AI request failed"));
+    renderPage();
+    await waitFor(() => screen.getByPlaceholderText("Write a reply…"));
+
+    await userEvent.type(screen.getByPlaceholderText("Write a reply…"), "Draft");
+    await userEvent.click(screen.getByRole("button", { name: /polish/i }));
+
+    await waitFor(() =>
+      expect(screen.getByText("AI request failed")).toBeInTheDocument(),
+    );
   });
 });

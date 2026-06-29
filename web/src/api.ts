@@ -90,4 +90,8 @@ export const api = {
     client
       .post<{ polished: string }>(`/tickets/${id}/polish-reply`, { reply, ticketBody, customerName })
       .then((r) => r.data),
+  summarizeTicket: (id: string) =>
+    client
+      .post<{ summary: string }>(`/tickets/${id}/summarize`)
+      .then((r) => r.data),
 };

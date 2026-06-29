@@ -148,6 +148,40 @@ ticketsRouter.post("/:id/polish-reply", async (req, res, next) => {
   }
 });
 
+ticketsRouter.post("/:id/summarize", async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    if (isNaN(id)) return res.status(400).json({ error: "Invalid ticket id" });
+    const ticket = await store.getTicket(id);
+    if (!ticket) return res.status(404).json({ error: "Ticket not found" });
+
+    const thread = [
+      `Customer (${ticket.senderName}): ${ticket.body}`,
+      ...ticket.replies.map((r) => `${r.senderType === "customer" ? `Customer (${r.senderName})` : `Agent (${r.senderName})`}: ${r.body}`),
+    ].join("\n\n");
+
+    const openai = new OpenAI({
+      apiKey: process.env.OPENROUTER_API_KEY,
+      baseURL: "https://openrouter.ai/api/v1",
+    });
+    const completion = await openai.chat.completions.create({
+      model: "nvidia/nemotron-3-super-120b-a12b:free",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a support ticket summarizer. Summarize the ticket and conversation in 2–4 concise sentences: the customer's issue, any steps taken, and current status. Be factual and neutral.",
+        },
+        { role: "user", content: thread },
+      ],
+    });
+    res.json({ summary: completion.choices[0]?.message.content ?? "" });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "AI request failed";
+    res.status(502).json({ error: message });
+  }
+});
+
 ticketsRouter.post("/:id/replies", async (req, res, next) => {
   try {
     const id = Number(req.params.id);

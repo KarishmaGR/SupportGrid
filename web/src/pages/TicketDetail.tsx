@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft, Mail, Calendar, Sparkles } from "lucide-react";
+import { ArrowLeft, Mail, Calendar, Sparkles, RefreshCw } from "lucide-react";
 
 function plainToHtml(text: string): string {
   const escape = (s: string) =>
@@ -64,6 +64,10 @@ export function TicketDetailPage() {
   const polishReply = useMutation({
     mutationFn: (draft: string) => api.polishReply(id!, draft, ticket?.body ?? "", ticket?.senderName),
     onSuccess: (data) => setReply(data.polished),
+  });
+
+  const summarize = useMutation({
+    mutationFn: () => api.summarizeTicket(id!),
   });
 
   if (isLoading) return <p className="text-muted-foreground">Loading…</p>;
@@ -143,6 +147,38 @@ export function TicketDetailPage() {
               </div>
             );
           })}
+
+          {/* Summarize */}
+          <div className="pt-1 space-y-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={summarize.isPending}
+              onClick={() => summarize.mutate()}
+            >
+              <Sparkles className="size-3.5 mr-1.5" />
+              {summarize.isPending
+                ? "Summarizing…"
+                : summarize.data
+                ? "Re-generate summary"
+                : "Summarize conversation"}
+              {summarize.data && !summarize.isPending && (
+                <RefreshCw className="size-3 ml-1.5" />
+              )}
+            </Button>
+            {summarize.isError && (
+              <p className="text-xs text-destructive">{(summarize.error as Error).message}</p>
+            )}
+            {summarize.data && (
+              <div className="rounded-lg border bg-muted/50 px-4 py-3 text-sm leading-relaxed text-muted-foreground">
+                <p className="text-xs font-semibold uppercase tracking-wide text-foreground mb-1.5">
+                  AI Summary
+                </p>
+                <p>{summarize.data.summary}</p>
+              </div>
+            )}
+          </div>
 
           {/* Reply form */}
           <form
