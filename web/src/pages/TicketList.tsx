@@ -34,46 +34,6 @@ const badgeVariant: Record<string, "default" | "secondary" | "outline"> = {
 
 const col = createColumnHelper<Ticket>();
 
-const columns = [
-  col.accessor("subject", {
-    header: "Subject",
-    enableSorting: true,
-    cell: (info) => (
-      <Link to={`/tickets/${info.row.original.id}`} className="text-primary hover:underline font-medium">
-        {info.getValue()}
-      </Link>
-    ),
-  }),
-  col.accessor("senderEmail", {
-    header: "Requester",
-    enableSorting: true,
-  }),
-  col.accessor("status", {
-    header: "Status",
-    enableSorting: true,
-    cell: (info) => (
-      <Badge variant={badgeVariant[info.getValue().toLowerCase()] ?? "outline"}>
-        {info.getValue()}
-      </Badge>
-    ),
-  }),
-  col.accessor("category", {
-    header: "Category",
-    enableSorting: true,
-    cell: (info) => info.getValue() ?? "—",
-  }),
-  col.accessor("assignedToName", {
-    header: "Assigned to",
-    enableSorting: false,
-    cell: (info) => info.getValue() ?? <span className="text-muted-foreground text-xs">Unassigned</span>,
-  }),
-  col.accessor("createdAt", {
-    header: "Created",
-    enableSorting: true,
-    cell: (info) => new Date(info.getValue()).toLocaleDateString(),
-  }),
-];
-
 interface StatCardProps {
   label: string;
   value: number | undefined;
@@ -104,6 +64,7 @@ function StatCard({ label, value, icon, color, ring, active, onClick }: StatCard
   );
 }
 
+
 export function TicketList() {
   const [status, setStatus]         = useState<Status | "">("");
   const [category, setCategory]     = useState<Category | "">("");
@@ -119,7 +80,6 @@ export function TicketList() {
     return () => clearTimeout(t);
   }, [inputValue]);
 
-  // Reset to page 1 when filters or sort change
   useEffect(() => { setPage(1); }, [status, category, sorting]);
 
   const sortCol   = sorting[0]?.id as SortCol | undefined;
@@ -144,6 +104,46 @@ export function TicketList() {
       }),
   });
 
+  const columns = [
+    col.accessor("subject", {
+      header: "Subject",
+      enableSorting: true,
+      cell: (info) => (
+        <Link to={`/tickets/${info.row.original.id}`} className="text-primary hover:underline font-medium">
+          {info.getValue()}
+        </Link>
+      ),
+    }),
+    col.accessor("senderEmail", {
+      header: "Requester",
+      enableSorting: true,
+    }),
+    col.accessor("status", {
+      header: "Status",
+      enableSorting: true,
+      cell: (info) => (
+        <Badge variant={badgeVariant[info.getValue().toLowerCase()] ?? "outline"}>
+          {info.getValue()}
+        </Badge>
+      ),
+    }),
+    col.accessor("category", {
+      header: "Category",
+      enableSorting: true,
+      cell: (info) => info.getValue() ?? <span className="text-muted-foreground">—</span>,
+    }),
+    col.accessor("assignedToName", {
+      header: "Assigned to",
+      enableSorting: false,
+      cell: (info) => info.getValue() ?? <span className="text-muted-foreground text-xs">Unassigned</span>,
+    }),
+    col.accessor("createdAt", {
+      header: "Created",
+      enableSorting: true,
+      cell: (info) => new Date(info.getValue()).toLocaleDateString(),
+    }),
+  ];
+
   const table = useReactTable({
     data: data?.items ?? [],
     columns,
@@ -163,12 +163,24 @@ export function TicketList() {
   };
 
   const hasFilters = !!status || !!category || !!search;
+  const totalPages = data ? Math.ceil(data.total / PAGE_SIZE) : 1;
+  const rangeStart = (page - 1) * PAGE_SIZE + 1;
+  const rangeEnd   = data ? Math.min(page * PAGE_SIZE, data.total) : 0;
+
+  const pageButtons: (number | "…")[] = (() => {
+    const pages = Array.from({ length: totalPages }, (_, i) => i + 1)
+      .filter((n) => n === 1 || n === totalPages || Math.abs(n - page) <= 1);
+    return pages.reduce<(number | "…")[]>((acc, n, idx, arr) => {
+      if (idx > 0 && n - (arr[idx - 1] as number) > 1) acc.push("…");
+      acc.push(n);
+      return acc;
+    }, []);
+  })();
 
   const toggleStatus = (s: Status) => setStatus((prev) => (prev === s ? "" : s));
 
   if (isLoading) return <p className="text-muted-foreground">Loading tickets…</p>;
   if (error)     return <p className="text-destructive">{(error as Error).message}</p>;
-
 
   return (
     <section className="space-y-5">
@@ -309,44 +321,32 @@ export function TicketList() {
       </div>
 
       {/* Pagination */}
-      {data && data.total > 0 && (() => {
-        const totalPages = Math.ceil(data.total / PAGE_SIZE);
-        const start = (page - 1) * PAGE_SIZE + 1;
-        const end   = Math.min(page * PAGE_SIZE, data.total);
-        return (
-          <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <span>{start}–{end} of {data.total} tickets</span>
-            <div className="flex items-center gap-1">
-              <Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage(1)}>«</Button>
-              <Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage(p => p - 1)}>‹ Prev</Button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1)
-                .filter(p => p === 1 || p === totalPages || Math.abs(p - page) <= 1)
-                .reduce<(number | "…")[]>((acc, p, idx, arr) => {
-                  if (idx > 0 && p - (arr[idx - 1] as number) > 1) acc.push("…");
-                  acc.push(p);
-                  return acc;
-                }, [])
-                .map((p, i) =>
-                  p === "…" ? (
-                    <span key={`ellipsis-${i}`} className="px-2">…</span>
-                  ) : (
-                    <Button
-                      key={p}
-                      variant={page === p ? "default" : "outline"}
-                      size="sm"
-                      className="w-8"
-                      onClick={() => setPage(p as number)}
-                    >
-                      {p}
-                    </Button>
-                  )
-                )}
-              <Button variant="outline" size="sm" disabled={page === totalPages} onClick={() => setPage(p => p + 1)}>Next ›</Button>
-              <Button variant="outline" size="sm" disabled={page === totalPages} onClick={() => setPage(totalPages)}>»</Button>
-            </div>
+      {data && data.total > 0 && (
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
+          <span>{rangeStart}–{rangeEnd} of {data.total} tickets</span>
+          <div className="flex items-center gap-1">
+            <Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage(1)}>«</Button>
+            <Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage(page - 1)}>‹ Prev</Button>
+            {pageButtons.map((n, i) =>
+              n === "…" ? (
+                <span key={`ellipsis-${i}`} className="px-2">…</span>
+              ) : (
+                <Button
+                  key={n}
+                  variant={page === n ? "default" : "outline"}
+                  size="sm"
+                  className="w-8"
+                  onClick={() => setPage(n)}
+                >
+                  {n}
+                </Button>
+              )
+            )}
+            <Button variant="outline" size="sm" disabled={page === totalPages} onClick={() => setPage(page + 1)}>Next ›</Button>
+            <Button variant="outline" size="sm" disabled={page === totalPages} onClick={() => setPage(totalPages)}>»</Button>
           </div>
-        );
-      })()}
+        </div>
+      )}
     </section>
   );
 }

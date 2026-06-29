@@ -145,7 +145,7 @@ export async function updateTicket(
     where: { id },
     data: {
       ...(patch.status ? { status: patch.status } : {}),
-      ...(patch.category ? { category: patch.category } : {}),
+      ...(patch.category !== undefined ? { category: patch.category } : {}),
       ...(patch.assignedToId !== undefined ? { assignedToId: patch.assignedToId } : {}),
     },
     include: { assignedTo: { select: { name: true } } },

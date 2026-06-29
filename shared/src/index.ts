@@ -73,7 +73,7 @@ export interface CreateTicketInput {
 
 export interface UpdateTicketInput {
   status?: TicketStatus;
-  category?: TicketCategory;
+  category?: TicketCategory | null;
   assignedToId?: string | null;
 }
 

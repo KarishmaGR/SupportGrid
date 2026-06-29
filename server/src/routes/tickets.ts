@@ -20,7 +20,7 @@ const createSchema = z.object({
 
 const updateSchema = z.object({
   status: z.nativeEnum(TicketStatus).optional(),
-  category: z.nativeEnum(TicketCategory).optional(),
+  category: z.nativeEnum(TicketCategory).nullable().optional(),
   assignedToId: z.string().nullable().optional(),
 });
 
