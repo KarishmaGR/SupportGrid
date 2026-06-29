@@ -21,6 +21,41 @@ export const UserRole = {
 } as const;
 export type UserRole = (typeof UserRole)[keyof typeof UserRole];
 
+export const ReplyDirection = {
+  Inbound:  "inbound",
+  Outbound: "outbound",
+} as const;
+export type ReplyDirection = (typeof ReplyDirection)[keyof typeof ReplyDirection];
+
+export const SenderType = {
+  Agent:    "agent",
+  Customer: "customer",
+} as const;
+export type SenderType = (typeof SenderType)[keyof typeof SenderType];
+
+export const TicketSortField = {
+  Subject:     "subject",
+  SenderEmail: "senderEmail",
+  Status:      "status",
+  Category:    "category",
+  CreatedAt:   "createdAt",
+  UpdatedAt:   "updatedAt",
+} as const;
+export type TicketSortField = (typeof TicketSortField)[keyof typeof TicketSortField];
+
+export const SortOrder = {
+  Asc:  "asc",
+  Desc: "desc",
+} as const;
+export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
+
+export const FieldLimits = {
+  senderName: 200,
+  subject:    300,
+  body:       50_000,
+  bodyHtml:   100_000,
+} as const;
+
 export interface User {
   id: string;
   email: string;
@@ -33,7 +68,8 @@ export interface User {
 export interface Reply {
   id: number;
   ticketId: number;
-  direction: "inbound" | "outbound";
+  direction: ReplyDirection;
+  senderType: SenderType;
   senderName: string | null;
   senderEmail: string;
   body: string;
@@ -99,8 +135,8 @@ export interface ListTicketsQuery {
   search?: string;
   page?: number;
   pageSize?: number;
-  sort?: "subject" | "senderEmail" | "status" | "category" | "createdAt" | "updatedAt";
-  order?: "asc" | "desc";
+  sort?: TicketSortField;
+  order?: SortOrder;
 }
 
 export interface Paginated<T> {

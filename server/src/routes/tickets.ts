@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { z } from "zod";
-import { TicketCategory, TicketStatus } from "@supportgrid/shared";
+import OpenAI from "openai";
+import { TicketCategory, TicketStatus, TicketSortField, SortOrder, ReplyDirection, FieldLimits } from "@supportgrid/shared";
+import { sanitizeBodyHtml } from "../sanitize.ts";
 import type { Paginated, Ticket } from "@supportgrid/shared";
 import * as store from "../store.ts";
 import { requireAuth } from "../middleware/requireAuth.ts";
@@ -10,12 +12,12 @@ export const ticketsRouter = Router();
 ticketsRouter.use(requireAuth);
 
 const createSchema = z.object({
-  subject: z.string().min(1),
-  senderName: z.string().min(1),
+  subject:    z.string().min(1).max(FieldLimits.subject),
+  senderName: z.string().min(1).max(FieldLimits.senderName),
   senderEmail: z.string().email(),
-  body: z.string().min(1),
-  bodyHtml: z.string().optional(),
-  category: z.nativeEnum(TicketCategory).optional(),
+  body:       z.string().min(1).max(FieldLimits.body),
+  bodyHtml:   z.string().max(FieldLimits.bodyHtml).optional(),
+  category:   z.nativeEnum(TicketCategory).optional(),
 });
 
 const updateSchema = z.object({
@@ -25,8 +27,8 @@ const updateSchema = z.object({
 });
 
 const replySchema = z.object({
-  body: z.string().min(1).max(10_000),
-  bodyHtml: z.string().optional(),
+  body:     z.string().min(1).max(FieldLimits.body),
+  bodyHtml: z.string().max(FieldLimits.bodyHtml).optional(),
 });
 
 const listQuerySchema = z.object({
@@ -35,8 +37,8 @@ const listQuerySchema = z.object({
   search: z.string().optional(),
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(100).default(20),
-  sort: z.enum(["subject", "senderEmail", "status", "category", "createdAt", "updatedAt"]).default("createdAt"),
-  order: z.enum(["asc", "desc"]).default("desc"),
+  sort: z.nativeEnum(TicketSortField).default(TicketSortField.CreatedAt),
+  order: z.nativeEnum(SortOrder).default(SortOrder.Desc),
 });
 
 ticketsRouter.get("/stats", async (_req, res, next) => {
@@ -67,7 +69,10 @@ ticketsRouter.post("/", async (req, res, next) => {
     if (!parsed.success) {
       return res.status(400).json({ error: "Invalid body", details: parsed.error.flatten() });
     }
-    const ticket = await store.createTicket(parsed.data);
+    const ticket = await store.createTicket({
+      ...parsed.data,
+      bodyHtml: parsed.data.bodyHtml ? sanitizeBodyHtml(parsed.data.bodyHtml) : undefined,
+    });
     res.status(201).json(ticket);
   } catch (err) {
     next(err);
@@ -102,6 +107,47 @@ ticketsRouter.patch("/:id", async (req, res, next) => {
   }
 });
 
+const polishSchema = z.object({
+  reply: z.string().min(1).max(FieldLimits.body),
+  ticketBody: z.string().max(FieldLimits.body),
+  customerName: z.string().optional(),
+});
+
+ticketsRouter.post("/:id/polish-reply", async (req, res, next) => {
+  try {
+    const parsed = polishSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({ error: "Invalid body", details: parsed.error.flatten() });
+    }
+    const { reply, ticketBody, customerName } = parsed.data;
+    const openai = new OpenAI({
+      apiKey: process.env.OPENROUTER_API_KEY,
+      baseURL: "https://openrouter.ai/api/v1",
+    });
+    const completion = await openai.chat.completions.create({
+      model: "nvidia/nemotron-3-super-120b-a12b:free",
+      messages: [
+        {
+          role: "system",
+          content:
+            `You are a professional support agent. Improve the draft reply to be clear, polite, and concise.${customerName ? ` Address the customer by their first name: ${customerName}.` : ""} Return only the improved reply text — no commentary or explanation.`,
+        },
+        {
+          role: "user",
+          content: `Customer message:\n${ticketBody}\n\nDraft reply:\n${reply}`,
+        },
+      ],
+    });
+    const agentName = (res.locals.session as { user: { name: string } }).user.name;
+    const text = completion.choices[0]?.message.content ?? "";
+    const signed = `${text}\n\n— ${agentName}\nhttps://codewithai.com`;
+    res.json({ polished: signed });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "AI request failed";
+    res.status(502).json({ error: message });
+  }
+});
+
 ticketsRouter.post("/:id/replies", async (req, res, next) => {
   try {
     const id = Number(req.params.id);
@@ -116,8 +162,8 @@ ticketsRouter.post("/:id/replies", async (req, res, next) => {
       from.email,
       from.name,
       parsed.data.body,
-      parsed.data.bodyHtml,
-      "outbound",
+      parsed.data.bodyHtml ? sanitizeBodyHtml(parsed.data.bodyHtml) : undefined,
+      ReplyDirection.Outbound,
     );
     if (!reply) return res.status(404).json({ error: "Ticket not found" });
     res.status(201).json(reply);

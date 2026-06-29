@@ -8,6 +8,7 @@ import type {
   TicketDetail,
   UpdateTicketInput,
 } from "@supportgrid/shared";
+import { ReplyDirection, SenderType } from "@supportgrid/shared";
 import { prisma } from "./db.ts";
 
 function toTicket(t: {
@@ -50,10 +51,12 @@ function toReply(r: {
   bodyHtml: string | null;
   createdAt: Date;
 }): Reply {
+  const direction = r.direction as ReplyDirection;
   return {
     id: r.id,
     ticketId: r.ticketId,
-    direction: r.direction as Reply["direction"],
+    direction,
+    senderType: direction === ReplyDirection.Outbound ? SenderType.Agent : SenderType.Customer,
     senderName: r.senderName,
     senderEmail: r.senderEmail,
     body: r.body,
@@ -159,7 +162,7 @@ export async function addReply(
   senderName: string | null,
   body: string,
   bodyHtml?: string,
-  direction: "inbound" | "outbound" = "outbound",
+  direction: ReplyDirection = ReplyDirection.Outbound,
   messageId?: string,
 ): Promise<Reply | null> {
   const exists = await prisma.ticket.findUnique({ where: { id: ticketId } });

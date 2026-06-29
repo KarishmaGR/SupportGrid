@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
-import { TicketStatus, TicketCategory, UserRole } from "@supportgrid/shared";
+import { TicketStatus, TicketCategory, UserRole, SenderType } from "@supportgrid/shared";
 import type { TicketStatus as Status, TicketCategory as Category } from "@supportgrid/shared";
 import { api } from "../api.ts";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +10,16 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft, Mail, Calendar } from "lucide-react";
+import { ArrowLeft, Mail, Calendar, Sparkles } from "lucide-react";
+
+function plainToHtml(text: string): string {
+  const escape = (s: string) =>
+    s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return text
+    .split(/\n\n+/)
+    .map((para) => `<p>${para.split("\n").map(escape).join("<br>")}</p>`)
+    .join("\n");
+}
 
 const statusVariant: Record<string, "default" | "secondary" | "outline"> = {
   open: "default",
@@ -45,11 +54,16 @@ export function TicketDetailPage() {
   });
 
   const sendReply = useMutation({
-    mutationFn: (body: string) => api.addReply(id!, "agent@support.edu", body),
+    mutationFn: (body: string) => api.addReply(id!, body, plainToHtml(body)),
     onSuccess: () => {
       setReply("");
       queryClient.invalidateQueries({ queryKey: ["ticket", id] });
     },
+  });
+
+  const polishReply = useMutation({
+    mutationFn: (draft: string) => api.polishReply(id!, draft, ticket?.body ?? "", ticket?.senderName),
+    onSuccess: (data) => setReply(data.polished),
   });
 
   if (isLoading) return <p className="text-muted-foreground">Loading…</p>;
@@ -88,17 +102,31 @@ export function TicketDetailPage() {
 
         {/* Left — thread + reply */}
         <div className="flex-1 min-w-0 space-y-3">
-          {/* Thread */}
+          {/* Original message */}
+          <div className="flex flex-col gap-1 items-start">
+            <div className="rounded-xl px-4 py-3 max-w-[85%] shadow-sm border-l-4 bg-card border-primary">
+              <div className="flex items-center justify-between gap-6 mb-1.5">
+                <span className="text-sm font-semibold">{ticket.senderName || ticket.senderEmail}</span>
+                <span className="text-xs text-muted-foreground whitespace-nowrap">
+                  {new Date(ticket.createdAt).toLocaleString()}
+                </span>
+              </div>
+              <p className="text-sm leading-relaxed whitespace-pre-wrap">{ticket.body}</p>
+            </div>
+            <span className="text-xs text-muted-foreground px-1">Customer</span>
+          </div>
+
+          {/* Replies */}
           {ticket.replies.map((m) => {
-            const isInbound = m.direction === "inbound";
+            const isCustomer = m.senderType === SenderType.Customer;
             return (
               <div
                 key={m.id}
-                className={`flex flex-col gap-1 ${isInbound ? "items-start" : "items-end"}`}
+                className={`flex flex-col gap-1 ${isCustomer ? "items-start" : "items-end"}`}
               >
                 <div
                   className={`rounded-xl px-4 py-3 max-w-[85%] shadow-sm border-l-4 ${
-                    isInbound ? "bg-card border-primary" : "bg-muted border-green-500"
+                    isCustomer ? "bg-card border-primary" : "bg-muted border-green-500"
                   }`}
                 >
                   <div className="flex items-center justify-between gap-6 mb-1.5">
@@ -110,7 +138,7 @@ export function TicketDetailPage() {
                   <p className="text-sm leading-relaxed whitespace-pre-wrap">{m.body}</p>
                 </div>
                 <span className="text-xs text-muted-foreground px-1">
-                  {isInbound ? "Customer" : "Agent"}
+                  {isCustomer ? "Customer" : "Agent"}
                 </span>
               </div>
             );
@@ -132,6 +160,17 @@ export function TicketDetailPage() {
               className="text-sm resize-none"
             />
             <div className="flex gap-2">
+              {reply.trim() && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={polishReply.isPending}
+                  onClick={() => polishReply.mutate(reply.trim())}
+                >
+                  <Sparkles className="size-3.5 mr-1.5" />
+                  {polishReply.isPending ? "Polishing…" : "Polish"}
+                </Button>
+              )}
               <Button type="submit" disabled={sendReply.isPending || !reply.trim()}>
                 {sendReply.isPending ? "Sending…" : "Send reply"}
               </Button>
@@ -141,6 +180,9 @@ export function TicketDetailPage() {
                 </Button>
               )}
             </div>
+            {polishReply.isError && (
+              <p className="text-xs text-destructive">{(polishReply.error as Error).message}</p>
+            )}
           </form>
         </div>
 

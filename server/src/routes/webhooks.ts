@@ -1,15 +1,17 @@
 import { Router } from "express";
 import { z } from "zod";
+import { ReplyDirection, FieldLimits } from "@supportgrid/shared";
+import { sanitizeBodyHtml } from "../sanitize.ts";
 import { requireWebhookSecret } from "../middleware/requireWebhookSecret.ts";
 import * as store from "../store.ts";
 
 export const webhooksRouter = Router();
 
 const inboundEmailSchema = z.object({
-  from: z.string().min(1),
-  subject: z.string().min(1),
-  body: z.string().min(1),
-  bodyHtml: z.string().optional(),
+  from:      z.string().min(1).max(FieldLimits.senderName),
+  subject:   z.string().min(1).max(FieldLimits.subject),
+  body:      z.string().min(1).max(FieldLimits.body),
+  bodyHtml:  z.string().max(FieldLimits.bodyHtml).optional(),
   messageId: z.string().optional(),
   inReplyTo: z.string().optional(),
 });
@@ -35,7 +37,8 @@ webhooksRouter.post("/webhooks/inbound-email", requireWebhookSecret, async (req,
       return res.status(400).json({ error: "Invalid body", details: parsed.error.flatten() });
     }
 
-    const { from, subject, body, bodyHtml, messageId, inReplyTo } = parsed.data;
+    const { from, subject, body, messageId, inReplyTo } = parsed.data;
+    const bodyHtml = parsed.data.bodyHtml ? sanitizeBodyHtml(parsed.data.bodyHtml) : undefined;
     const { senderName, senderEmail } = parseFrom(from);
 
     // Dedup: skip if we've already stored this messageId.
@@ -62,7 +65,7 @@ webhooksRouter.post("/webhooks/inbound-email", requireWebhookSecret, async (req,
         senderName,
         body,
         bodyHtml,
-        "inbound",
+        ReplyDirection.Inbound,
         messageId,
       );
       return res.status(201).json({ ticketId: existingTicket.id, created: false });

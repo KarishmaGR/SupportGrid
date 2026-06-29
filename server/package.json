@@ -17,6 +17,7 @@
     "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@prisma/client": "^7.8.0",
     "@supportgrid/shared": "*",
     "better-auth": "^1.6.20",
@@ -25,11 +26,13 @@
     "express": "^4.21.2",
     "express-rate-limit": "^8.5.2",
     "helmet": "^8.2.0",
+    "sanitize-html": "^2.17.5",
     "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "@types/sanitize-html": "^2.16.1",
     "prisma": "^7.8.0"
   }
 }

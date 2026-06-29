@@ -76,8 +76,8 @@ export const api = {
     client.post<TicketDetail>("/tickets", input).then((r) => r.data),
   updateTicket: (id: string, patch: UpdateTicketInput) =>
     client.patch<Ticket>(`/tickets/${id}`, patch).then((r) => r.data),
-  addReply: (id: string, from: string, body: string) =>
-    client.post(`/tickets/${id}/replies`, { from, body }).then((r) => r.data),
+  addReply: (id: string, body: string, bodyHtml?: string) =>
+    client.post(`/tickets/${id}/replies`, { body, bodyHtml }).then((r) => r.data),
   listUsers: () =>
     client.get<User[]>("/users").then((r) => r.data),
   createUser: (input: CreateUserInput) =>
@@ -86,4 +86,8 @@ export const api = {
     client.patch<User>(`/users/${id}`, input).then((r) => r.data),
   deleteUser: (id: string) =>
     client.delete(`/users/${id}`).then((r) => r.data),
+  polishReply: (id: string, reply: string, ticketBody: string, customerName?: string) =>
+    client
+      .post<{ polished: string }>(`/tickets/${id}/polish-reply`, { reply, ticketBody, customerName })
+      .then((r) => r.data),
 };

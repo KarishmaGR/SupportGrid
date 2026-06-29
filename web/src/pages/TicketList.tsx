@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-table";
 import type { SortingState } from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, ArrowUpDown, Search, X, Inbox, CheckCircle, XCircle, CircleDot } from "lucide-react";
-import { TicketStatus, TicketCategory } from "@supportgrid/shared";
+import { TicketStatus, TicketCategory, SortOrder } from "@supportgrid/shared";
 import type { Ticket, TicketStatus as Status, TicketCategory as Category } from "@supportgrid/shared";
 import { api } from "../api.ts";
 import { Badge } from "@/components/ui/badge";
@@ -83,7 +83,7 @@ export function TicketList() {
   useEffect(() => { setPage(1); }, [status, category, sorting]);
 
   const sortCol   = sorting[0]?.id as SortCol | undefined;
-  const sortOrder = sorting[0] ? (sorting[0].desc ? "desc" : "asc") : undefined;
+  const sortOrder = sorting[0] ? (sorting[0].desc ? SortOrder.Desc : SortOrder.Asc) : undefined;
 
   const { data: stats } = useQuery({
     queryKey: ["ticket-stats"],
