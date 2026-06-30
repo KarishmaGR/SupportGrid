@@ -1,0 +1,6 @@
+ALTER TYPE "TicketStatus" ADD VALUE IF NOT EXISTS 'New';
+ALTER TYPE "TicketStatus" ADD VALUE IF NOT EXISTS 'Processing';
+
+ALTER TABLE "ticket" ALTER COLUMN "status" SET DEFAULT 'New';
+
+ALTER TABLE "ticket" DROP COLUMN IF EXISTS "autoResolved";

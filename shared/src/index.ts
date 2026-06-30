@@ -2,9 +2,11 @@
 // See project-scop.md and tech-stack.md for the source of these definitions.
 
 export const TicketStatus = {
-  Open:     "Open",
-  Resolved: "Resolved",
-  Closed:   "Closed",
+  New:        "New",
+  Processing: "Processing",
+  Open:       "Open",
+  Resolved:   "Resolved",
+  Closed:     "Closed",
 } as const;
 export type TicketStatus = (typeof TicketStatus)[keyof typeof TicketStatus];
 
@@ -124,6 +126,8 @@ export interface InboundEmailPayload {
 
 export interface TicketStats {
   total: number;
+  new: number;
+  processing: number;
   open: number;
   resolved: number;
   closed: number;

@@ -7,6 +7,9 @@ import { auth } from "./auth.ts";
 import { ticketsRouter } from "./routes/tickets.ts";
 import { usersRouter } from "./routes/users.ts";
 import { webhooksRouter } from "./routes/webhooks.ts";
+import { boss } from "./queue.ts";
+import { registerClassifyTicketWorker } from "./workers/classifyTicket.ts";
+import { registerAutoResolveTicketWorker } from "./workers/autoResolveTicket.ts";
 
 const app = express();
 const PORT = Number(process.env.PORT ?? 4000);
@@ -63,6 +66,11 @@ app.use(
     res.status(500).json({ error: "Internal server error" });
   },
 );
+
+boss
+  .start()
+  .then(() => Promise.all([registerClassifyTicketWorker(), registerAutoResolveTicketWorker()]))
+  .catch(console.error);
 
 app.listen(PORT, () => {
   console.log(`API server listening on http://localhost:${PORT}`);

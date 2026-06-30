@@ -11,6 +11,8 @@ datasource db {
 }
 
 enum TicketStatus {
+  New
+  Processing
   Open
   Resolved
   Closed
@@ -110,7 +112,7 @@ model Ticket {
   subject      String
   body         String
   bodyHtml     String?
-  status       TicketStatus    @default(Open)
+  status       TicketStatus    @default(New)
   category     TicketCategory?
   senderName   String
   senderEmail  String

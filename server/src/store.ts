@@ -86,9 +86,11 @@ export async function getTicketStats() {
   const total = rows.reduce((s, r) => s + r._count._all, 0);
   return {
     total,
-    open:     map["Open"]     ?? 0,
-    resolved: map["Resolved"] ?? 0,
-    closed:   map["Closed"]   ?? 0,
+    new:        map["New"]        ?? 0,
+    processing: map["Processing"] ?? 0,
+    open:       map["Open"]       ?? 0,
+    resolved:   map["Resolved"]   ?? 0,
+    closed:     map["Closed"]     ?? 0,
   };
 }
 
@@ -100,7 +102,9 @@ export async function listTickets(
   const sort = query.sort ?? "createdAt";
   const order = query.order ?? "desc";
   const where = {
-    ...(query.status ? { status: query.status } : {}),
+    ...(query.status
+      ? { status: query.status }
+      : { status: "Open" as const }),
     ...(query.category ? { category: query.category } : {}),
     ...(query.search
       ? {
@@ -126,6 +130,7 @@ export async function listTickets(
   return { items: items.map(toTicket), total, page, pageSize };
 }
 
+
 export async function getTicket(id: number): Promise<TicketDetail | null> {
   const ticket = await prisma.ticket.findUnique({
     where: { id },
@@ -136,6 +141,31 @@ export async function getTicket(id: number): Promise<TicketDetail | null> {
   });
   if (!ticket) return null;
   return { ...toTicket(ticket), replies: ticket.replies.map(toReply) };
+}
+
+export async function markProcessing(id: number): Promise<void> {
+  await prisma.ticket.update({ where: { id }, data: { status: "Processing" } });
+}
+
+export async function markAiResolved(id: number, replyBody: string): Promise<void> {
+  await prisma.ticket.update({
+    where: { id },
+    data: {
+      status: "Resolved",
+      replies: {
+        create: {
+          direction: "outbound",
+          senderName: "SupportGrid AI",
+          senderEmail: "ai@supportgrid.internal",
+          body: replyBody,
+        },
+      },
+    },
+  });
+}
+
+export async function markOpen(id: number): Promise<void> {
+  await prisma.ticket.update({ where: { id }, data: { status: "Open" } });
 }
 
 export async function updateTicket(
@@ -211,7 +241,7 @@ export async function createTicketFromEmail(data: {
   senderName: string;
   senderEmail: string;
   messageId?: string;
-}): Promise<{ ticket: Ticket; reply: Reply }> {
+}): Promise<{ ticket: Ticket }> {
   const ticket = await prisma.ticket.create({
     data: {
       subject: data.subject,
@@ -219,19 +249,8 @@ export async function createTicketFromEmail(data: {
       bodyHtml: data.bodyHtml ?? null,
       senderName: data.senderName,
       senderEmail: data.senderEmail,
-      replies: {
-        create: {
-          direction: "inbound",
-          senderEmail: data.senderEmail,
-          senderName: data.senderName,
-          body: data.body,
-          bodyHtml: data.bodyHtml ?? null,
-          messageId: data.messageId ?? null,
-        },
-      },
     },
     include: { replies: true },
   });
-  const reply = ticket.replies[0]!;
-  return { ticket: toTicket(ticket), reply: toReply(reply) };
+  return { ticket: toTicket(ticket) };
 }

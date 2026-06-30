@@ -2,6 +2,7 @@ import { Router } from "express";
 import { z } from "zod";
 import OpenAI from "openai";
 import { TicketCategory, TicketStatus, TicketSortField, SortOrder, ReplyDirection, FieldLimits } from "@supportgrid/shared";
+import { boss, QUEUE_CLASSIFY_TICKET, QUEUE_AUTO_RESOLVE_TICKET } from "../queue.ts";
 import { sanitizeBodyHtml } from "../sanitize.ts";
 import type { Paginated, Ticket } from "@supportgrid/shared";
 import * as store from "../store.ts";
@@ -63,35 +64,6 @@ ticketsRouter.get("/", async (req, res, next) => {
   }
 });
 
-async function classifyTicketInBackground(ticketId: number, subject: string, body: string) {
-  try {
-    const openai = new OpenAI({
-      apiKey: process.env.OPENROUTER_API_KEY,
-      baseURL: "https://openrouter.ai/api/v1",
-    });
-    const completion = await openai.chat.completions.create({
-      model: "nvidia/nemotron-3-super-120b-a12b:free",
-      messages: [
-        {
-          role: "system",
-          content:
-            `Classify the support ticket into exactly one of these categories: ${Object.values(TicketCategory).join(", ")}. Reply with only the category name — nothing else.`,
-        },
-        { role: "user", content: `Subject: ${subject}\n\n${body}` },
-      ],
-    });
-    const raw = completion.choices[0]?.message.content?.trim() ?? "";
-    const category = Object.values(TicketCategory).find(
-      (c) => c.toLowerCase() === raw.toLowerCase(),
-    );
-    if (category) {
-      await store.updateTicket(ticketId, { category });
-    }
-  } catch {
-    // classification failure is non-critical — silently ignore
-  }
-}
-
 ticketsRouter.post("/", async (req, res, next) => {
   try {
     const parsed = createSchema.safeParse(req.body);
@@ -103,8 +75,10 @@ ticketsRouter.post("/", async (req, res, next) => {
       bodyHtml: parsed.data.bodyHtml ? sanitizeBodyHtml(parsed.data.bodyHtml) : undefined,
     });
     res.status(201).json(ticket);
-    // fire-and-forget — does not block the response
-    classifyTicketInBackground(ticket.id, ticket.subject, ticket.body);
+    await Promise.all([
+      boss.send(QUEUE_CLASSIFY_TICKET, { ticketId: ticket.id, subject: ticket.subject, body: ticket.body }),
+      boss.send(QUEUE_AUTO_RESOLVE_TICKET, { ticketId: ticket.id, subject: ticket.subject, body: ticket.body }),
+    ]);
   } catch (err) {
     next(err);
   }

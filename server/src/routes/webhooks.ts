@@ -4,6 +4,7 @@ import { ReplyDirection, FieldLimits } from "@supportgrid/shared";
 import { sanitizeBodyHtml } from "../sanitize.ts";
 import { requireWebhookSecret } from "../middleware/requireWebhookSecret.ts";
 import * as store from "../store.ts";
+import { boss, QUEUE_CLASSIFY_TICKET, QUEUE_AUTO_RESOLVE_TICKET } from "../queue.ts";
 
 export const webhooksRouter = Router();
 
@@ -79,6 +80,11 @@ webhooksRouter.post("/webhooks/inbound-email", requireWebhookSecret, async (req,
       senderEmail,
       messageId,
     });
+
+    await Promise.all([
+      boss.send(QUEUE_CLASSIFY_TICKET, { ticketId: ticket.id, subject: ticket.subject, body: ticket.body }),
+      boss.send(QUEUE_AUTO_RESOLVE_TICKET, { ticketId: ticket.id, subject: ticket.subject, body: ticket.body }),
+    ]);
 
     res.status(201).json({ ticketId: ticket.id, created: true });
   } catch (err) {

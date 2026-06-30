@@ -59,6 +59,8 @@ export type AiSuggestion = $Result.DefaultSelection<Prisma.$AiSuggestionPayload>
  */
 export namespace $Enums {
   export const TicketStatus: {
+  New: 'New',
+  Processing: 'Processing',
   Open: 'Open',
   Resolved: 'Resolved',
   Closed: 'Closed'
