@@ -10,6 +10,7 @@ import type {
 } from "@supportgrid/shared";
 import { ReplyDirection, SenderType } from "@supportgrid/shared";
 import { prisma } from "./db.ts";
+import { AI_AGENT_ID, AI_AGENT_EMAIL } from "./constants.ts";
 
 function toTicket(t: {
   id: number;
@@ -81,9 +82,19 @@ export async function createTicket(input: CreateTicketInput): Promise<TicketDeta
 }
 
 export async function getTicketStats() {
-  const rows = await prisma.ticket.groupBy({ by: ["status"], _count: { _all: true } });
+  const [rows, aiResolved, avgResult] = await Promise.all([
+    prisma.ticket.groupBy({ by: ["status"], _count: { _all: true } }),
+    prisma.reply.count({
+      where: { senderEmail: AI_AGENT_EMAIL, ticket: { status: "Resolved" } },
+    }),
+    prisma.$queryRaw<[{ avg_seconds: number }]>`
+      SELECT COALESCE(AVG(EXTRACT(EPOCH FROM ("updatedAt" - "createdAt"))), 0) AS avg_seconds
+      FROM ticket WHERE status = 'Resolved'
+    `,
+  ]);
   const map = Object.fromEntries(rows.map((r) => [r.status, r._count._all]));
   const total = rows.reduce((s, r) => s + r._count._all, 0);
+  const avgResolutionMinutes = Number(avgResult[0]?.avg_seconds ?? 0) / 60;
   return {
     total,
     new:        map["New"]        ?? 0,
@@ -91,6 +102,8 @@ export async function getTicketStats() {
     open:       map["Open"]       ?? 0,
     resolved:   map["Resolved"]   ?? 0,
     closed:     map["Closed"]     ?? 0,
+    aiResolved,
+    avgResolutionMinutes,
   };
 }
 
@@ -144,7 +157,10 @@ export async function getTicket(id: number): Promise<TicketDetail | null> {
 }
 
 export async function markProcessing(id: number): Promise<void> {
-  await prisma.ticket.update({ where: { id }, data: { status: "Processing" } });
+  await prisma.ticket.update({
+    where: { id },
+    data: { status: "Processing", assignedToId: AI_AGENT_ID },
+  });
 }
 
 export async function markAiResolved(id: number, replyBody: string): Promise<void> {
@@ -152,11 +168,12 @@ export async function markAiResolved(id: number, replyBody: string): Promise<voi
     where: { id },
     data: {
       status: "Resolved",
+      assignedToId: AI_AGENT_ID,
       replies: {
         create: {
           direction: "outbound",
-          senderName: "SupportGrid AI",
-          senderEmail: "ai@supportgrid.internal",
+          senderName: "AI",
+          senderEmail: AI_AGENT_EMAIL,
           body: replyBody,
         },
       },
@@ -165,7 +182,10 @@ export async function markAiResolved(id: number, replyBody: string): Promise<voi
 }
 
 export async function markOpen(id: number): Promise<void> {
-  await prisma.ticket.update({ where: { id }, data: { status: "Open" } });
+  await prisma.ticket.update({
+    where: { id },
+    data: { status: "Open", assignedToId: null },
+  });
 }
 
 export async function updateTicket(

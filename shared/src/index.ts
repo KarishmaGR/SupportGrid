@@ -131,6 +131,8 @@ export interface TicketStats {
   open: number;
   resolved: number;
   closed: number;
+  aiResolved: number;
+  avgResolutionMinutes: number;
 }
 
 export interface ListTicketsQuery {
