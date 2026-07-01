@@ -15,6 +15,9 @@ import { registerAutoResolveTicketWorker } from "./workers/autoResolveTicket.ts"
 const app = express();
 const PORT = Number(process.env.PORT ?? 4000);
 
+// Trust Railway's reverse proxy so rate limiting and IP detection work correctly
+app.set("trust proxy", 1);
+
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ?? "http://localhost:5173")
   .split(",")
   .map((o) => o.trim());

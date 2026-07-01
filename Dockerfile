@@ -41,4 +41,4 @@ COPY --from=builder /app/server/node_modules ./server/node_modules
 EXPOSE 4000
 
 # Run migrations then start the server
-CMD ["sh", "-c", "cd server && bunx prisma migrate deploy && bun src/index.ts"]
+CMD ["sh", "-c", "cd server && bunx prisma migrate deploy --schema prisma/schema.prisma && bun src/index.ts"]
