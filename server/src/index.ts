@@ -84,6 +84,6 @@ boss
   .then(() => Promise.all([registerClassifyTicketWorker(), registerAutoResolveTicketWorker()]))
   .catch(console.error);
 
-app.listen(PORT, () => {
-  console.log(`API server listening on http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`API server listening on http://0.0.0.0:${PORT}`);
 });
