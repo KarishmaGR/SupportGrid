@@ -28,14 +28,15 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-# Only copy what the server needs at runtime
-COPY --from=builder /app/package.json ./
+# Copy source and pre-built assets
 COPY --from=builder /app/shared ./shared
 COPY --from=builder /app/server ./server
 COPY --from=builder /app/web/dist ./web/dist
 
-# Install production deps only (skips devDependencies)
-RUN bun install --frozen-lockfile --production
+# Copy node_modules from builder — avoids workspace resolution issues
+# in a partial directory tree
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/server/node_modules ./server/node_modules
 
 EXPOSE 4000
 
