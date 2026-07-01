@@ -19,7 +19,7 @@ const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ?? "http://localhost:5173")
   .split(",")
   .map((o) => o.trim());
 
-app.use(helmet());
+app.use(helmet({ contentSecurityPolicy: false }));
 
 app.use(
   cors({
@@ -58,7 +58,8 @@ app.use("/api", webhooksRouter);
 // Serve the Vite build in production. The web package builds to ../web/dist
 // relative to the server package root.
 if (process.env.NODE_ENV === "production") {
-  const webDist = path.resolve(import.meta.dirname, "../../web/dist");
+  const webDist = path.resolve(process.cwd(), "../web/dist");
+  console.log(`Serving static files from ${webDist}`);
   app.use(express.static(webDist));
   // SPA fallback — all non-API routes return index.html
   app.get("*", (_req, res) => {
