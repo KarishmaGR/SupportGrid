@@ -49,7 +49,7 @@ function StatCard({ label, value, icon, color, ring, active, onClick }: StatCard
     <button
       onClick={onClick}
       className={cn(
-        "flex items-center gap-3 rounded-xl border bg-card px-5 py-4 text-left shadow-sm transition-all hover:shadow-md focus:outline-none flex-1 min-w-[130px]",
+        "flex items-center gap-3 rounded-xl border border-border/60 bg-card px-5 py-4 text-left shadow-sm transition-all hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-ring flex-1 min-w-[130px]",
         active && `ring-2 ${ring} shadow-md`,
       )}
     >
@@ -184,7 +184,14 @@ export function TicketList() {
 
   return (
     <section className="space-y-5">
-      <h1 className="text-3xl font-semibold">Tickets</h1>
+      <h1 className="text-2xl font-bold text-foreground">
+        Tickets
+        {stats?.open !== undefined && (
+          <span className="ml-2 text-base font-normal text-muted-foreground">
+            · {stats.open} open
+          </span>
+        )}
+      </h1>
 
       {/* Stat cards */}
       <div className="flex gap-3 flex-wrap">

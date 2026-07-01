@@ -171,11 +171,16 @@ export function TicketDetailPage() {
               <p className="text-xs text-destructive">{(summarize.error as Error).message}</p>
             )}
             {summarize.data && (
-              <div className="rounded-lg border bg-muted/50 px-4 py-3 text-sm leading-relaxed text-muted-foreground">
-                <p className="text-xs font-semibold uppercase tracking-wide text-foreground mb-1.5">
-                  AI Summary
+              <div className="rounded-lg border border-border/60 bg-card px-4 py-3 text-sm leading-relaxed shadow-sm">
+                <p className="mb-2">
+                  <span
+                    className="inline-flex items-center gap-1 text-xs font-semibold px-1.5 py-0.5 rounded-md text-white"
+                    style={{ background: "linear-gradient(135deg, #2563eb, #7c3aed)" }}
+                  >
+                    AI Summary
+                  </span>
                 </p>
-                <p>{summarize.data.summary}</p>
+                <p className="text-muted-foreground">{summarize.data.summary}</p>
               </div>
             )}
           </div>
@@ -223,7 +228,7 @@ export function TicketDetailPage() {
         </div>
 
         {/* Right — properties sidebar */}
-        <aside className="w-56 shrink-0 rounded-xl border bg-card p-4 shadow-sm space-y-5">
+        <aside className="w-56 shrink-0 rounded-xl border border-border/60 bg-card p-4 shadow-sm space-y-5">
           {/* Status */}
           <div className="space-y-1.5">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Status</p>

@@ -26,25 +26,40 @@ function formatMinutes(minutes: number): string {
   return m > 0 ? `${h}h ${m}m` : `${h}h`;
 }
 
+function AiLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <span
+      className="inline-flex items-center gap-1 text-xs font-semibold px-1.5 py-0.5 rounded-md text-white"
+      style={{ background: "linear-gradient(135deg, #2563eb, #7c3aed)" }}
+    >
+      {children}
+    </span>
+  );
+}
+
 function StatCard({
   label,
   value,
   sub,
-  valueClass = "text-gray-900",
+  valueClass = "text-foreground",
+  ai = false,
 }: {
   label: string;
   value: string | number;
   sub?: string;
   valueClass?: string;
+  ai?: boolean;
 }) {
   return (
-    <Card>
+    <Card className="shadow-sm border-border/60 hover:shadow-md transition-shadow">
       <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium text-gray-500">{label}</CardTitle>
+        <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-2">
+          {ai ? <AiLabel>{label}</AiLabel> : label}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <span className={`text-4xl font-bold ${valueClass}`}>{value}</span>
-        {sub && <p className="text-xs text-gray-400 mt-1">{sub}</p>}
+        {sub && <p className="text-xs text-muted-foreground mt-1">{sub}</p>}
       </CardContent>
     </Card>
   );
@@ -66,12 +81,12 @@ function SkeletonCard() {
 const STATUS_COLORS: Record<string, string> = {
   Open:       "#f59e0b",
   Resolved:   "#22c55e",
-  Closed:     "#6b7280",
-  New:        "#93c5fd",
-  Processing: "#818cf8",
+  Closed:     "#9ca3af",
+  New:        "#60a5fa",
+  Processing: "#a78bfa",
 };
 
-const DONUT_COLORS = ["#3b82f6", "#d1d5db"];
+const DONUT_COLORS = ["#2563eb", "#7c3aed"];
 
 export function Dashboard() {
   const { data, isLoading, isError } = useQuery<TicketStats>({
@@ -106,8 +121,8 @@ export function Dashboard() {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-500 mt-1">Overview of your support tickets</p>
+        <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+        <p className="text-muted-foreground mt-1">Overview of your support queue</p>
       </div>
 
       {isError && (
@@ -122,12 +137,13 @@ export function Dashboard() {
           <>
             <StatCard label="Total Tickets" value={data.total} />
             <StatCard label="Open" value={data.open} valueClass="text-amber-500" />
-            <StatCard label="Resolved by AI" value={data.aiResolved} valueClass="text-blue-600" />
+            <StatCard label="Resolved by AI" value={data.aiResolved} valueClass="text-blue-600" ai />
             <StatCard
               label="AI Resolution Rate"
               value={`${aiRate}%`}
               sub={`${data.aiResolved} of ${data.resolved} resolved`}
-              valueClass="text-purple-600"
+              valueClass="text-violet-600"
+              ai
             />
             <StatCard
               label="Avg Resolution Time"
@@ -143,9 +159,9 @@ export function Dashboard() {
       {!isLoading && data && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Bar chart — ticket status breakdown */}
-          <Card>
+          <Card className="shadow-sm border-border/60">
             <CardHeader>
-              <CardTitle className="text-base font-semibold text-gray-700">
+              <CardTitle className="text-sm font-semibold text-foreground uppercase tracking-wide">
                 Tickets by Status
               </CardTitle>
             </CardHeader>
@@ -176,9 +192,9 @@ export function Dashboard() {
           </Card>
 
           {/* Donut chart — AI vs human resolution */}
-          <Card>
+          <Card className="shadow-sm border-border/60">
             <CardHeader>
-              <CardTitle className="text-base font-semibold text-gray-700">
+              <CardTitle className="text-sm font-semibold text-foreground uppercase tracking-wide">
                 AI vs Human Resolution
               </CardTitle>
             </CardHeader>

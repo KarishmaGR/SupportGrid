@@ -40,11 +40,25 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/40">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-3xl">SupportGrid</CardTitle>
-          <CardDescription className="text-base">Sign in to your account</CardDescription>
+    <div className="min-h-screen flex" style={{ backgroundColor: "#1c1c1e" }}>
+      {/* Left panel — brand */}
+      <div className="hidden lg:flex w-80 shrink-0 flex-col justify-between px-10 py-12 border-r border-white/10">
+        <div>
+          <span className="text-white text-xl font-semibold tracking-tight">SupportGrid</span>
+          <p className="mt-4 text-white/40 text-sm leading-relaxed">
+            AI-powered support ticket management for your team.
+          </p>
+        </div>
+        <p className="text-white/20 text-xs">Internal console · Agents only</p>
+      </div>
+
+      {/* Right panel — form */}
+      <div className="flex-1 flex items-center justify-center bg-background px-6">
+      <Card className="w-full max-w-md shadow-md border-border/60">
+        <CardHeader className="pb-4">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 lg:hidden">SupportGrid</p>
+          <CardTitle className="text-2xl font-bold">Sign in</CardTitle>
+          <CardDescription>Enter your credentials to access the console</CardDescription>
         </CardHeader>
         <CardContent>
           {serverError && (
@@ -91,6 +105,7 @@ export function LoginPage() {
           </form>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }
