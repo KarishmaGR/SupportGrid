@@ -18,8 +18,9 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      // Forward API calls to the Express server during development.
-      "/api": "http://localhost:4000",
+      // Forward API calls to the Express server.
+      // Override with: API_TARGET=http://localhost:4001 bun run dev:web
+      "/api": process.env.API_TARGET ?? "http://localhost:4001",
     },
   },
 });
