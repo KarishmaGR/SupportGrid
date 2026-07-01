@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import path from "path";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./auth.ts";
 import { ticketsRouter } from "./routes/tickets.ts";
@@ -53,6 +54,17 @@ app.get("/api/health", (_req, res) => {
 app.use("/api/tickets", ticketsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api", webhooksRouter);
+
+// Serve the Vite build in production. The web package builds to ../web/dist
+// relative to the server package root.
+if (process.env.NODE_ENV === "production") {
+  const webDist = path.resolve(import.meta.dirname, "../../web/dist");
+  app.use(express.static(webDist));
+  // SPA fallback — all non-API routes return index.html
+  app.get("*", (_req, res) => {
+    res.sendFile(path.join(webDist, "index.html"));
+  });
+}
 
 // Centralized error handler.
 app.use(
