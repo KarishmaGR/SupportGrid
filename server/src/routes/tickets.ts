@@ -7,6 +7,7 @@ import { sanitizeBodyHtml } from "../sanitize.ts";
 import type { Paginated, Ticket } from "@supportgrid/shared";
 import * as store from "../store.ts";
 import { requireAuth } from "../middleware/requireAuth.ts";
+import { sendReply } from "../email.ts";
 
 export const ticketsRouter = Router();
 
@@ -196,6 +197,9 @@ ticketsRouter.post("/:id/replies", async (req, res, next) => {
       return res.status(400).json({ error: "Invalid body", details: parsed.error.flatten() });
     }
     const from = (res.locals.session as { user: { email: string; name: string } }).user;
+    const ticket = await store.getTicket(id);
+    if (!ticket) return res.status(404).json({ error: "Ticket not found" });
+
     const reply = await store.addReply(
       id,
       from.email,
@@ -206,6 +210,18 @@ ticketsRouter.post("/:id/replies", async (req, res, next) => {
     );
     if (!reply) return res.status(404).json({ error: "Ticket not found" });
     res.status(201).json(reply);
+
+    // Send outbound email to the customer (fire-and-forget after response).
+    store.getFirstInboundMessageId(id).then((inReplyToMessageId) =>
+      sendReply({
+        to:      ticket.senderEmail,
+        toName:  ticket.senderName,
+        subject: ticket.subject,
+        text:    parsed.data.body,
+        html:    parsed.data.bodyHtml ? sanitizeBodyHtml(parsed.data.bodyHtml) : undefined,
+        inReplyToMessageId,
+      })
+    ).catch((err) => console.error("SendGrid outbound error:", err));
   } catch (err) {
     next(err);
   }

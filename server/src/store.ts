@@ -115,9 +115,7 @@ export async function listTickets(
   const sort = query.sort ?? "createdAt";
   const order = query.order ?? "desc";
   const where = {
-    ...(query.status
-      ? { status: query.status }
-      : { status: "Open" as const }),
+    ...(query.status ? { status: query.status } : {}),
     ...(query.category ? { category: query.category } : {}),
     ...(query.search
       ? {
@@ -254,6 +252,23 @@ export async function findReplyByMessageId(messageId: string): Promise<boolean> 
   return reply !== null;
 }
 
+export async function findTicketByMessageId(messageId: string): Promise<Ticket | null> {
+  const reply = await prisma.reply.findUnique({
+    where: { messageId },
+    include: { ticket: { include: { assignedTo: { select: { name: true } } } } },
+  });
+  return reply ? toTicket(reply.ticket) : null;
+}
+
+export async function getFirstInboundMessageId(ticketId: number): Promise<string | null> {
+  const reply = await prisma.reply.findFirst({
+    where: { ticketId, direction: "inbound", messageId: { not: null } },
+    orderBy: { createdAt: "asc" },
+    select: { messageId: true },
+  });
+  return reply?.messageId ?? null;
+}
+
 export async function createTicketFromEmail(data: {
   subject: string;
   body: string;
@@ -261,7 +276,7 @@ export async function createTicketFromEmail(data: {
   senderName: string;
   senderEmail: string;
   messageId?: string;
-}): Promise<{ ticket: Ticket }> {
+}): Promise<{ ticket: Ticket; firstMessageId?: string }> {
   const ticket = await prisma.ticket.create({
     data: {
       subject: data.subject,
@@ -269,8 +284,21 @@ export async function createTicketFromEmail(data: {
       bodyHtml: data.bodyHtml ?? null,
       senderName: data.senderName,
       senderEmail: data.senderEmail,
+      // Store the first inbound message as a reply so we can thread future replies.
+      replies: data.messageId
+        ? {
+            create: {
+              direction: "inbound",
+              senderName: data.senderName,
+              senderEmail: data.senderEmail,
+              body: data.body,
+              bodyHtml: data.bodyHtml ?? null,
+              messageId: data.messageId,
+            },
+          }
+        : undefined,
     },
     include: { replies: true },
   });
-  return { ticket: toTicket(ticket) };
+  return { ticket: toTicket(ticket), firstMessageId: data.messageId };
 }
